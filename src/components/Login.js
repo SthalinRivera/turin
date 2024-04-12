@@ -48,9 +48,12 @@ export function Login() {
 
   return (
 
-    <>  <NavBar />
+    <>
 
+      <NavBar></NavBar>
       <div className="w-full max-w-xs m-auto">
+      <h1 class="text-2xl font-bold text-very-dark-blue md:text-5xl py-10 text-center">Login
+              </h1>
         {error && <Alert message={error} />}
 
         <form
@@ -106,7 +109,7 @@ export function Login() {
             </a>
           </div>
         </form>
-  
+
         <button
           onClick={handleGoogleSignin}
           class="align-middle   select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-sm py-3.5 px-7 rounded-lg border border-blue-gray-500 text-blue-gray-500 hover:opacity-75 focus:ring focus:ring-blue-gray-200 active:opacity-[0.85] flex items-center gap-3"

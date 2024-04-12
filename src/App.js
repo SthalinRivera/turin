@@ -9,7 +9,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { NotFound } from "./pages/NotFound";
 import { Prueba } from "./pages/Prueba";
 import { Create } from "./pages/Prueba/create";
-
+import { SpeechGenerator} from "./pages/SpeechGenerator";
 
 function App() {
 
@@ -17,7 +17,7 @@ function App() {
   console.log('aqui debe de estar');
   console.log(apiKey); // Outputs the value from your .env file
   return (
-    <div className=" text-black h-screen  text-black">
+    <div className=" text-black h-screen  text-black ">
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -35,10 +35,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/prueba" element={<Prueba />} />
           <Route path="/prueba/create" element={<Create />} />
-
+          <Route path="/speech-generator" element={<SpeechGenerator />} />
         </Routes>
-
-        <div>hola estoy aqui</div>
       </AuthProvider>
     </div>
   );

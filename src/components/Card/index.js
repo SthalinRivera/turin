@@ -3,19 +3,32 @@ import { useAuth } from "../../context/AuthContext";
 export function Card({ product }) {
     const { logout, user } = useAuth();
     return (
-
-            <div className="rounded overflow-hidden shadow-lg p-4 m-2">
-                <div className="px-6 py-4">
-                    <div className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{product.name}</div>
-                    <p className="text-gray-700 text-base">{product.response}</p>
-                </div>
-                <div className="flex px-6 pt-4 pb-2">
-                    <a href="#"><img class="w-10 h-10 rounded-full mr-4" src={product.photoURL} alt="" /></a>
-                    <div class="text-sm">
-                        <p class="text-gray-900 font-semibold leading-none hover:text-indigo-600">{product.userName} </p>
-                        <p class="text-gray-600"> Created {product.timestamp}</p>
+        <div>
+       
+            <div class="max-w-sm w-full lg:max-w-full lg:flex">
+                <div class="border-r border-b border-l border-gray-400 lg:border lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                    <div class="mb-8">
+                        <p class="text-sm text-gray-600 flex items-center">
+                            <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
+                            </svg>
+                            {product.name}
+                        </p>
+                        <div class="text-gray-900 font-bold text-xl mb-2"></div>
+                        <p class="text-gray-700 text-base">
+                        <div dangerouslySetInnerHTML={{ __html: product.response }} />
+                        </p>
+                    </div>
+                    <div class="flex items-center">
+                        <img class="w-10 h-10 rounded-full mr-4" src={product.photoURL}  alt="Avatar of Jonathan Reinink"/>
+                            <div class="text-sm">
+                                <p class="text-gray-900 leading-none">{product.userName} </p>
+                                <p class="text-gray-600">Created {product.timestamp}</p>
+                            </div>
                     </div>
                 </div>
             </div>
+
+        </div>
     );
 }

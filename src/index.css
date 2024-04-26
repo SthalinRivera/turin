@@ -9,7 +9,10 @@
     }
 
     .button{
-        @apply bg-bright-red text-vary-light-gray block w-max py-4 px-12 rounded-full;
+        @apply bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 block w-max py-2 px-6 rounded-lg;
+    }
+    .bg-page{
+        @apply bg-gradient-to-r bg-gray-100 bg-gray-100 bg-gray-100;
     }
     
     .footer-area{

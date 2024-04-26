@@ -1,0 +1,18 @@
+[
+    {
+      "id": 1,
+      "title": "Card 1",
+      "description": "¡Hola! ¿Cómo estás? Solo quería enviarte un mensaje rápido para decirte que espero que tengas un día maravilloso. ¡Nos vemos pronto!"
+    },
+    {
+      "id": 2,
+      "title": "Card 2",
+      "description": "¡Hola! Solo quería decirte que me encantó tu última presentación. Excelente trabajo. Estoy impresionado/a por tu profesionalismo y creatividad. ¡Sigue así!"
+    },
+    {
+      "id": 3,
+      "title": "Card 3",
+      "description": "¡Hola! Solo quería agradecerte por tu ayuda con el proyecto. Tu contribución ha sido invaluable. ¡Gracias de nuevo y que tengas un excelente día!"
+    }
+  ]
+  

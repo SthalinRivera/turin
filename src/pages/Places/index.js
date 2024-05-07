@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import OpenAI from "openai";
 import { NavBar } from "../../components/NavBar";
+import { Footer } from "../../components/Footer";
 import { SideBar } from "../../components/SideBar";
 import { db, storage } from "../../firebase";
 import { collection, getDocs, getDoc, deleteDoc, doc, addDoc } from 'firebase/firestore';
@@ -42,13 +43,13 @@ export function Places() {
   }
 
   return (
-    <div className=" ">
-      <div class="flex ">
+    <div className="">
+      <div class="flex">
         <div class="">
           <SideBar></SideBar>
         </div>
         <div class="wrapper mt-4">
-          <div className='bg-white shadow-[0_8px_12px_-6px_rgba(0,0,0,0.2)] border p-6 w-full  rounded-lg font-[sans-serif] overflow-hidden mx-auto my-4'>
+          <div className='bg-white shadow-[0_8px_12px_-6px_rgba(0,0,0,0.2)] border p-1 md:p-6 w-full  rounded-lg font-[sans-serif] overflow-hidden mx-auto my-4'>
             <div className='flex  py-6 px-6 rounded-xl justify-between'>
               <div className=''>
                 <p>All Post</p>
@@ -58,8 +59,7 @@ export function Places() {
               </div>
             </div>
             <hr className="my-4 border-gray-300" />
-
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg pt-10 flex-col overflow-x-auto">
+            <div class="md:relative  shadow-md sm:rounded-lg border-dark-blue pt-10 flex-col overflow-x-auto">
               <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
@@ -121,7 +121,6 @@ export function Places() {
                             </svg>
                           </a>
                         </div>
-
                       </td>
                     </tr>
                   ))}
@@ -129,10 +128,10 @@ export function Places() {
               </table>
               {modalOpen && <Edit closeModal={closeModal} postId={postId} />}
             </div>
-
           </div>
         </div>
       </div>
+      <Footer></Footer>
     </div>
   );
 }

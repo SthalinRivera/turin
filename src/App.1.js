@@ -21,7 +21,7 @@ export function App() {
   console.log('aqui debe de estar');
   console.log(apiKey); // Outputs the value from your .env file
   return (
-    <div className=" text-black h-screen  text-black ">
+    <div className="  ">
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />

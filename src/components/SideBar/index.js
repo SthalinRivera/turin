@@ -42,9 +42,8 @@ export function SideBar() {
 					</button>
 				</div>
 			</div>
-			<div className="z-30 fixed top-0 left-0  h-screen xl:w-64 overflow-visible rounded-sm">
-
-				<div id="Main" className={`${show ? 'translate-x-0' : '-translate-x-full'} xl:rounded-r transform  xl:translate-x-0  ease-in-out transition duration-500 flex justify-start items-start h-full  w-full sm:w-64 bg-white flex-col bottom-1  shadow-xl`}>
+			<div className="z-30 h-screen ">
+				<div id="Main" className={`${show ? 'translate-x-0' : '-translate-x-full'} w-60 xl:rounded-r transform  xl:translate-x-0  fixed top-0 left-0 ease-in-out transition duration-500 flex justify-start items-start h-full  w-full sm:w-64 bg-white flex-col bottom-1  shadow-xl`}>
 
 					<div className="flex justify-between items-center m-5  space-x-3">
 						<svg aria-label="Home" id="logo" enableBackground="new 0 0 300 300" height={44} viewBox="0 0 300 300" width={43} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
@@ -61,10 +60,10 @@ export function SideBar() {
 						<div className=" flex justify-between items-center w-full ">
 							<div className="flex justify-center items-center  space-x-2">
 								<div>
-								{user && user.photoURL && <img src={user.photoURL} className='w-12 rounded-full' alt="User Photo" />}
+									{user && user.photoURL && <img src={user.photoURL} className='w-12 rounded-full' alt="User Photo" />}
 								</div>
 								<div className="flex justify-start flex-col items-start">
-									<p className="cursor-pointer text-sm leading-5  text-slate-900 font-bold ">{ user && user.displayName}</p>
+									<p className="cursor-pointer text-sm leading-5  text-slate-900 font-bold ">{user && user.displayName}</p>
 									<p className="cursor-pointer text-xs leading-3  text-slate-600 font-bold ">{user && user.email}</p>
 								</div>
 							</div>
@@ -188,7 +187,7 @@ export function SideBar() {
 						</div>
 					</div>
 					<div className="mt-6 flex flex-col justify-start items-center  pl-4 w-full  space-y-3 pb-5 ">
-						<button  onClick={handleLogout} className="flex jusitfy-start items-center w-full  space-x-6 focus:outline-none focus:text-indigo-400   rounded text-slate-900 font-bold ">
+						<button onClick={handleLogout} className="flex jusitfy-start items-center w-full  space-x-6 focus:outline-none focus:text-indigo-400   rounded text-slate-900 font-bold ">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
 							</svg>

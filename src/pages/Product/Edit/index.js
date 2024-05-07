@@ -12,6 +12,7 @@ export function Edit({ closeModal, postId }) {
     const [downloadURL, setDownloadURL] = useState(null)
     const navigate = useNavigate();
     const [file, setFile] = useState()
+    
     const getPostsById = async (postId) => {
         const post = await getDoc(doc(db, "posts", postId))
         if (post.exists()) {
@@ -32,6 +33,7 @@ export function Edit({ closeModal, postId }) {
         await updateDoc(post, data)
         navigate('/product')
     }
+
     useEffect(() => {
         const uploadFile = () => {
             const name = new Date().getTime() + file.name

@@ -41,15 +41,34 @@ export function Product() {
     getPosts()
   }
 
-  return (
-    <div className="z-0 overflow-hidden">
+  const [theme, setTheme] = useState(() => {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
 
-      <div class=" lg:flex flex-none z-10 ">
+    return "light";
+  });
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.querySelector("html").classList.add("dark");
+    } else {
+      document.querySelector("html").classList.remove("dark");
+    }
+  }, [theme]);
+
+  const handleChangeTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  };
+
+  return (
+    <div className="">
+      <div class="flex">
         <div class="">
           <SideBar></SideBar>
         </div>
         <div class="wrapper mt-4  ">
-          <div className='bg-white shadow-[0_8px_12px_-6px_rgba(0,0,0,0.2)] border p-6 w-full  rounded-lg font-[sans-serif] overflow-hidden mx-auto my-4'>
+          <div className='bg-white shadow-[0_8px_12px_-6px_rgba(0,0,0,0.2)] border p-1 md:p-6 w-full  rounded-lg font-[sans-serif] overflow-hidden mx-auto my-4'>
             <div className='flex  py-6 px-6 rounded-xl justify-between'>
               <div className=''>
                 <p>All Post</p>
@@ -58,8 +77,9 @@ export function Product() {
                 <Link to="/product/new-posts"> <button className='button text-white mr-2' >+ new posts</button></Link>
               </div>
             </div>
+            <button onClick={handleChangeTheme} className='bg-salate-700'>Mode</button>
             <hr className="my-4 border-gray-300" />
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg border-dark-blue pt-10 flex-col overflow-x-auto">
+            <div class="md:relative  shadow-md sm:rounded-lg border-dark-blue pt-10 flex-col overflow-x-auto">
               <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
@@ -72,8 +92,8 @@ export function Product() {
                     <th scope="col" class="px-6 py-3">
                       Title
                     </th>
-                   <th scope="col" class="px-6 py-3">
-                      <p className='hidden md:block'> Description</p> 
+                    <th scope="col" class="px-6 py-3">
+                      <p className='hidden md:block'> Description</p>
                     </th>
                     <th scope="col" class="px-6 py-3">
                       Category
@@ -127,48 +147,6 @@ export function Product() {
                   ))}
                 </tbody>
               </table>
-
-
-
-
-              <div>
-                <div className="max-w-8xl mx-auto container py-10">
-                  <ul className="flex justify-center items-center">
-                    <li>
-                      <span className="p-1 flex rounded transition duration-150 ease-in-out text-base leading-tight font-bold text-gray-500 hover:text-indigo-700 focus:outline-none mr-1 sm:mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                          <path stroke="none" d="M0 0h24v24H0z" />
-                          <polyline points="15 6 9 12 15 18" />
-                        </svg>
-                      </span>
-                    </li>
-                    <li>
-                      <span className="flex text-indigo-700 hover:bg-indigo-600 hover:text-white text-base leading-tight font-bold cursor-pointer shadow transition duration-150 ease-in-out mx-2 sm:mx-4 rounded px-3 py-2 focus:outline-none">1</span>
-                    </li>
-                    <li>
-                      <span className="flex text-indigo-700 hover:bg-indigo-600 hover:text-white text-base leading-tight font-bold cursor-pointer shadow transition duration-150 ease-in-out mx-2 sm:mx-4 rounded px-3 py-2 focus:outline-none">2</span>
-                    </li>
-                    <li>
-                      <span className="flex text-indigo-700 hover:bg-indigo-600 hover:text-white rounded transition duration-150 ease-in-out text-base leading-tight font-bold shadow px-3 py-2 focus:outline-none">...</span>
-                    </li>
-                    <li>
-                      <span className="flex text-indigo-700 hover:bg-indigo-600 hover:text-white text-base leading-tight font-bold cursor-pointer transition shadow duration-150 ease-in-out mx-2 sm:mx-4 rounded px-3 py-2 focus:outline-none">6</span>
-                    </li>
-                    <li>
-                      <span className="flex text-indigo-700 hover:bg-indigo-600 hover:text-white text-base leading-tight font-bold cursor-pointer transition shadow duration-150 ease-in-out mx-2 sm:mx-4 rounded px-3 py-2 focus:outline-none">7</span>
-                    </li>
-                    <li>
-                      <span className="flex rounded transition duration-150 ease-in-out text-base leading-tight font-bold text-gray-500 hover:text-indigo-700 p-1 focus:outline-none ml-1 sm:ml-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                          <path stroke="none" d="M0 0h24v24H0z" />
-                          <polyline points="9 6 15 12 9 18" />
-                        </svg>
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-
-              </div>
 
               {modalOpen && <Edit closeModal={closeModal} postId={postId} />}
             </div>

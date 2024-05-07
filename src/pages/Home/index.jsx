@@ -2,13 +2,20 @@ import React, { useEffect, useState } from 'react';
 import OpenAI from 'openai';
 import { useNavigate, Link } from "react-router-dom";
 import { db } from "../../firebase";
-import { collection, getDocs, getDoc, deleteDoc, addDoc } from 'firebase/firestore';
+import { collection, getDocs, getDoc, deleteDoc, addDoc, query, limit, startAfter, orderBy,where } from 'firebase/firestore';
 import { NavBar } from "../../components/NavBar";
 import { Card } from "../../components/Card";
 import { useAuth } from "../../context/AuthContext";
 import { Modal } from "../../components/Modal";
 import { NavLink } from 'react-router-dom';
+import { ListPlaceholder } from "../../components/Skeleton/ListPlaceholder";
+import { CardPlaceholder } from "../../components/Skeleton/CardPlaceholder";
 import { } from "../Home/data.json";
+import { Footer } from "../../components/Footer";
+import Tabs from './Tabs';
+import Tab from './Tab';
+
+const PAGE_SIZE = 6; // Número de elementos por página
 export function Home() {
   const { logout, user } = useAuth();
   const [inputValue, setInputValue] = useState('');
@@ -21,6 +28,14 @@ export function Home() {
   const [speechUrl, setSpeechUrl] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('hola  gil en que estas ');
+  const [image_url, setImagen_url] = useState('')
+  const [like, setLike] = useState(null)
+  const [views, seViews] = useState(null)
+  const [cantidadCardPlaceholder, setCantidadCardPlaceholder] = useState([1, 2])
+  const [lastDoc, setLastDoc] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  // Obtener la fecha y hora actual
+  const currentDate = new Date().toDateString();;
 
   const openModal = (content) => {
     setModalContent(content);
@@ -35,14 +50,14 @@ export function Home() {
     // Cambiar el estado de visibilidad basado en el radio seleccionado
     setVisibility(e.target.value === 'public');
   };
-  // Obtener la fecha y hora actual
-  const currentDate = new Date();
+
   const LimpiarInput = () => {
     setInputValue('')
+
   }
   const navigate = useNavigate()
 
-  // const   // Access the API key from .env
+  // Access the API key from .env
   const openai = new OpenAI({
     apiKey: process.env["REACT_APP_OPENAI_API_KEY"], // This is the default and can be omitted
     dangerouslyAllowBrowser: true
@@ -53,7 +68,6 @@ export function Home() {
       setLoading(true); // Establecer el estado de carga a true antes de la solicitud
       const startTime = performance.now(); // Iniciar el temporizador
       setButtonDisabled(true); // Deshabilitar el botón mientras se carga la respuesta
-
       const completion = await openai.chat.completions.create({
         messages: [
           { role: "system", content: "Generar una tabla en html (solo tabla) de una matriz de consistencia teniendo el Problema general y específicos, Objetivo General y específicos,Hipótesis General y específicos, Variables y dimensiones ,Metodología y dentro de metodología considerar ,Nivel, tipo, método, diseño y población ,  es una matriz de consistencia y identificar y buscar y rellenar del siguiente titulo de investigación : Análisis del impacto del turismo comunitario en el desarrollo socioeconómico:" },
@@ -64,13 +78,12 @@ export function Home() {
       const endTime = performance.now(); // Detener el temporizador
       setGenerationTime(endTime - startTime); // Calcular el tiempo transcurrido
       setResponse(completion.choices[0].message.content);
-      const respuesta = completion.choices[0].message.content
-      console.log(respuesta);
+      const response = completion.choices[0].message.content
+      console.log(response);
       // Verifica si hay una respuesta antes de llamar a store()
-      if (respuesta) {
-        setResponse(respuesta);
-        store(respuesta); // Llamar a store después de obtener la respuesta exitosa
-        generateSpeech(respuesta)
+      if (response) {
+        setResponse(response);
+        store(response)
       } else {
         console.log("no tengo una respuesta ");
       }
@@ -82,45 +95,95 @@ export function Home() {
 
     }
   }
+  async function generateImge() {
+    try {
+      const response = await openai.images.generate({
+        model: "dall-e-3",
+        prompt: inputValue,
+        n: 1,
+        size: "1024x1024",
+      });
+      const image_url = response.data[0].url;
+      setImagen_url(image_url)
+      console.log(image_url);
+      if (image_url) {
+        store(image_url)
+      }
+    } catch (error) {
+      console.error('Ocurrio este error', error);
+
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Enviando solicitud...");
-    await fetchResponse();
-    console.log("Solicitud enviada.");
-
+    fetchResponse();
   };
 
   const [products, setProducts] = useState('');
-  
   const productsCollection = collection(db, "products")
   const getProducts = async () => {
     const data = await getDocs(productsCollection)
-    //console.log("hola", data.docs);
     setProducts(
       data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
     )
     console.log(" test", products);
   }
 
+  //List data
+  const [pageSize, setPageSize] = useState(2); // Estado para el número total de páginas
+  const [totalPages, setTotalPages] = useState(0); // Estado para el número total de páginas
+  const loadMoreProducts = () => {
+    setPageSize(pageSize + 2); // Incrementar el número de página
+    getProducts2()
+    console.log(pageSize);
+  };
+
+  const getProducts2 = async () => {
+    const q = query(collection(db, "products"), orderBy("timestamp"), limit(pageSize), startAfter(lastDoc));
+    const data = await getDocs(q)
+    setProducts(
+      data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    )
+    // Calcular el número total de páginas
+    const totalDocs = await getDocs(collection(db, "products"));
+    const numPages = Math.ceil(totalDocs.size / PAGE_SIZE);
+    setTotalPages(numPages); // Establecer el número total de páginas
+  };
+  const [products3, setProducts3] = useState('');
+  const getProducts3 = async () => {
+    const q = query(collection(db, "products"), orderBy("timestamp"), limit(pageSize), startAfter(lastDoc), where('userEmail', '==', user.email) );
+    const data = await getDocs(q)
+    setProducts3(
+      data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    )
+    console.log(user.email);
+    console.log("producto 3",data);
+    // Calcular el número total de páginas
+    const totalDocs = await getDocs(collection(db, "products"));
+    const numPages = Math.ceil(totalDocs.size / PAGE_SIZE);
+    setTotalPages(numPages); // Establecer el número total de páginas
+  };
+
+  //Add data
   const productsCollectionStore = collection(db, "products")
   const userName = user.displayName
   const photoURL = user.photoURL
   const userEmail = user.email
-  const store = async (respuesta, url) => {
+  const store = async (response) => {
+    console.log("esperado respuesta ", response);
     console.log("Almacenando en Firebase...");
-    console.log(respuesta);
-    console.log(" soy el audio ", url);
-    console.log("hola aqui estou viendo donde me imprimo");
-    if (respuesta) {
+    if (response) {
       await addDoc(productsCollectionStore, {
         name: inputValue,
         visibility: visibility,
-        response: respuesta,
-        timestamp: currentDate.toISOString(),
+        response: response,
+        timestamp: currentDate,
         userName: userName,
         photoURL: photoURL,
-        userEmail: userEmail
+        userEmail: userEmail,
+        like: like,
+        views: views
       });
       console.log("Datos almacenados en Firebase.");
     } else {
@@ -132,11 +195,8 @@ export function Home() {
     const randomIndex = Math.floor(Math.random() * possibleInputs.length);
     setInputValue(possibleInputs[randomIndex]);
   };
-  const timestamp = Date.now();
-  console.log('aqui estoy timestatn');
-  console.log(timestamp);
+
   useEffect(() => {
-    // Define una lista de posibles inputs
     setPossibleInputs([
       "Análisis del impacto del turismo comunitario en el desarrollo socioeconómico: Un estudio de caso en [ubicación específica]",
       "Exploración de las percepciones de los turistas extranjeros sobre la sostenibilidad en destinos emergentes",
@@ -145,9 +205,9 @@ export function Home() {
       "Desarrollo de un plan de gestión de crisis para destinos turísticos frente a desastres naturales y pandemias: Experiencias del COVID-19",
       // Agrega más inputs según sea necesario
     ]);
-    getProducts();
-    fetchData()
-  }, [])
+    getProducts2();
+    getProducts3();
+  }, [response, pageSize])
 
   const generateSpeech = async (respuesta) => {
     setLoading(true);
@@ -160,7 +220,6 @@ export function Home() {
       const blob = new Blob([await mp3.arrayBuffer()], { type: "audio/mp3" });
       const url = URL.createObjectURL(blob);
       setSpeechUrl(url);
-      store(url);
     } catch (error) {
       console.error("Error generating speech:", error);
     }
@@ -168,30 +227,19 @@ export function Home() {
   };
   const [cards, setCards] = useState([]);
 
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('data.json'); // Fetch data from the local JSON file
-      console.log("no encuentro data");
-      const data = await response.json();
-      setCards(data); // Update state with fetched data
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
   return (
-    <div className='bg-slate-600 h-full'>
+    <div className='bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-700 via-slate-600 to-slate-900 '>
       <NavBar />
-      <div className='w-full '>
-        <div className='  ' >
-          <div class=" mx-auto max-w-2xl py-32 sm:py-48 lg:py-4  ">
+      <div className=' wrapper '>
+        <div className='mb-4 md:mb-10 ' >
+          <div class=" mx-auto  mt-10 md:py-32 sm:py-48 lg:py-4  ">
             <div class="justify-center">
               <p className='text-xl text-center font-bold text-slate-50'>Ingrese su título y explore con IA </p>
               <form onSubmit={handleSubmit} className=' bg-slate-900 rounded-xl p-1 mt-4 z-0'>
                 <div className='mt-4 bg-clip-border rounded-xl  shadow-sm drop-shadow-sm mb-4 0'  >
                   <div class="flex">
                     <div class="relative w-3/4">
-                      <textarea type="text" rows={6} className='focus:outline-none  resize-none block bg-slate-900 w-full p-4 ps-10 text-sm pl-9  text-white border-none rounded-xl ' placeholder="Ej:Implemtacion de plan de marketing en proceso de ventas del Travi Sac ." value={inputValue}
+                      <textarea required type="text" rows={6} className='focus:outline-none  resize-none block bg-slate-900 w-full p-4 ps-10 text-sm pl-9  text-white border-none rounded-xl ' placeholder="Ej:Implemtacion de plan de marketing en proceso de ventas del Travi Sac ." value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)} />
                     </div>
                     <div class=" w-1/4  ">
@@ -212,7 +260,6 @@ export function Home() {
                       <label for="hs-checked-radio" class="text-sm text-gray-500  dark:text-gray-400">Público</label>
                       <div className='items-center justify-center'>
 
-
                         <div class="  text-gray-500 dark:text-gray-400 py-2 px-2 inline-flex items-center" onClick={LimpiarInput}>
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -230,12 +277,12 @@ export function Home() {
 
                       </button>
                     </div>
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md mr-2" disabled>
+                    <a class="bg-transparent hover:bg-zinc-900 text-slate-300 font-semibold hover:text-white py-2 px-4 border border-slate-500 hover:border-transparent rounded mr-4">
                       Basic
-                    </button>
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md" disabled>
+                    </a>
+                    <a class="bg-transparent hover:bg-zinc-900 text-slate-300 font-semibold hover:text-white py-2 px-4 border border-slate-500 hover:border-transparent rounded">
                       Expert
-                    </button>
+                    </a>
                   </div>
                 </div>
               </form>
@@ -254,6 +301,7 @@ export function Home() {
                     </svg>
                     loading
                   </button>
+                  <ListPlaceholder></ListPlaceholder>
                 </div>
               ) : null}
 
@@ -263,53 +311,69 @@ export function Home() {
                     <div className="px-6 py-4">
                       <div className="font-bold text-xl mb-2">{inputValue}</div>
                       <div dangerouslySetInnerHTML={{ __html: response }} />
-                      <p>Tiempo de generación: {generationTime.toFixed(2)} milisegundos</p>
-                      {speechUrl && (
-                        <audio controls>
-                          <source src={speechUrl} type="audio/mp3" />
-                          Your browser does not support the audio element.
-                        </audio>
-                      )}
+
+                      <p className='mt-6'>Tiempo de generación: {generationTime.toFixed(2)} milisegundos</p>
                     </div>
                   </div>
                 </div>
               )}
-
-
             </div>
           </div>
 
-          <div className="">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold  rounded" onClick={() => openModal('me llegas al pinchu')}>
-              Abrir Modal
-            </button>
-            {modalOpen && <Modal onClose={closeModal} content={modalContent} />}
-          </div>
 
-          <div>
-            {cards.map(card => (
-              <div key={card.id} className="card">
-                <img src={card.imageUrl} alt={card.title} />
-                <div className="card-body">
-                  <h2>{card.title}</h2>
-                  <p>{card.description}</p>
-                </div>
-              </div>
-            ))}
+          <div className="container mx-auto mt-8">
+            <Tabs>
+              <Tab title="All Showcase">
+                <>
+                  <div className='flex  justify-between  m-6'>
+                    <h1 className='text-slate-100 hover:text-slate-300 md:text-2xl font-bold pointer-events-auto'>
+                      Showcase</h1>
+                    <button
+                      onClick={loadMoreProducts}
+                      className='text-slate-100 hover:text-slate-300 md:text-2xl font-bold justify-end'
+                    > Show more +  </button>
+                  </div>
+                  {products ? "" : (
+                    <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 ' >
+                      {cantidadCardPlaceholder.map((item, id) => (
+                        <CardPlaceholder key={id}></CardPlaceholder>
+                      ))}
+                    </div>
+                  )}
+                  <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 '>
+                    {Array.isArray(products) && products.map((product) => (
+                      <Card key={product.id} product={product} />
+                    ))}
+                  </div>
+                </>
+              </Tab>
 
-          </div>
+              <Tab title="My Showcase">
+              <>
+                  <div className='flex  justify-between  m-6'>
+                    <h1 className='text-slate-100 hover:text-slate-300 md:text-2xl font-bold pointer-events-auto'>
+                      Showcase</h1>
+                    <button
+                      onClick={loadMoreProducts}
+                      className='text-slate-100 hover:text-slate-300 md:text-2xl font-bold justify-end'
+                    > Show more +  </button>
+                  </div>
+                  {products3 ? "" : (
+                    <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 ' >
+                      {cantidadCardPlaceholder.map((item, id) => (
+                        <CardPlaceholder key={id}></CardPlaceholder>
+                      ))}
+                    </div>
+                  )}
+                  <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 '>
+                    {Array.isArray(products3) && products.map((product) => (
+                      <Card key={product.id} product={product} />
+                    ))}
+                  </div>
+                </>
+              </Tab>
 
-
-
-          <div className='mb-4 p-4'>
-            <p className='text-2xl text-white font-bold '> Treding</p>
-          </div>
-
-          <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 '>
-            {Array.isArray(products) && products.map((product) => (
-              <Card key={product.id} product={product} />
-            ))}
-
+            </Tabs>
           </div>
 
 
@@ -317,6 +381,8 @@ export function Home() {
         </div>
 
       </div>
+
+      <Footer></Footer>
     </div>
 
   );

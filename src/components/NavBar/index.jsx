@@ -13,7 +13,6 @@ export function NavBar() {
     const { logout, user } = useAuth();
 
 
-    console.log(user);
     const handleLogout = async () => {
         try {
             await logout();

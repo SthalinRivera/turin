@@ -97,8 +97,8 @@ export function NewPlace() {
         <div class="">
           <SideBar></SideBar>
         </div>
-        <div class="wrapper mt-4 ">
-          <div className='bg-white shadow-[0_8px_12px_-6px_rgba(0,0,0,0.2)] border p-6 w-full  rounded-lg font-[sans-serif] overflow-hidden mx-auto my-4'>
+        <div class="md:wrapper mt-4 ">
+          <div className='bg-white shadow-[0_8px_12px_-6px_rgba(0,0,0,0.2)] border md:p-6 w-full  rounded-lg font-[sans-serif] overflow-hidden mx-auto my-4'>
 
             <div className='flex py-6 px-6 rounded-xl justify-between'>
               <div className=''>
@@ -110,7 +110,7 @@ export function NewPlace() {
             </div>
 
             <div className="">
-              <div class="p-4 flex items-center justify-center">
+              <div class=" p-1 md:p-4 flex items-center justify-center">
                 <div class="container max-w-screen-2xl mx-auto">
 
                   <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">

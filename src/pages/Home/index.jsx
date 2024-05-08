@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { Children, useEffect, useState, useContext } from 'react';
 import OpenAI from 'openai';
 import { useNavigate, Link } from "react-router-dom";
 import { db } from "../../firebase";
-import { collection, getDocs, getDoc, deleteDoc, addDoc, query, limit, startAfter, orderBy,where } from 'firebase/firestore';
+import { collection, getDocs, getDoc, deleteDoc, addDoc, query, limit, startAfter, orderBy, where } from 'firebase/firestore';
 import { NavBar } from "../../components/NavBar";
 import { Card } from "../../components/Card";
 import { useAuth } from "../../context/AuthContext";
@@ -15,7 +15,7 @@ import { Footer } from "../../components/Footer";
 import Tabs from './Tabs';
 import Tab from './Tab';
 
-const PAGE_SIZE = 6; // Número de elementos por página
+
 export function Home() {
   const { logout, user } = useAuth();
   const [inputValue, setInputValue] = useState('');
@@ -26,25 +26,16 @@ export function Home() {
   const [buttonDisabled, setButtonDisabled] = useState(false); // Estado para deshabilitar el botón
   const [possibleInputs, setPossibleInputs] = useState([]); // Lista de posibles inputs
   const [speechUrl, setSpeechUrl] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState('hola  gil en que estas ');
   const [image_url, setImagen_url] = useState('')
   const [like, setLike] = useState(null)
   const [views, seViews] = useState(null)
   const [cantidadCardPlaceholder, setCantidadCardPlaceholder] = useState([1, 2])
   const [lastDoc, setLastDoc] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
   // Obtener la fecha y hora actual
   const currentDate = new Date().toDateString();;
 
-  const openModal = (content) => {
-    setModalContent(content);
-    setModalOpen(true);
-  };
 
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+console.log("soy la foto ",user.photoURL);
 
   const handleVisibilityChange = (e) => {
     // Cambiar el estado de visibilidad basado en el radio seleccionado
@@ -120,49 +111,32 @@ export function Home() {
     fetchResponse();
   };
 
-  const [products, setProducts] = useState('');
-  const productsCollection = collection(db, "products")
-  const getProducts = async () => {
-    const data = await getDocs(productsCollection)
-    setProducts(
-      data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-    )
-    console.log(" test", products);
-  }
 
-  //List data
+  //Calculate pages
   const [pageSize, setPageSize] = useState(2); // Estado para el número total de páginas
-  const [totalPages, setTotalPages] = useState(0); // Estado para el número total de páginas
   const loadMoreProducts = () => {
     setPageSize(pageSize + 2); // Incrementar el número de página
-    getProducts2()
-    console.log(pageSize);
+    getAllProducts()
+    getMyProducts()
   };
 
-  const getProducts2 = async () => {
+  // Lis data all user 
+  const [allProducts, setAllProducts] = useState('');
+  const getAllProducts = async () => {
     const q = query(collection(db, "products"), orderBy("timestamp"), limit(pageSize), startAfter(lastDoc));
     const data = await getDocs(q)
-    setProducts(
+    setAllProducts(
       data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
     )
-    // Calcular el número total de páginas
-    const totalDocs = await getDocs(collection(db, "products"));
-    const numPages = Math.ceil(totalDocs.size / PAGE_SIZE);
-    setTotalPages(numPages); // Establecer el número total de páginas
   };
-  const [products3, setProducts3] = useState('');
-  const getProducts3 = async () => {
-    const q = query(collection(db, "products"), orderBy("timestamp"), limit(pageSize), startAfter(lastDoc), where('userEmail', '==', user.email) );
+  // Lis data by user 
+  const [myProduct, setMyProduct] = useState('');
+  const getMyProducts = async () => {
+    const q = query(collection(db, "products"), limit(pageSize), where('userEmail', '==', user.email), orderBy("timestamp"));
     const data = await getDocs(q)
-    setProducts3(
+    setMyProduct(
       data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
     )
-    console.log(user.email);
-    console.log("producto 3",data);
-    // Calcular el número total de páginas
-    const totalDocs = await getDocs(collection(db, "products"));
-    const numPages = Math.ceil(totalDocs.size / PAGE_SIZE);
-    setTotalPages(numPages); // Establecer el número total de páginas
   };
 
   //Add data
@@ -171,7 +145,6 @@ export function Home() {
   const photoURL = user.photoURL
   const userEmail = user.email
   const store = async (response) => {
-    console.log("esperado respuesta ", response);
     console.log("Almacenando en Firebase...");
     if (response) {
       await addDoc(productsCollectionStore, {
@@ -205,8 +178,8 @@ export function Home() {
       "Desarrollo de un plan de gestión de crisis para destinos turísticos frente a desastres naturales y pandemias: Experiencias del COVID-19",
       // Agrega más inputs según sea necesario
     ]);
-    getProducts2();
-    getProducts3();
+    getAllProducts();
+    getMyProducts();
   }, [response, pageSize])
 
   const generateSpeech = async (respuesta) => {
@@ -311,7 +284,6 @@ export function Home() {
                     <div className="px-6 py-4">
                       <div className="font-bold text-xl mb-2">{inputValue}</div>
                       <div dangerouslySetInnerHTML={{ __html: response }} />
-
                       <p className='mt-6'>Tiempo de generación: {generationTime.toFixed(2)} milisegundos</p>
                     </div>
                   </div>
@@ -333,7 +305,7 @@ export function Home() {
                       className='text-slate-100 hover:text-slate-300 md:text-2xl font-bold justify-end'
                     > Show more +  </button>
                   </div>
-                  {products ? "" : (
+                  {allProducts ? "" : (
                     <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 ' >
                       {cantidadCardPlaceholder.map((item, id) => (
                         <CardPlaceholder key={id}></CardPlaceholder>
@@ -341,7 +313,7 @@ export function Home() {
                     </div>
                   )}
                   <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 '>
-                    {Array.isArray(products) && products.map((product) => (
+                    {Array.isArray(allProducts) && allProducts.map((product) => (
                       <Card key={product.id} product={product} />
                     ))}
                   </div>
@@ -349,7 +321,7 @@ export function Home() {
               </Tab>
 
               <Tab title="My Showcase">
-              <>
+                <>
                   <div className='flex  justify-between  m-6'>
                     <h1 className='text-slate-100 hover:text-slate-300 md:text-2xl font-bold pointer-events-auto'>
                       Showcase</h1>
@@ -358,7 +330,7 @@ export function Home() {
                       className='text-slate-100 hover:text-slate-300 md:text-2xl font-bold justify-end'
                     > Show more +  </button>
                   </div>
-                  {products3 ? "" : (
+                  {myProduct ? "" : (
                     <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 ' >
                       {cantidadCardPlaceholder.map((item, id) => (
                         <CardPlaceholder key={id}></CardPlaceholder>
@@ -366,7 +338,7 @@ export function Home() {
                     </div>
                   )}
                   <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 '>
-                    {Array.isArray(products3) && products.map((product) => (
+                    {Array.isArray(myProduct) && myProduct.map((product) => (
                       <Card key={product.id} product={product} />
                     ))}
                   </div>

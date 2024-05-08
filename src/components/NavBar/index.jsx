@@ -104,17 +104,14 @@ export function NavBar() {
                                             <img className="rounded h-10 w-10 object-cover" src={user.photoURL} alt="logo" />
                                         ) : (
                                             /* Si no hay URL de foto del usuario, muestra una imagen alternativa */
-                                            <img className="rounded h-10 w-10 object-cover" src="https://tuk-cdn.s3.amazonaws.com/assets/components/horizontal_navigation/hn_1.png" alt="logo" />
+                                            <>
+                                            <Link className="text-slate-100"  to={"/login"}>LognIn</Link>
+                                            </>
+                                            
 
                                         )}
                                       
-                                      {user ? (
-                                             <p className="text-white text-sm ml-2">{user.displayName}</p>
-                                        ) : (
-                                            /* Si no hay URL de foto del usuario, muestra una imagen alternativa */
-                                            <p className="text-white text-sm ml-2"></p>
-
-                                        )}
+                                
                                        
                                     </div>
                                 </div>

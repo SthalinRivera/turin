@@ -13,7 +13,6 @@ export function Footer() {
                             <span class="text-sm text-gray-500 ">©<a href="https://pagedone.io/">pagedone</a> 2024, All rights reserved.</span>
                             <ul class="flex items-center text-sm text-gray-500 gap-9">
                                 <li><a href="#">create</a></li>
-                            
                             </ul>
                         </div>
                     </div>

@@ -11,6 +11,7 @@ export function Register() {
   };
 
   const [user, setUser] = useState({
+    displayName:"",
     email: "",
     password: "",
   });
@@ -22,8 +23,8 @@ export function Register() {
     e.preventDefault();
     setError("");
     try {
-      await signup(user.email, user.password);
-      navigate("/");
+      await signup(user.email, user.password, user.displayName);
+      navigate("/home");
     } catch (error) {
       setError(error.message);
     }
@@ -49,6 +50,11 @@ export function Register() {
               </span>
             </p>
             <form onSubmit={handleSubmit} >
+            <div>
+                <lable className="text-sm font-medium leading-none text-gray-800">User Name</lable>
+                <input onChange={(e) => setUser({ ...user, displayName: e.target.value })} name="displayName"
+                  id="displayName" aria-label="enter your name" role="input" type="text" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
+              </div>
               <div>
                 <lable className="text-sm font-medium leading-none text-gray-800">Email</lable>
                 <input onChange={(e) => setUser({ ...user, email: e.target.value })} name="email"

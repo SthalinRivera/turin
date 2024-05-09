@@ -29,13 +29,10 @@ export function Home() {
   const [image_url, setImagen_url] = useState('')
   const [like, setLike] = useState(null)
   const [views, seViews] = useState(null)
-  const [cantidadCardPlaceholder, setCantidadCardPlaceholder] = useState([1, 2])
+  const [cantidadCardPlaceholder, setCantidadCardPlaceholder] = useState([1, 2, 3, 4])
   const [lastDoc, setLastDoc] = useState(null);
   // Obtener la fecha y hora actual
   const currentDate = new Date().toDateString();;
-
-
-console.log("soy la foto ",user.photoURL);
 
   const handleVisibilityChange = (e) => {
     // Cambiar el estado de visibilidad basado en el radio seleccionado
@@ -113,7 +110,7 @@ console.log("soy la foto ",user.photoURL);
 
 
   //Calculate pages
-  const [pageSize, setPageSize] = useState(2); // Estado para el número total de páginas
+  const [pageSize, setPageSize] = useState(4); // Estado para el número total de páginas
   const loadMoreProducts = () => {
     setPageSize(pageSize + 2); // Incrementar el número de página
     getAllProducts()
@@ -201,70 +198,50 @@ console.log("soy la foto ",user.photoURL);
   const [cards, setCards] = useState([]);
 
   return (
-    <div className='bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-700 via-slate-600 to-slate-900 '>
+    <div className='bg-zinc-700 '>
       <NavBar />
-      <div className=' wrapper '>
-        <div className='mb-4 md:mb-10 ' >
-          <div class=" mx-auto  mt-10 md:py-32 sm:py-48 lg:py-4  ">
-            <div class="justify-center">
-              <p className='text-xl text-center font-bold text-slate-50'>Ingrese su título y explore con IA </p>
-              <form onSubmit={handleSubmit} className=' bg-slate-900 rounded-xl p-1 mt-4 z-0'>
-                <div className='mt-4 bg-clip-border rounded-xl  shadow-sm drop-shadow-sm mb-4 0'  >
-                  <div class="flex">
-                    <div class="relative w-3/4">
-                      <textarea required type="text" rows={6} className='focus:outline-none  resize-none block bg-slate-900 w-full p-4 ps-10 text-sm pl-9  text-white border-none rounded-xl ' placeholder="Ej:Implemtacion de plan de marketing en proceso de ventas del Travi Sac ." value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)} />
-                    </div>
-                    <div class=" w-1/4  ">
-                      <p className='text-gray-500 text-center '> Visibilidad</p>
-                      <input type="radio" name="hs-default-radio"
-                        value="private"
-                        onChange={handleVisibilityChange}
-                        id="private-radio"
-                        checked={!visibility}
-                        className="m-2" />
-                      <label for="hs-default-radio" class="text-sm text-gray-500  dark:text-gray-400">Privado</label>
-
-                      <input type="radio" name="hs-default-radio"
-                        onChange={handleVisibilityChange}
-                        value="public"
-                        id="private-radio"
-                        checked={visibility} className="m-2" />
-                      <label for="hs-checked-radio" class="text-sm text-gray-500  dark:text-gray-400">Público</label>
-                      <div className='items-center justify-center'>
-
-                        <div class="  text-gray-500 dark:text-gray-400 py-2 px-2 inline-flex items-center" onClick={LimpiarInput}>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                          </svg>
-                          <span className='text-sm ml-2' >Limpiar</span>
-                        </div></div>
-                    </div>
-                  </div>
-
-                  <div className='p-3 relative bottom-0 left-0'>
-
-                    <div class="absolute bottom-0 right-0 ">
-                      <button className='m-3 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-4 text-center  '
-                        type="submit" disabled={buttonDisabled}>Generate
-
-                      </button>
-                    </div>
-                    <a class="bg-transparent hover:bg-zinc-900 text-slate-300 font-semibold hover:text-white py-2 px-4 border border-slate-500 hover:border-transparent rounded mr-4">
-                      Basic
-                    </a>
-                    <a class="bg-transparent hover:bg-zinc-900 text-slate-300 font-semibold hover:text-white py-2 px-4 border border-slate-500 hover:border-transparent rounded">
-                      Expert
-                    </a>
-                  </div>
-                </div>
-              </form>
-              <div class="  text-cyan-50 font-bold py-1 px-1 rounded inline-flex items-center text-sm" onClick={handleRandomInput}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 pr-2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+      <div className='m-4'>
+        <div class="md:flex mb-4">
+          <div class="mt-10 md:mt-0 w-full md:w-1/4 p-2 h-auto  md:h-screen">
+            <p className='mt-10 md:mt-0 text-white font-bold text-center'>Describe your variables </p>
+            <form onSubmit={handleSubmit} className='  rounded-xl p-1 mt-4 z-0'>
+              <textarea required type="text" rows={4} className='p-4  resize-none block bg-zinc-800 w-full p-4 ps-10 text-sm pl-9  text-white border  border-slate-400 rounded-xl ' placeholder="Ej:Implemtacion de plan de marketing en proceso de ventas del Travi Sac ." value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)} />
+              <p className='text-gray-100 text-center font-bold mt-2 '>Visibilidad</p>
+              <input type="radio" name="hs-default-radio"
+                value="private"
+                onChange={handleVisibilityChange}
+                id="private-radio"
+                checked={!visibility}
+                className="m-2" />
+              <label for="hs-default-radio" class="text-sm text-gray-100  dark:text-gray-400">Privado</label>
+              <input type="radio" name="hs-default-radio"
+                onChange={handleVisibilityChange}
+                value="public"
+                id="private-radio"
+                checked={visibility} className="m-2" />
+              <label for="hs-checked-radio" class="text-sm text-gray-100  dark:text-gray-400">Público</label>
+              <div class="  text-gray-100 dark:text-gray-400 py-2 px-2 inline-flex items-center" onClick={LimpiarInput}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                 </svg>
-                <span>Sorpréndeme</span>
+                <span className='text-sm ml-2' >Limpiar</span>
               </div>
+              <button className=' text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm   text-center w-full h-10  '
+                type="submit" disabled={buttonDisabled}>Generate
+              </button>
+            </form>
+            <div class=" text-cyan-50 font-bold py-1 px-1 rounded inline-flex items-center justify-start text-sm" onClick={handleRandomInput}>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 pr-2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+              </svg>
+              <span>Sorpréndeme</span>
+            </div>
+          </div>
+
+          <div class="md:w-1/2 p-2 text-center ">
+
+            <div class="justify-center">
               {loading ? (
                 <div className=''>
                   <button type="button" class="py-2 mb-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg max-w-full">
@@ -290,19 +267,15 @@ console.log("soy la foto ",user.photoURL);
                 </div>
               )}
             </div>
-          </div>
-
-
-          <div className="container mx-auto mt-8">
             <Tabs>
               <Tab title="All Showcase">
                 <>
-                  <div className='flex  justify-between  m-6'>
-                    <h1 className='text-slate-100 hover:text-slate-300 md:text-2xl font-bold pointer-events-auto'>
+                  <div className='flex  justify-between  md:m-1'>
+                    <h1 className='text-slate-100 hover:text-slate-300 md:text-xl font-bold pointer-events-auto'>
                       Showcase</h1>
                     <button
                       onClick={loadMoreProducts}
-                      className='text-slate-100 hover:text-slate-300 md:text-2xl font-bold justify-end'
+                      className='text-slate-100 hover:text-slate-300 md:text-xl font-bold justify-end'
                     > Show more +  </button>
                   </div>
                   {allProducts ? "" : (
@@ -322,7 +295,7 @@ console.log("soy la foto ",user.photoURL);
 
               <Tab title="My Showcase">
                 <>
-                  <div className='flex  justify-between  m-6'>
+                  <div className='flex  justify-between  md:m-1'>
                     <h1 className='text-slate-100 hover:text-slate-300 md:text-2xl font-bold pointer-events-auto'>
                       Showcase</h1>
                     <button
@@ -346,10 +319,13 @@ console.log("soy la foto ",user.photoURL);
               </Tab>
 
             </Tabs>
+
           </div>
+          {/**/}
+          <div class="md:w-1/4 p-2 text-center text-sm ">
 
-
-
+            <p className='text-white font-bold'>Selecciona un Shorcase</p>
+          </div>
         </div>
 
       </div>

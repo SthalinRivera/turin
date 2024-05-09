@@ -101,18 +101,19 @@ export function NavBar() {
 
                                         {/* Si hay una URL de foto del usuario, muestra la imagen */}
                                         {user ? (
-                                            <img className="rounded h-10 w-10 object-cover" src={user.photoURL} alt="logo" />
+                                            <>
+                                                <p class="text-slate-200 text-xs  leading-none mr-2">{user.email && user.email.split('@')[0]}</p>
+                                                <img className="rounded-full h-10 w-10 object-cover" src={user.photoURL ? user.photoURL : "https://firebasestorage.googleapis.com/v0/b/tutorial-538a4.appspot.com/o/userDefault.jpg?alt=media&token=3939f559-10ba-4287-ba28-ebcc03779ba6"} alt="logo" />
+                                            </>
                                         ) : (
                                             /* Si no hay URL de foto del usuario, muestra una imagen alternativa */
                                             <>
-                                            <Link className="text-slate-100"  to={"/login"}>LognIn</Link>
+                                                <Link className="text-slate-100" to={"/login"}>LognIn</Link>
                                             </>
-                                            
-
                                         )}
-                                      
-                                
-                                       
+
+
+
                                     </div>
                                 </div>
                             </div>

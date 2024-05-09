@@ -25,7 +25,7 @@ const Tabs = ({ children }) => {
          
         ))} <hr class="border-t border-gray-200"/>
       </div>
-      <div className="p-4">{children[activeTab]}</div>
+      <div className="">{children[activeTab]}</div>
     </div>
     
 

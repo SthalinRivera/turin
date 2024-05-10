@@ -39,7 +39,7 @@ export function NavBar() {
                                 <h3 className="text-base text-white font-bold tracking-normal leading-tight ml-3 hidden lg:block"><Link to="/">Flour</Link></h3>
                             </div>
                             <ul className="pr-12 xl:flex items-center h-full hidden">
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-white tracking-normal border-b-2 border-white">Dashboard</li>
+                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-white tracking-normal border-b-2 border-white"><Link to="/dashboard"> Dashboard</Link></li>
                                 <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-white mx-10 tracking-normal"><Link to="/gemini"> Gemini</Link></li>
                                 <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-white mr-10 tracking-normal"><Link to="/speech-generator"> speech-generator</Link></li>
                                 <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-white tracking-normal"><Link to="/product"> Product</Link></li>

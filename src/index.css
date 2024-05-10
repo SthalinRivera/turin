@@ -14,7 +14,11 @@
     .bg-page{
         @apply bg-gradient-to-r bg-gray-100 bg-gray-100 bg-gray-100;
     }
-    
+    .bg-gradient  {
+  
+        @apply bg-gradient-to-tl from-teal-400 to-gray-800;
+    }
+
     .footer-area{
         grid-template-areas:
         "form"

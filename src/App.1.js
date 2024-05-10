@@ -15,6 +15,7 @@ import { Storage } from "./pages/Storage";
 import { Gallery } from "./pages/Gallery";
 import { Places } from "./pages/Places";
 import { NewPlace } from "./pages/Places/NewPlace";
+import {Dashboard} from "./pages/Dashboard"
 export function App() {
 
   const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
@@ -50,6 +51,7 @@ export function App() {
 
             <Route path="/storage" element={<Storage />} />
             <Route path="/gallery" element={<Gallery />} />
+            <Route path="dashboard" element={<Dashboard/>}></Route>
           </Routes>
       </AuthProvider>
     </div>

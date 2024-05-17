@@ -16,8 +16,8 @@ const Tabs = ({ children }) => {
             onClick={() => changeTab(index)}
             className={`${
               activeTab === index
-                ? ' text-white font-bold'
-                : ' text-slate-300 font-bold'
+                ? ' text-slate-700 dark:text-white font-bold'
+                : ' text-slate-700 dark:text-white font-bold'
             } py-2 px-4 rounded-l focus:outline-none`}
           >
             {tab.props.title}

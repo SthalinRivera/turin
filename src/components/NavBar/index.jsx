@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
+
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 export function NavBar() {
@@ -20,11 +21,36 @@ export function NavBar() {
             console.error(error.message);
         }
     };
+    const [theme, setTheme] = useState(() => {
+        // On page load or when changing themes, check localStorage for the theme
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            return 'dark';
+        } else {
+            return 'light';
+        }
+    });
+
+    // Update the theme in localStorage and apply it to the HTML element
+    useEffect(() => {
+        localStorage.setItem('theme', theme);
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [theme]);
+
+    // Function to toggle between light and dark themes
+    const toggleTheme = () => {
+        setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
+    };
+
     return (
         <>
-            <div className="bg-gray-200  w-full">
+            <div className="  w-full">
                 {/* Code block starts */}
-                <nav className="w-full mx-auto hidden xl:block bg-gray-800 shadow">
+                <nav className="w-full mx-auto hidden xl:block bg-gray-200 dark:bg-slate-800 shadow">
                     <div className="container px-6 justify-between h-16 flex items-center lg:items-stretch mx-auto">
                         <div className="h-full flex items-center">
                             <div className="mr-10 flex items-center">
@@ -36,59 +62,35 @@ export function NavBar() {
                                         />
                                     </g>
                                 </svg>
-                                <h3 className="text-base text-white font-bold tracking-normal leading-tight ml-3 hidden lg:block"><Link to="/">Flour</Link></h3>
+                                <h3 className="text-base text-slate-700 dark:text-white font-bold tracking-normal leading-tight ml-3 hidden lg:block"><Link to="/">Flour</Link></h3>
                             </div>
                             <ul className="pr-12 xl:flex items-center h-full hidden">
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-white tracking-normal border-b-2 border-white"><Link to="/dashboard"> Dashboard</Link></li>
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-white mx-10 tracking-normal"><Link to="/gemini"> Gemini</Link></li>
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-white mr-10 tracking-normal"><Link to="/speech-generator"> speech-generator</Link></li>
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-white tracking-normal"><Link to="/product"> Product</Link></li>
+                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white  tracking-normal border-b-2 border-white"><Link to="/dashboard"> Dashboard</Link></li>
+                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white mx-10 tracking-normal"><Link to="/gemini"> Gemini</Link></li>
+                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white mr-10 tracking-normal"><Link to="/speech-generator"> speech-generator</Link></li>
+                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white mr-10 tracking-normal"><Link to="/parafrasear"> Parafrasea</Link></li>
+                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white tracking-normal"><Link to="/product"> Product</Link></li>
                             </ul>
                         </div>
+
                         <div className="h-full xl:flex items-center justify-end hidden">
                             <div className="w-full h-full flex items-center">
-                                <div className="w-full pr-12 h-full flex items-center border-gray-700 border-r">
-                                    <div className="relative w-full">
-                                        <div className="text-white absolute ml-3 inset-0 m-auto w-4 h-4">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search" width={16} height={16} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" />
-                                                <circle cx={10} cy={10} r={7} />
-                                                <line x1={21} y1={21} x2={15} y2={15} />
-                                            </svg>
-                                        </div>
-                                        <input className="border border-gray-700 focus:outline-none focus:border-indigo-700 w-56 rounded text-sm text-white bg-gray-700 pl-8 py-2" type="text" placeholder="Search" />
-                                    </div>
-                                </div>
+
                                 <div className="w-full h-full flex">
-                                    <div className="w-32 h-full flex items-center justify-center border-gray-700 border-r text-gray-400 cursor-pointer">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-bell" width={28} height={28} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" />
-                                            <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
-                                            <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
-                                        </svg>
+                                    <div className="w-32 h-full flex items-center justify-center border-gray-700 border-r  cursor-pointer block">
+                                        <button onClick={toggleTheme} className={`  h-12 w-12 rounded-lg p-2 hover:bg-gray-300 ${theme === 'dark' ? 'dark:bg-gray-700' : ''}`}>
+                                            <svg className={`${theme === 'dark' ? 'fill-yellow-500' : 'fill-violet-800'} block dark:hidden`} fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                            </svg>
+                                            <svg className={`${theme === 'dark' ? 'fill-yellow-500' : 'fill-violet-300'} hidden dark:block`} fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                     <div className="w-full flex items-center justify-end relative cursor-pointer" onClick={() => setProfile(!profile)}>
                                         {profile && (
                                             <ul className="p-2 w-40 border-r bg-white absolute rounded left-0 shadow mt-16 top-0 ">
-                                                <li className="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
-                                                    <div className="flex items-center">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-user" width={20} height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" />
-                                                            <circle cx={12} cy={7} r={4} />
-                                                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                                                        </svg>
-                                                        <span className="ml-2">My Profile</span>
-                                                    </div>
-                                                </li>
-                                                <li className="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none flex items-center">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-help" width={20} height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" />
-                                                        <circle cx={12} cy={12} r={9} />
-                                                        <line x1={12} y1={17} x2={12} y2="17.01" />
-                                                        <path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4" />
-                                                    </svg>
-                                                    <span className="ml-2">Help Center</span>
-                                                </li>
+
                                                 <li onClick={handleLogout} className="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
@@ -102,7 +104,7 @@ export function NavBar() {
                                         {/* Si hay una URL de foto del usuario, muestra la imagen */}
                                         {user ? (
                                             <>
-                                                <p class="text-slate-200 text-xs  leading-none mr-2">{user.email && user.email.split('@')[0]}</p>
+                                                <p class=" text-slate-700 dark:text-slate-200 text-xs  leading-none mr-2">{user.email && user.email.split('@')[0]}</p>
                                                 <img className="rounded-full h-10 w-10 object-cover" src={user.photoURL ? user.photoURL : "https://firebasestorage.googleapis.com/v0/b/tutorial-538a4.appspot.com/o/userDefault.jpg?alt=media&token=3939f559-10ba-4287-ba28-ebcc03779ba6"} alt="logo" />
                                             </>
                                         ) : (
@@ -112,71 +114,17 @@ export function NavBar() {
                                             </>
                                         )}
 
-
-
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="flex items-center xl:hidden">
-                            <ul className="p-2 border-r bg-white absolute rounded top-0 left-0 right-0 shadow mt-16 md:mt-16 hidden">
-                                <li className="flex md:hidden cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
-                                    <div className="flex items-center">
-                                        <span className="ml-2 font-bold">Dashboard</span>
-                                    </div>
-                                </li>
-                                <li className="flex md:hidden flex-col cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none flex justify-center">
-                                    <div className="flex items-center">
-                                        <span className="ml-2 font-bold">Products</span>
-                                    </div>
-                                </li>
-                                <li className="flex md:hidden flex-col cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none flex justify-center">
-                                    <div className="flex items-center">
-                                        <span className="ml-2 font-bold">Performance</span>
-                                    </div>
-                                </li>
-                                <li className="border-b border-gray-300 flex md:hidden cursor-pointer text-gray-600 text-sm leading-3 tracking-normal pt-2 pb-4 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none">
-                                    <span className="ml-2 font-bold">Deliverables</span>
-                                </li>
-                                <li className="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none">
-                                    <div className="flex items-center">
-                                        <div className="w-12 cursor-pointer flex text-sm border-2 border-transparent rounded focus:outline-none focus:border-white transition duration-150 ease-in-out">
-                                            <img className="rounded h-10 w-10 object-cover" src="https://tuk-cdn.s3.amazonaws.com/assets/components/horizontal_navigation/hn_1.png" alt="logo" />
-                                        </div>
-                                        <p className="text-sm ml-2 cursor-pointer">Jane Doe</p>
-                                        <div className="sm:ml-2 text-white relative">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-chevron-down cursor-pointer" width={20} height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" />
-                                                <polyline points="6 9 12 15 18 9" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li className="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal py-2 hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
-                                    <div className="flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-user" width={20} height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" />
-                                            <circle cx={12} cy={7} r={4} />
-                                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                                        </svg>
-                                        <span className="ml-2">Profile</span>
-                                    </div>
-                                </li>
-                                <li className="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-logout" width={20} height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" />
-                                        <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
-                                        <path d="M7 12h14l-3 -3m0 6l3 -3" />
-                                    </svg>
-                                    <span className="ml-2">Sign out</span>
-                                </li>
-                            </ul>
-                        </div>
+
                     </div>
                 </nav>
                 {/* Navbar */}
                 <nav>
                     <div className="py-4 px-6 w-full flex xl:hidden justify-between items-center bg-gray-800 fixed top-0 z-40">
+
                         <div className="w-24">
                             <svg xmlns="http://www.w3.org/2000/svg" width={43} height={44} viewBox="0 0 43 44" fill="none">
                                 <path
@@ -220,7 +168,7 @@ export function NavBar() {
                                                             fill="#667EEA"
                                                         />
                                                     </svg>
-                                                    <p className="text-base  text-white ml-3">The North</p>
+                                                    <p className="text-base  text-white ml-3">TraviWeb</p>
                                                 </div>
                                                 <div id="cross" className="text-white" onClick={() => setShow(!show)}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-x" width={24} height={24} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -244,7 +192,7 @@ export function NavBar() {
                                                                 <rect x={14} y={14} width={6} height={6} rx={1} />
                                                             </svg>
                                                         </div>
-                                                        <p className="text-indigo-700 xl:text-base text-base ml-3">Dashboard</p>
+                                                        <Link to="/">   <p className="text-white xl:text-base  text-base ml-3">Home</p></Link>
                                                     </div>
                                                 </li>
                                             </a>
@@ -258,7 +206,7 @@ export function NavBar() {
                                                                     <path d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1" />
                                                                 </svg>
                                                             </div>
-                                                            <p className="text-white xl:text-base  text-base ml-3">Products</p>
+                                                            <Link to="/gemini">   <p className="text-white xl:text-base  text-base ml-3">Gemini</p></Link>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -273,7 +221,7 @@ export function NavBar() {
                                                                 <circle cx={12} cy={12} r={9} />
                                                             </svg>
                                                         </div>
-                                                        <p className="text-white xl:text-base  text-base ml-3">Performance</p>
+                                                        <Link to="/parafrasear">   <p className="text-white xl:text-base  text-base ml-3">parafrasear</p></Link>
                                                     </div>
                                                 </li>
                                             </a>
@@ -288,51 +236,36 @@ export function NavBar() {
                                                                 <line x1={14} y1={4} x2={10} y2={20} />
                                                             </svg>
                                                         </div>
-                                                        <p className="text-white xl:text-base  text-base ml-3">Deliverables</p>
+                                                        <Link to="/home"><p className="text-white xl:text-base  text-base ml-3">Matriz de Consitencia</p></Link>
                                                     </div>
                                                 </div>
                                             </li>
                                         </ul>
                                     </div>
                                     <div className="w-full pt-4">
-                                        <div className="flex justify-center mb-4 w-full">
-                                            <div className="relative w-full">
-                                                <div className="text-gray-500 absolute ml-4 inset-0 m-auto w-4 h-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search" width={16} height={16} viewBox="0 0 24 24" strokeWidth={1} stroke="#A0AEC0" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" />
-                                                        <circle cx={10} cy={10} r={7} />
-                                                        <line x1={21} y1={21} x2={15} y2={15} />
-                                                    </svg>
-                                                </div>
-                                                <input className="bg-gray-100 focus:outline-none rounded w-full text-sm text-gray-500 bg-gray-700 pl-10 py-2" type="text" placeholder="Search" />
-                                            </div>
-                                        </div>
+
                                         <div className="border-t border-gray-700">
-                                            <div className="w-full flex items-center justify-between pt-1">
-                                                <div className="flex items-center">
-                                                    <img alt="profile-pic" src="https://tuk-cdn.s3.amazonaws.com/assets/components/boxed_layout/bl_1.png" className="w-8 h-8 rounded-md" />
-                                                    <p className=" text-white text-base leading-4 ml-2">Jane Doe</p>
-                                                </div>
-                                                <ul className="flex">
-                                                    <li className="cursor-pointer text-white pt-5 pb-3">
-                                                        <div className="w-6 h-6 md:w-8 md:h-8">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-messages" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" />
-                                                                <path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" />
-                                                                <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" />
-                                                            </svg>
+                                            <div className=" mt-2">
+                                                {/* Si hay una URL de foto del usuario, muestra la imagen */}
+                                                {user ? (
+                                                    <div className='flex justify-between'>
+                                                        <div className='inline-flex  items-center'>
+                                                            <img className="rounded-full h-10 w-10 object-cover" src={user.photoURL ? user.photoURL : "https://firebasestorage.googleapis.com/v0/b/tutorial-538a4.appspot.com/o/userDefault.jpg?alt=media&token=3939f559-10ba-4287-ba28-ebcc03779ba6"} alt="logo" />
+
+                                                            <p class=" text-slate-700 dark:text-slate-200 text-xs  leading-none ml-2">{user.email && user.email.split('@')[0]}</p>
                                                         </div>
-                                                    </li>
-                                                    <li className="cursor-pointer text-white pt-5 pb-3 pl-3">
-                                                        <div className="w-6 h-6 md:w-8 md:h-8">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-bell" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" />
-                                                                <path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
-                                                                <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+                                                        <button onClick={handleLogout} className="cursor-pointer text-gray-600 text-sm text-right leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
                                                             </svg>
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    /* Si no hay URL de foto del usuario, muestra una imagen alternativa */
+                                                    <>
+                                                        <Link className="text-slate-100" to={"/login"}>LognIn</Link>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                     </div>

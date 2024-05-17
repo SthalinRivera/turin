@@ -1,12 +1,16 @@
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,jsx,ts,tsx}"
+  ],
+  darkMode: 'class',
   theme: {
     extend: {
 
       fontFamily: {
         "principal": ['"Be Vietnam Pro"', 'sans-serif']
       },
-      darkMode: 'class',
+      
       colors: {
         "bright-red": "hsl(12, 88%, 59%)",
         "dark-blue": "hsl(228, 39%, 23%)",

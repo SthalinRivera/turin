@@ -35,7 +35,7 @@ export function Register() {
 
       <NavBar></NavBar>
 
-      <div className="h-full bg-gradient-to-tl from-green-400 to-indigo-900 w-full py-16 px-4">
+      <div className="h-screen bg-gradient-to-tl from-green-400 to-indigo-900 w-full py-16 px-4">
         {error && <Alert message={error} />}
         <div className="flex flex-col items-center justify-center">
           <div className="bg-white shadow rounded-xl lg:w-1/3  md:w-1/2 w-full p-10 mt-16">

@@ -10,6 +10,7 @@ export function Dashboard(props) {
   const [posts, setPosts] = useState([]);
 
 
+
   const [totalPosts, setTotalPosts] = useState(0); // Estado para almacenar el total de posts
   const postsCollection = collection(db, "dataset");
   const getDataCharts = async () => {
@@ -28,9 +29,11 @@ export function Dashboard(props) {
       console.error("Error fetching posts: ", error);
     }
   }
+
   useEffect(() => {
     getDataCharts()
     getPostsTotal() 
+   
   }, [])
 
   return (

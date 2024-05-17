@@ -16,11 +16,9 @@ import { Gallery } from "./pages/Gallery";
 import { Places } from "./pages/Places";
 import { NewPlace } from "./pages/Places/NewPlace";
 import {Dashboard} from "./pages/Dashboard"
+import { Parafrasear } from "./pages/Parafrasear";
 export function App() {
 
-  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
-  console.log('aqui debe de estar');
-  console.log(apiKey); // Outputs the value from your .env file
   return (
     <div className="  ">
       <AuthProvider>
@@ -35,9 +33,7 @@ export function App() {
                 <Home />
               </ProtectedRoute>} />
 
-
             <Route path="/register" element={<Register />} />
-
             <Route path="/speech-generator" element={<SpeechGenerator />} />
             <Route path="/gemini" element={<Gemini />} />
 
@@ -52,6 +48,7 @@ export function App() {
             <Route path="/storage" element={<Storage />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="dashboard" element={<Dashboard/>}></Route>
+            <Route path="parafrasear" element={<Parafrasear/>}> </Route>
           </Routes>
       </AuthProvider>
     </div>

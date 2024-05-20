@@ -72,7 +72,7 @@ export function Parafrasear() {
 
 
   return (
-    <div className="h-full h-screen dark:bg-slate-900">
+    <div className="h-screen dark:bg-slate-900">
       <NavBar />
       <div className="wrapper">
         <div className=''>
@@ -151,7 +151,7 @@ export function Parafrasear() {
           <div class="md:flex  md:mt-0 mb-4  ">
             <div class=" w-full md:w-1/2  h-auto ">
               <div className=''>
-                <textarea id="message" value={inputText} onChange={(e) => setInputText(e.target.value)}  class="min-h-[100px] md:min-h-[460px] block mt-2 p-2.5 w-full text-[10px] md:text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+                <textarea id="message" value={inputText} onChange={(e) => setInputText(e.target.value)}  class="min-h-[100px] md:min-h-[460px] block mt-2 p-2.5 w-full text-[10px] md:text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your text here maximum 5,000 characters..."></textarea>
                 <button type="button" onClick={run} class="mt-4 w-full text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-br hover:from-purple-700 hover:to-blue-500 hover:text-white  focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Parafrasear
 
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 inline-flex ml-3">

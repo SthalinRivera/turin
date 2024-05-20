@@ -110,7 +110,7 @@ export function NavBar() {
                                         ) : (
                                             /* Si no hay URL de foto del usuario, muestra una imagen alternativa */
                                             <>
-                                                <Link className="text-slate-100" to={"/login"}>LognIn</Link>
+                                                <Link className=" text-slate-900 dark:text-slate-100" to={"/login"}>LognIn</Link>
                                             </>
                                         )}
 

@@ -50,7 +50,7 @@ export function NavBar() {
         <>
             <div className="  w-full">
                 {/* Code block starts */}
-                <nav className="w-full mx-auto hidden xl:block bg-gray-200 dark:bg-slate-800 shadow">
+                <nav className="  w-full mx-auto hidden xl:block bg-gray-200 dark:bg-slate-800 shadow">
                     <div className="container px-6 justify-between h-16 flex items-center lg:items-stretch mx-auto">
                         <div className="h-full flex items-center">
                             <div className="mr-10 flex items-center">
@@ -70,23 +70,22 @@ export function NavBar() {
                                 <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white mr-10 tracking-normal"><Link to="/speech-generator"> speech-generator</Link></li>
                                 <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white mr-10 tracking-normal"><Link to="/parafrasear"> Parafrasea</Link></li>
                                 <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white tracking-normal"><Link to="/product"> Product</Link></li>
+
                             </ul>
                         </div>
 
                         <div className="h-full xl:flex items-center justify-end hidden">
                             <div className="w-full h-full flex items-center">
-
+                            <button onClick={toggleTheme} className={` h-12 w-12 rounded-lg p-2 mr-2 hover:bg-gray-300 ${theme === 'dark' ? 'dark:bg-gray-700' : ''}`}>
+                                    <svg className={`${theme === 'dark' ? 'fill-yellow-500' : 'fill-violet-800'} block dark:hidden`} fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                    </svg>
+                                    <svg className={`${theme === 'dark' ? 'fill-yellow-500' : 'fill-violet-300'} hidden dark:block`} fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+                                    </svg>
+                                </button>
                                 <div className="w-full h-full flex">
-                                    <div className="w-32 h-full flex items-center justify-center border-gray-700 border-r  cursor-pointer block">
-                                        <button onClick={toggleTheme} className={`  h-12 w-12 rounded-lg p-2 hover:bg-gray-300 ${theme === 'dark' ? 'dark:bg-gray-700' : ''}`}>
-                                            <svg className={`${theme === 'dark' ? 'fill-yellow-500' : 'fill-violet-800'} block dark:hidden`} fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                                            </svg>
-                                            <svg className={`${theme === 'dark' ? 'fill-yellow-500' : 'fill-violet-300'} hidden dark:block`} fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
+
                                     <div className="w-full flex items-center justify-end relative cursor-pointer" onClick={() => setProfile(!profile)}>
                                         {profile && (
                                             <ul className="p-2 w-40 border-r bg-white absolute rounded left-0 shadow mt-16 top-0 ">
@@ -97,6 +96,8 @@ export function NavBar() {
                                                     </svg>
 
                                                     <span className="ml-2"> Sign out</span>
+
+
                                                 </li>
                                             </ul>
                                         )}
@@ -110,7 +111,11 @@ export function NavBar() {
                                         ) : (
                                             /* Si no hay URL de foto del usuario, muestra una imagen alternativa */
                                             <>
-                                                <Link className=" text-slate-900 dark:text-slate-100" to={"/login"}>LognIn</Link>
+                                                <Link className=" text-slate-900 dark:text-slate-100" to={"/login"}>
+                                                    <button type="button" class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Get started</button>
+
+                                                </Link>
+
                                             </>
                                         )}
 
@@ -123,8 +128,7 @@ export function NavBar() {
                 </nav>
                 {/* Navbar */}
                 <nav>
-                    <div className="py-4 px-6 w-full flex xl:hidden justify-between items-center bg-gray-800 fixed top-0 z-40">
-
+                    <div className="py-4 px-6 w-full flex xl:hidden justify-between items-center bg-slate-300 dark:bg-gray-800 fixed top-0 z-40">
                         <div className="w-24">
                             <svg xmlns="http://www.w3.org/2000/svg" width={43} height={44} viewBox="0 0 43 44" fill="none">
                                 <path
@@ -135,8 +139,18 @@ export function NavBar() {
                                 />
                             </svg>
                         </div>
-                        <div>
-                            <div id="menu" className="text-white" onClick={() => setShow(!show)}>
+                        <div className='flex'>
+                            <div className="  mr-2">
+                                <button onClick={toggleTheme} className={` h-12 w-12 rounded-lg p-2 mr-2 hover:bg-gray-300 ${theme === 'dark' ? 'dark:bg-gray-700' : ''}`}>
+                                    <svg className={`${theme === 'dark' ? 'fill-yellow-500' : 'fill-violet-800'} block dark:hidden`} fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                                    </svg>
+                                    <svg className={`${theme === 'dark' ? 'fill-yellow-500' : 'fill-violet-300'} hidden dark:block`} fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div id="menu" className=" text-slate-800 dark:text-white" onClick={() => setShow(!show)}>
                                 {show ? (
                                     " "
                                 ) : (

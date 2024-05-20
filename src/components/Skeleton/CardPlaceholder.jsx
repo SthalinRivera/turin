@@ -2,7 +2,7 @@
 export function CardPlaceholder() {
     return (
         <>
-            <div class="flex flex-wrap justify-center mt-2 bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 z-40 rounded-lg drop-shadow-lg">
+            <div class="flex flex-wrap justify-center mt-2 bg-gradient-to-r  rounded-lg drop-shadow-lg">
 
                 <div role="status" class=" flex w-full">
                     <div class="flex items-center justify-center w-full h-48 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">

@@ -256,12 +256,12 @@ export function Home() {
               ) : null}
 
               {response && !loading && (
-                <div className='flex flex-col bg-gray-200 rounded-lg p-4 m-2'>
+                <div className='flex flex-col bg-gray-200 dark:bg-zinc-900 rounded-lg p-4 m-2'>
                   <div className="w-full rounded overflow-hidden shadow-lg">
                     <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{inputValue}</div>
-                      <div dangerouslySetInnerHTML={{ __html: response }} />
-                      <p className='mt-6 text-slate-700 dark:text-white'>Tiempo de generación: {generationTime.toFixed(2)} milisegundos</p>
+                      <div className="font-bold text-xl mb-2 dark:text-slate-100">{inputValue}</div>
+                      <div className=' text-slate-900 dark:text-slate-100' dangerouslySetInnerHTML={{ __html: response }} />
+                      <p className='mt-6 text-slate-700 dark:text-white '>Tiempo de generación: {generationTime.toFixed(2)} milisegundos</p>
                     </div>
                   </div>
                 </div>

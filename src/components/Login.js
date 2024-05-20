@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Alert } from "./Alert";
 import { NavBar } from "../components/NavBar";
+import { Footer } from "../components/Footer";
 export function Login() {
   const [user, setUser] = useState({
     email: "",
@@ -55,16 +56,16 @@ export function Login() {
 
       <NavBar></NavBar>
 
-      <div className="h-screen bg-gradient-to-tl from-green-400 to-indigo-900 w-full py-16 px-4">
+      <div className="h-screen bg-gradient-to-tl from-green-400 to-indigo-900 dark:bg-gradient-to-tl dark:from-green-700 dark:to-indigo-900 w-full py-16 px-4">
         {error && <Alert message={error} />}
         <div className="flex flex-col items-center justify-center">
-          <div className="bg-white shadow rounded-xl lg:w-1/3  md:w-1/2 w-full p-10 mt-16">
-            <p tabIndex={0} role="heading" aria-label="Login to your account" className="text-2xl font-extrabold leading-6 text-gray-800">
+          <div className="bg-white dark:bg-slate-800 shadow rounded-xl lg:w-1/3  md:w-1/2 w-full p-10 mt-16">
+            <p tabIndex={0} role="heading" aria-label="Login to your account" className="text-2xl font-extrabold leading-6 text-gray-800 dark:text-stone-200">
               Login to your account
             </p>
-            <p className="text-sm mt-4 font-medium leading-none text-gray-500">
+            <p className="text-sm mt-4 font-medium leading-none text-gray-500 dark:text-gray-300">
               Dont have account?{" "}
-              <span tabIndex={0} role="link" aria-label="Sign up here" className="text-sm font-medium leading-none underline text-gray-800 cursor-pointer">
+              <span tabIndex={0} role="link" aria-label="Sign up here" className="text-sm font-medium leading-none underline text-gray-800 dark:text-slate-100 cursor-pointer">
                 {" "}
                 <Link to="/register" >Sign up here</Link>
               </span>
@@ -76,7 +77,7 @@ export function Login() {
                 <path d="M4.17667 11.9366C3.97215 11.3165 3.85378 10.6521 3.85378 9.96562C3.85378 9.27905 3.97215 8.6147 4.16591 7.99463L4.1605 7.86257L1.13246 5.44363L1.03339 5.49211C0.37677 6.84302 0 8.36005 0 9.96562C0 11.5712 0.37677 13.0881 1.03339 14.4391L4.17667 11.9366Z" fill="#FBBC05" />
                 <path d="M9.68807 3.85336C11.5073 3.85336 12.7344 4.66168 13.4342 5.33718L16.1684 2.59107C14.4892 0.985496 12.3039 0 9.68807 0C5.89885 0 2.62637 2.23672 1.0332 5.49214L4.16573 7.99466C4.95162 5.59183 7.12608 3.85336 9.68807 3.85336Z" fill="#EB4335" />
               </svg>
-              <p className="text-base font-medium ml-4 text-gray-700">Continue with Google</p>
+              <p className="text-base font-medium ml-4 text-gray-700 dark:text-zinc-200">Continue with Google</p>
             </button>
             <div className="w-full flex items-center justify-between py-5">
               <hr className="w-full bg-gray-400" />
@@ -85,16 +86,16 @@ export function Login() {
             </div>
             <form onSubmit={handleSubmit} >
               <div>
-                <lable className="text-sm font-medium leading-none text-gray-800">Email</lable>
+                <lable className="text-sm font-medium leading-none text-gray-800 dark:text-gray-100">Email</lable>
                 <input onChange={handleChange} name="email"
-                  id="email" aria-label="enter email adress" role="input" type="email" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
+                  id="email" aria-label="enter email adress" role="input" type="email" className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none dark:bg-gray-800 text-gray-800  dark:text-gray-100  py-3 w-full pl-3 mt-2" />
               </div>
               <div className="mt-6  w-full">
-                <lable className="text-sm font-medium leading-none text-gray-800">Password</lable>
+                <lable className="text-sm font-medium leading-none text-gray-800 dark:text-gray-100 ">Password</lable>
                 <div className="relative flex items-center justify-center">
                   <input name="password"
                     id="password"
-                    onChange={handleChange} aria-label="enter Password" role="input" type={showPassword ? 'text' : 'password'} className="bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
+                    onChange={handleChange} aria-label="enter Password" role="input" type={showPassword ? 'text' : 'password'} className="bg-gray-200  dark:bg-gray-800 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2 dark:text-gray-100 " />
                   <div className="absolute right-0 mt-2 mr-3 cursor-pointer" onClick={togglePasswordVisibility}>
                     <svg width={16} height={16} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                       {showPassword ? 'Ocultar' : 'Mostrar'}
@@ -107,7 +108,7 @@ export function Login() {
                 </div>
               </div>
               <div className="mt-8">
-                <button role="button" aria-label="create my account" className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full">
+                <button role="button" aria-label="" className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white  focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full">
                   Log In
                 </button>
               </div>
@@ -121,6 +122,7 @@ export function Login() {
 
 
         </div>
+        <Footer></Footer>
       </div>
     </>
   );

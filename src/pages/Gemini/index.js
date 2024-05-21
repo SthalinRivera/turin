@@ -1,90 +1,170 @@
-import React, { useEffect, useState } from 'react';
-import OpenAI from "openai";
+import React, {useRef, useState } from 'react';
+import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
+import Base64 from 'base64-js';
+import MarkdownIt from 'markdown-it';
 import { NavBar } from "../../components/NavBar";
-import {ListPlaceholder  } from "../../components/Skeleton/ListPlaceholder";
+import { Footer } from "../../components/Footer";
 
-export function Gemini() {
-  const { GoogleGenerativeAI } = require("@google/generative-ai");
-  const [inputText, setInputText] = useState("");
-  const [response, setResponse] = useState("");
-  const [loading, setLoading] = useState(false); // Estado para controlar la carga
-  // Access your API key as an environment variable (see "Set up your API key" above)
-  const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
+import Webcam from "react-webcam";
 
-  const run = async () => {
-    setLoading(true)
-    // For text-only input, use the gemini-pro model
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    const prompt = inputText;
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    setResponse(text)
-    if (text) {
-      setLoading(false)
+
+const API_KEY = 'AIzaSyCD6vY9uhhaukCegaaru8CtXXXL7knKR7Y';
+export const Gemini = () => {
+  const [prompt, setPrompt] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [output, setOutput] = useState('');
+  const webcamRef = useRef(null);
+  const [image, setImage] = useState('');
+
+  const capture = () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setImage(imageSrc);
+  };
+
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
+    setOutput('Generating...');
+
+    try {
+      // Convert the image file to a base64 string
+      let reader = new FileReader();
+      reader.readAsArrayBuffer(imageFile);
+      reader.onloadend = async () => {
+        let imageBase64 = Base64.fromByteArray(new Uint8Array(reader.result));
+
+
+        // Assemble the prompt by combining the text with the chosen image
+        let contents = [
+          {
+            role: 'user',
+            parts: [
+              { inline_data: { mime_type: 'image/jpeg', data: imageBase64, } },
+              { text: prompt }
+            ]
+          }
+        ];
+
+        // Call the gemini-pro-vision model, and get a stream of results
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({
+          model: "gemini-pro-vision",
+          safetySettings: [
+            {
+              category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+              threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+            },
+          ],
+        });
+
+        const result = await model.generateContentStream({ contents });
+
+        // Read from the stream and interpret the output as markdown
+        let buffer = [];
+        let md = new MarkdownIt();
+        for await (let response of result.stream) {
+          buffer.push(response.text());
+          setOutput(md.render(buffer.join('')));
+        }
+      };
+    } catch (e) {
+      setOutput(prevOutput => prevOutput + '<hr>' + e);
     }
-    console.log(text);
-  }
-
+  };
 
   return (
-    <div className="h-full">
-      <NavBar />
-      <div className="wrapper">
-        <div class="md:flex mt-20 md:mt-0 mb-4">
-          <div class=" w-full md:w-1/4 p-2 h-auto   md:h-screen">
+    <>
 
-            <div className='bg-slate-100 shadow-lg p-4 rounded-lg'>
-              <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Imgresar un texto</label>
-              <textarea id="message" value={inputText}
-                onChange={(e) => setInputText(e.target.value)} rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
-              <button type="button" onClick={run} class="mt-4 w-full text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Generate text </button>
-
+      <div className='dark:bg-zinc-800 h-screen'>    <NavBar></NavBar>
+        <div className='wrapper mt-10 '>
+          <form onSubmit={handleSubmit}>
+            <input
+              className='p-4  resize-none block bg-zinc-300 dark:bg-zinc-800 w-full p-4 ps-10 text-sm pl-9  text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300'
+              type="text"
+              name="prompt"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Enter your prompt"
+            />
+            <div
+              id="FileUpload"
+              className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border border-dashed border-primary bg-gray py-4 px-4 dark:bg-meta-4 sm:py-7.5 mt-4"
+            >
+              <input
+                type="file"
+                name="chosen-image"
+                accept="image/*"
+                onChange={(e) => setImageFile(e.target.files[0])}
+                className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
+              />
+              <div className="flex flex-col items-center justify-center space-y-3 ">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-stroke bg-white  dark:border-strokedark dark:bg-boxdark ">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M1.99967 9.33337C2.36786 9.33337 2.66634 9.63185 2.66634 10V12.6667C2.66634 12.8435 2.73658 13.0131 2.8616 13.1381C2.98663 13.2631 3.1562 13.3334 3.33301 13.3334H12.6663C12.8431 13.3334 13.0127 13.2631 13.1377 13.1381C13.2628 13.0131 13.333 12.8435 13.333 12.6667V10C13.333 9.63185 13.6315 9.33337 13.9997 9.33337C14.3679 9.33337 14.6663 9.63185 14.6663 10V12.6667C14.6663 13.1971 14.4556 13.7058 14.0806 14.0809C13.7055 14.456 13.1968 14.6667 12.6663 14.6667H3.33301C2.80257 14.6667 2.29387 14.456 1.91879 14.0809C1.54372 13.7058 1.33301 13.1971 1.33301 12.6667V10C1.33301 9.63185 1.63148 9.33337 1.99967 9.33337Z"
+                      fill="#3C50E0"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M7.5286 1.52864C7.78894 1.26829 8.21106 1.26829 8.4714 1.52864L11.8047 4.86197C12.0651 5.12232 12.0651 5.54443 11.8047 5.80478C11.5444 6.06513 11.1223 6.06513 10.8619 5.80478L8 2.94285L5.13807 5.80478C4.87772 6.06513 4.45561 6.06513 4.19526 5.80478C3.93491 5.54443 3.93491 5.12232 4.19526 4.86197L7.5286 1.52864Z"
+                      fill="#3C50E0"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M7.99967 1.33337C8.36786 1.33337 8.66634 1.63185 8.66634 2.00004V10C8.66634 10.3682 8.36786 10.6667 7.99967 10.6667C7.63148 10.6667 7.33301 10.3682 7.33301 10V2.00004C7.33301 1.63185 7.63148 1.33337 7.99967 1.33337Z"
+                      fill="#3C50E0"
+                    />
+                  </svg>
+                </span>
+                <p className='dark:text-slate-100'>
+                  <span className="text-primary">Click to upload</span> or
+                  drag and drop
+                </p>
+                <p className="mt-1.5 dark:text-slate-100">SVG, PNG, JPG or GIF</p>
+                <p className='dark:text-slate-100'>(max, 800 X 800px)</p>
+              </div>
             </div>
-          </div>
 
-          <div class="md:w-1/2 p-2 text-center ">
-           
-            <div class="justify-center">
-              {loading ? (
-                <div className=''>
-                  <button type="button" class="py-2 mb-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg max-w-full">
-                    <svg width="20" height="20" fill="currentColor" class="mr-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
-                      </path>
-                    </svg>
-                    loading
-                  </button>
-                  <ListPlaceholder></ListPlaceholder>
-                </div>
-              ) : null}
+            <button
+              className='shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded mt-4'
+              type="submit">Generate</button>
+          </form>
 
-              {response && !loading && (
-                <div className='flex flex-col bg-gray-200 rounded-lg p-4 m-2'>
-                  <div className="w-full rounded overflow-hidden shadow-lg">
-                    <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2">{inputText}</div>
-                      <div dangerouslySetInnerHTML={{ __html: response }} />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+          <img className=' object-cover mt-4 rounded-xl w-20 h-20' src={imageFile ? URL.createObjectURL(imageFile) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}
+            alt=""
+          />
+          <div className="output dark:text-slate-100" dangerouslySetInnerHTML={{ __html: output }}></div>
 
-          </div>
-          {/**/}
-          <div class="md:w-1/4 p-2 text-center text-sm ">
-            <p className='text-black font-bold'>Selecciona un Shorcase</p>
-          </div>
+          <Webcam
+        audio={false}
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+        width={640}
+        height={480}
+      />
+      <button onClick={capture}>Capture photo</button>
+      {image && (
+        <div>
+          <h2>Captured Image:</h2>
+          <img src={image} alt="Captured" />
         </div>
-
-
-        <h1 className='text-slate-800 text-2xl font-bold p-4 text-center'> Gemini google</h1>
-
-
-
-
+      )}
+        </div><Footer></Footer>
       </div>
-    </div>
+
+
+    </>
+
   );
-}
+};
+
+

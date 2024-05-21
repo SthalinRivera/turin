@@ -31,13 +31,14 @@ export const Gemini = () => {
   const camera = () => {
     setShowCamera(true)
   }
+  const toggleCamera = () => {
+    setUseFrontCamera((prev) => !prev);
+  };
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     setOutput('Generating...');
 
-    const toggleCamera = () => {
-      setUseFrontCamera((prev) => !prev);
-    };
+
     try {
 
       // Si se capturó una imagen, la agregamos a los contenidos
@@ -130,10 +131,9 @@ export const Gemini = () => {
   };
   return (
     <>
-
-      <div className='dark:bg-zinc-800 h-screen mt-20 md:mt-4'>    <NavBar></NavBar>
+ <NavBar></NavBar>
+      <div className='dark:bg-zinc-800 h-screen '>   
         <div className='wrapper mt-20 '>
-
 
           <form onSubmit={handleSubmit}>
             <label for="chat" class="sr-only">Your message</label>
@@ -172,6 +172,11 @@ export const Gemini = () => {
                   <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
                 </svg>
 
+              </button>
+              <button onClick={toggleCamera} type="button" className="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6.75v10.5M8.25 6.75v10.5M21 12H3" />
+                </svg>
               </button>
               <textarea id="chat" rows="1" type="text"
                 name="prompt"

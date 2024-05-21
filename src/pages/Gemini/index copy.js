@@ -14,19 +14,12 @@ export const Gemini = () => {
   const [imageFile, setImageFile] = useState(null);
   const [output, setOutput] = useState('');
   const webcamRef = useRef(null);
-  const [imageCapture, setImageCapture] = useState(null);
+  const [image, setImage] = useState('');
   const [showCamera, setShowCamera] = useState(false);
-  const [useFrontCamera, setUseFrontCamera] = useState(true);
-
-  const videoConstraints = {
-    width: 200,
-    height: 100,
-    facingMode: useFrontCamera ? "user" : { exact: "environment" }
-  };
 
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
-    setImageCapture(imageSrc);
+    setImage(imageSrc);
   };
   const camera = () => {
     setShowCamera(true)
@@ -35,24 +28,35 @@ export const Gemini = () => {
     ev.preventDefault();
     setOutput('Generating...');
 
-    const toggleCamera = () => {
-      setUseFrontCamera((prev) => !prev);
-    };
     try {
+      let contents = [];
 
-      // Si se capturó una imagen, la agregamos a los contenidos
-      if (imageCapture) {
-        let capturedImageBase64 = imageCapture.split(",")[1];
-        // Assemble the prompt by combining the text with the chosen image
-        let contents = [
-          {
+      // Si se ha subido una imagen, la agregamos a los contenidos
+      if (imageFile) {
+        let reader = new FileReader();
+        reader.readAsArrayBuffer(imageFile);
+        reader.onloadend = async () => {
+          let imageBase64 = Base64.fromByteArray(new Uint8Array(reader.result));
+          contents.push({
             role: 'user',
             parts: [
-              { inline_data: { mime_type: 'image/jpeg', data: capturedImageBase64, } },
+              { inline_data: { mime_type: 'image/jpeg', data: imageBase64 } },
               { text: prompt }
             ]
-          }
-        ];
+          });
+        };
+        // Si se capturó una imagen, la agregamos a los contenidos
+        if (image) {
+          let capturedImageBase64 = image.split(",")[1]; // Eliminar el prefijo "data:image/jpeg;base64,"
+          contents.push({
+            role: 'user',
+            parts: [
+              { inline_data: { mime_type: 'image/jpeg', data: capturedImageBase64 } },
+              { text: prompt }
+            ]
+          });
+        }
+
         // Call the gemini-pro-vision model, and get a stream of results
         const genAI = new GoogleGenerativeAI(API_KEY);
         const model = genAI.getGenerativeModel({
@@ -74,53 +78,7 @@ export const Gemini = () => {
           buffer.push(response.text());
           setOutput(md.render(buffer.join('')));
         }
-
-      }
-
-      if (imageFile) {
-        // Convert the image file to a base64 string
-
-        let reader = new FileReader();
-        reader.readAsArrayBuffer(imageFile);
-        reader.onloadend = async () => {
-          let imageBase64 = Base64.fromByteArray(new Uint8Array(reader.result));
-
-          // Assemble the prompt by combining the text with the chosen image
-          let contents = [
-            {
-              role: 'user',
-              parts: [
-                { inline_data: { mime_type: 'image/jpeg', data: imageBase64, } },
-                { text: prompt }
-              ]
-            }
-          ];
-
-          // Call the gemini-pro-vision model, and get a stream of results
-          const genAI = new GoogleGenerativeAI(API_KEY);
-          const model = genAI.getGenerativeModel({
-            model: "gemini-pro-vision",
-            safetySettings: [
-              {
-                category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-                threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-              },
-            ],
-          });
-
-          const result = await model.generateContentStream({ contents });
-
-          // Read from the stream and interpret the output as markdown
-          let buffer = [];
-          let md = new MarkdownIt();
-          for await (let response of result.stream) {
-            buffer.push(response.text());
-            setOutput(md.render(buffer.join('')));
-          }
-        };
-      }
-
-
+      };
     } catch (e) {
       setOutput(prevOutput => prevOutput + '<hr>' + e);
     }
@@ -191,23 +149,22 @@ export const Gemini = () => {
           />
           <div className="output dark:text-slate-100" dangerouslySetInnerHTML={{ __html: output }}></div>
           {showCamera && (
-            <>
-              <Webcam
-                audio={false}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                width={200}
-                height={100}
-                videoConstraints={videoConstraints}
-              />
+            <>  <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              width={200}
+              height={100}
+            />
               <button className='bg-slate-900 text-slate-100 p-2 rounded-md mt-3' onClick={capture}>Capture photo</button>
             </>
+
           )}
 
-          {imageCapture && (
+          {image && (
             <div>
               <h2>Captured Image:</h2>
-              <img src={imageCapture} alt="Captured" />
+              <img src={image} alt="Captured" />
             </div>
           )}
         </div><Footer></Footer>

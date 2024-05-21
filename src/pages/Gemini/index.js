@@ -132,8 +132,11 @@ export const Gemini = () => {
       <NavBar></NavBar>
       <div className='dark:bg-zinc-800 h-screen '>
         <div className='wrapper '>
-
-          <form onSubmit={handleSubmit} className=' mt-20 md:mt-2'>
+        <div className=''>
+          <p className='mt-[80px] md:mt-4 text-center text-lg md:text-[35px] font-bold dark:text-slate-200'>Vision Gemini Pro </p>
+          <p className='text-center text-sm md:text-lg dark:text-slate-200 mt-4'>Captura en Tiempo real y enterate de la magia que se puede hacer.</p>
+        </div>
+          <form onSubmit={handleSubmit} className=' mt-4 md:mt-2'>
             <label for="chat" class="sr-only">Your message</label>
             <div class="flex items-center  md:py-2 px-2 md:px-3 bg-gray-50 rounded-lg dark:bg-gray-700">
               <div className="flex items-center">

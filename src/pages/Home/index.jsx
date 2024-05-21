@@ -58,7 +58,7 @@ export function Home() {
       setButtonDisabled(true); // Deshabilitar el botón mientras se carga la respuesta
       const completion = await openai.chat.completions.create({
         messages: [
-          { role: "system", content: "Generar una tabla en html (solo tabla) de una matriz de consistencia teniendo el Problema general y específicos, Objetivo General y específicos,Hipótesis General y específicos, Variables y dimensiones ,Metodología y dentro de metodología considerar ,Nivel, tipo, método, diseño y población ,  es una matriz de consistencia y identificar y buscar y rellenar del siguiente titulo de investigación : Análisis del impacto del turismo comunitario en el desarrollo socioeconómico:" },
+          { role: "system", content: "Generar una tabla en html (solo tabla) de una matriz de consistencia teniendo en cuenta el Problema general y específicos, Objetivo General y específicos,Hipótesis General y específicos, Variables y dimensiones ,Metodología y dentro de metodología considerar ,Nivel, tipo, método, diseño y población , del siguiente titulo de investigación:" },
           { role: "user", content: inputValue }
         ],
         model: "gpt-3.5-turbo",

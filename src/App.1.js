@@ -17,6 +17,7 @@ import { Places } from "./pages/Places";
 import { NewPlace } from "./pages/Places/NewPlace";
 import {Dashboard} from "./pages/Dashboard"
 import { Parafrasear } from "./pages/Parafrasear";
+import { Turis } from "./pages/Turis";
 export function App() {
 
   return (
@@ -49,6 +50,7 @@ export function App() {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="dashboard" element={<Dashboard/>}></Route>
             <Route path="parafrasear" element={<Parafrasear/>}> </Route>
+            <Route path="turis" element={<Turis/>}> </Route>
           </Routes>
       </AuthProvider>
     </div>

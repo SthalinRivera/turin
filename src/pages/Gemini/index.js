@@ -37,10 +37,17 @@ export const Gemini = () => {
     setShowCamera(false)
   };
 
+  useEffect(() => {
+
+  setShowCamera(false)
+  setImageCapture(null)
+
+  }, [imageFile]);
+
 
   const toggleCamera = () => {
-    setUseFrontCamera((prev) => !prev);
     setShowCamera(true)
+    setUseFrontCamera((prev) => !prev);
   };
 
   const handleSubmit = async (ev) => {
@@ -50,6 +57,8 @@ export const Gemini = () => {
     try {
       // Si se capturó una imagen, la agregamos a los contenidos
       if (imageCapture) {
+
+
         let capturedImageBase64 = imageCapture.split(",")[1];
         // Assemble the prompt by combining the text with the chosen image
         let contents = [
@@ -82,12 +91,12 @@ export const Gemini = () => {
           buffer.push(response.text());
           setOutput(md.render(buffer.join('')));
         }
-
+        setPrompt('');
       }
 
       if (imageFile) {
         // Convert the image file to a base64 string
-
+       
         let reader = new FileReader();
         reader.readAsArrayBuffer(imageFile);
         reader.onloadend = async () => {
@@ -117,7 +126,7 @@ export const Gemini = () => {
           });
 
           const result = await model.generateContentStream({ contents });
-
+          setPrompt('');
           // Read from the stream and interpret the output as markdown
           let buffer = [];
           let md = new MarkdownIt();
@@ -138,21 +147,21 @@ export const Gemini = () => {
   };
   return (
     <>
-      <NavBar></NavBar>
+
       <div className='dark:bg-zinc-800 h-screen '>
+        <NavBar></NavBar>
         <div className='wrapper '>
           <div className=''>
             <p className='mt-[80px] md:mt-4 text-center text-lg md:text-[35px] font-bold dark:text-slate-200'>Vision Gemini Pro </p>
             <p className='text-center text-sm md:text-lg dark:text-slate-200 mt-4'>Captura en Tiempo real y enterate de la magia que se puede hacer.</p>
           </div>
 
-
-          <div class="mr-4 bg-white dark:bg-zinc-900 p-6 rounded-lg  ">
+          <div class=" bg-white dark:bg-zinc-900 p-6 rounded-lg  ">
             <div class="flex flex-col space-y-1.5 pb-6">
-              <h2 class="font-semibold text-lg tracking-tight text-slate-900 dark:text-slate-100">Chatbot</h2>
-              <p class="text-sm text-slate-900 dark:text-slate-100 leading-3">Powered by Mendable and Vercel</p>
+              <h2 class="font-semibold text-lg tracking-tight text-slate-900 dark:text-slate-100">Bot Travito</h2>
+              <p class="text-sm text-slate-900 dark:text-slate-100 leading-3">Soportado con Gimini Google</p>
             </div>
-            <div class="pr-4 h-auto" >
+            <div class="pr-4 h-40 overflow-y-auto" >
               <div class="flex gap-3 my-4 text-gray-600 text-sm flex-1">
                 <span
                   class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
@@ -166,7 +175,6 @@ export const Gemini = () => {
                 <p class="leading-relaxed text-slate-900 dark:text-slate-100"><span class="block font-bold text-slate-900 dark:text-slate-100">AI </span>Hi, how can I help you today?
                 </p>
               </div>
-
               <div class="flex gap-3 my-4 text-slate-900 dark:text-slate-100 dar text-sm flex-1"><span
                 class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
                 <div class="rounded-full bg-gray-100 border p-1"><svg stroke="none" fill="black" stroke-width="0"
@@ -179,7 +187,7 @@ export const Gemini = () => {
                 <div class="leading-relaxed"><span class="block font-bold text-slate-900 dark:text-slate-100">You </span>
                   <div className='' >
                     {imageFile && (
-                      <img className=' object-cover mt-4 rounded-xl w-20 h-20' src={imageFile ? URL.createObjectURL(imageFile) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"} alt="" />
+                      <img className=' object-cover mt-4 rounded-xl w-full h-50' src={imageFile ? URL.createObjectURL(imageFile) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"} alt="" />
                     )}
                     {showCamera && (
                       <>
@@ -188,8 +196,8 @@ export const Gemini = () => {
                             <div>
                               <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" className='  w-full mx-auto md:w-full  rounded-2xl' videoConstraints={videoConstraints} />
                             </div>
-                            <div className='absolute inset-0 w-full justify-center text-center content-end'>
-                              <button className=' text-slate-100   dark:text-slate-100 p-2 rounded-md mt-3 ' onClick={capture}>
+                            <div className='absolute inset-0 w-full justify-center text-center content-end '>
+                              <button className=' text-slate-100   dark:text-slate-300 p-2  mt-3 bg-white rounded-full opacity-40' onClick={capture}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                   <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2" />
                                 </svg>
@@ -208,8 +216,6 @@ export const Gemini = () => {
                   </div>
                 </div>
               </div>
-
-
               {output &&
                 (
                   <div class="flex gap-3 my-4 text-gray-600 text-sm flex-1">
@@ -229,17 +235,13 @@ export const Gemini = () => {
                   </div>
                 )
               }
-
             </div>
 
           </div>
-
-
-          <div className='w-full mx-auto xl:block  fixed bottom-0 left-0 right-0'>
-
-            <form onSubmit={handleSubmit} className=' mt-4 md:mt-2'>
+          <div className='w-full mx-auto xl:block  bottom-0 left-0 right-0'>
+            <form onSubmit={handleSubmit} className='mt-2 md:mt-2'>
               <label for="chat" class="sr-only">Your message</label>
-              <div class="flex items-center  md:py-2 px-2 md:px-3 bg-gray-50 rounded-lg dark:bg-gray-700">
+              <div class="flex items-center  md:py-2 px-2 md:px-3 bg-gray-50 rounded-lg dark:bg-zinc-900">
                 <div className="flex items-center">
                   <input
                     type="file"
@@ -274,7 +276,7 @@ export const Gemini = () => {
                 <textarea id="chat" rows="2" type="text" required
                   name="prompt"
                   value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)} class="block mx-2  my-2 md:mx-4 p-1 md:p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
+                  onChange={(e) => setPrompt(e.target.value)} class="block mx-2  my-2 md:mx-4 p-1 md:p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
                 <button type="submit" class="inline-flex justify-center p-1 dark:text-slate-100 rounded-full cursor-pointer hover:bg-blue-100  dark:hover:bg-gray-600">
                   <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8" xmlns="http://www.w3.org/2000/svg">
                     <path d="M20.7639 12H10.0556M3 8.00003H5.5M4 12H5.5M4.5 16H5.5M9.96153 12.4896L9.07002 15.4486C8.73252 16.5688 8.56376 17.1289 8.70734 17.4633C8.83199 17.7537 9.08656 17.9681 9.39391 18.0415C9.74792 18.1261 10.2711 17.8645 11.3175 17.3413L19.1378 13.4311C20.059 12.9705 20.5197 12.7402 20.6675 12.4285C20.7961 12.1573 20.7961 11.8427 20.6675 11.5715C20.5197 11.2598 20.059 11.0295 19.1378 10.5689L11.3068 6.65342C10.2633 6.13168 9.74156 5.87081 9.38789 5.95502C9.0808 6.02815 8.82627 6.24198 8.70128 6.53184C8.55731 6.86569 8.72427 7.42461 9.05819 8.54246L9.96261 11.5701C10.0137 11.7411 10.0392 11.8266 10.0493 11.9137C10.0583 11.991 10.0582 12.069 10.049 12.1463C10.0387 12.2334 10.013 12.3188 9.96153 12.4896Z" />
@@ -284,6 +286,7 @@ export const Gemini = () => {
             </form>
           </div>
         </div>
+        <Footer></Footer >
       </div>
 
 

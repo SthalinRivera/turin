@@ -184,17 +184,19 @@ export const Gemini = () => {
                     {showCamera && (
                       <>
                         <div className='p-2'>
-                          <div className='relative '>
-                            <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" className=' items-center w-full mx-auto md:w-full  rounded-2xl' videoConstraints={videoConstraints} />  
-                             <button className='absolute inset-0 text-slate-100   dark:text-slate-100 p-2 rounded-md mt-3 text-center justify-between' onClick={capture}>
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4" />
-                              </svg>
-                            </button>
+                          <div className='relative justify-center'>
+                            <div>
+                              <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" className='  w-full mx-auto md:w-full  rounded-2xl' videoConstraints={videoConstraints} />
+                            </div>
+                            <div className='absolute inset-0 w-full justify-center text-center content-end'>
+                              <button className=' text-slate-100   dark:text-slate-100 p-2 rounded-md mt-3 ' onClick={capture}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                  <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2" />
+                                </svg>
+                              </button>
+                            </div>
+
                           </div>
-                       
-                         
-                        
                         </div>
                       </>
                     )}

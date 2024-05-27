@@ -3,8 +3,8 @@ import OpenAI from "openai";
 import { NavBar } from "../../components/NavBar";
 import { ListPlaceholder } from "../../components/Skeleton/ListPlaceholder";
 import toast, { Toaster } from 'react-hot-toast';
-
-import {  Footer} from "../../components/Footer";
+import { Alert } from "../../components/Alert";
+import { Footer } from "../../components/Footer";
 import MarkdownIt from 'markdown-it';
 
 class MarkdownRenderer extends React.Component {
@@ -19,7 +19,7 @@ class MarkdownRenderer extends React.Component {
 
     return (
       <p className='text-base text-[10px] md:text-sm text-left overflow-y-auto md:min-h-[460px] p-2' dangerouslySetInnerHTML={{ __html: html }} />
-    );  
+    );
   }
 }
 
@@ -32,10 +32,24 @@ export function Parafrasear() {
   const [selectedButton, setSelectedButton] = useState(""); // Nuevo estado para almacenar el botón seleccionado
   const notify = () => toast.success('Copied!')
   const [clikCopy, setClikCopy] = useState(""); // Nuevo estado para almacenar el botón seleccionado
-
+  const [error, setError] = useState("");
   const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
   console.log(tipoText);
+
+
   const run = async () => {
+    if (inputText.trim() === "") {
+      setError("Please enter some text before paraphrasing.");
+      return;
+    }
+
+    if (inputText.length > 5000) {
+      setError("Text should not exceed 5000 characters.");
+      return;
+    }
+    // Reset input error state if no error
+    setError("");
+
     setLoading(true)
     // For text-only input, use the gemini-pro model
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
@@ -45,13 +59,16 @@ export function Parafrasear() {
     const response = await result.response;
     const text = response.text();
     setResponse(text)
-    
+
 
     if (text) {
       setLoading(false)
     }
     console.log(text);
   }
+
+
+
 
   // Función para contar letras en el input
   const countLetters = (text) => {
@@ -79,6 +96,7 @@ export function Parafrasear() {
           <p className='mt-[80px] md:mt-4 text-center text-lg md:text-[35px] font-bold dark:text-slate-200'>Parafraseador </p>
           <p className='text-center text-sm md:text-lg dark:text-slate-200 mt-4'>Más de 5000 caracteres para parafrasear online utilizando nuestra plataforma Traviweb</p>
         </div>
+        {error && <Alert message={error} />}
         <div className=' mt-4 bg-slate-100  shadow-lg dark:bg-gray-700 p-2 rounded-lg'>
           <div className=''>
             <div class="flex gap-1 flex-wrap justify-start md:pt-4  max-w-full ">
@@ -151,7 +169,7 @@ export function Parafrasear() {
           <div class="md:flex  md:mt-0 mb-4  ">
             <div class=" w-full md:w-1/2  h-auto ">
               <div className=''>
-                <textarea id="message" value={inputText} onChange={(e) => setInputText(e.target.value)}  class="min-h-[100px] md:min-h-[460px] block mt-2 p-2.5 w-full text-[10px] md:text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your text here maximum 5,000 characters..."></textarea>
+                <textarea id="message" value={inputText} onChange={(e) => setInputText(e.target.value)} class="min-h-[100px] md:min-h-[460px] block mt-2 p-2.5 w-full text-[10px] md:text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your text here maximum 5,000 characters..."></textarea>
                 <button type="button" onClick={run} class="mt-4 w-full text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-br hover:from-purple-700 hover:to-blue-500 hover:text-white  focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Parafrasear
 
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 inline-flex ml-3">
@@ -167,9 +185,9 @@ export function Parafrasear() {
               <div class="justify-center">
                 {loading ? (
                   <div className=''>
-                 
+
                     <ListPlaceholder>
-                  
+
                     </ListPlaceholder>
                   </div>
                 ) : (
@@ -186,7 +204,7 @@ export function Parafrasear() {
                   <div className='flex flex-col'>
                     <div className=''>
                       <div class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ">
-                   
+
                         <MarkdownRenderer content={response} />
                       </div>
 

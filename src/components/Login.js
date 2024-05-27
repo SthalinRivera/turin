@@ -122,8 +122,8 @@ export function Login() {
 
 
         </div>
-        <Footer></Footer>
-      </div>
+       
+      </div> <Footer></Footer>
     </>
   );
 }

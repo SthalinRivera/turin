@@ -39,8 +39,8 @@ export const Gemini = () => {
 
   useEffect(() => {
 
-  setShowCamera(false)
-  setImageCapture(null)
+    setShowCamera(false)
+    setImageCapture(null)
 
   }, [imageFile]);
 
@@ -96,7 +96,7 @@ export const Gemini = () => {
 
       if (imageFile) {
         // Convert the image file to a base64 string
-       
+
         let reader = new FileReader();
         reader.readAsArrayBuffer(imageFile);
         reader.onloadend = async () => {
@@ -286,10 +286,10 @@ export const Gemini = () => {
             </form>
           </div>
         </div>
-        <Footer></Footer >
+
       </div>
 
-
+      <Footer></Footer >
     </>
 
   );

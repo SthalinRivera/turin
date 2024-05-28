@@ -205,7 +205,7 @@ export function NavBar() {
                                                                 <rect x={14} y={14} width={6} height={6} rx={1} />
                                                             </svg>
                                                         </div>
-                                                        <Link to="/">   <p className="text-white xl:text-base  text-base ml-3">Home</p></Link>
+                                                        <Link to="/home">   <p className="text-white xl:text-base  text-base ml-3">Home</p></Link>
                                                     </div>
                                                 </li>
                                             </a>
@@ -249,7 +249,7 @@ export function NavBar() {
                                                                 <line x1={14} y1={4} x2={10} y2={20} />
                                                             </svg>
                                                         </div>
-                                                        <Link to="/home"><p className="text-white xl:text-base  text-base ml-3">Matriz de Consitencia</p></Link>
+                                                        <Link to="/resumir"><p className="text-white xl:text-base  text-base ml-3">Resumir</p></Link>
                                                     </div>
                                                 </div>
                                             </li>

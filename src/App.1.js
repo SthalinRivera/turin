@@ -18,6 +18,7 @@ import { NewPlace } from "./pages/Places/NewPlace";
 import {Dashboard} from "./pages/Dashboard"
 import { Parafrasear } from "./pages/Parafrasear";
 import { Turis } from "./pages/Turis";
+import { Resumir } from "./pages/Resumir";
 export function App() {
 
   return (
@@ -33,10 +34,25 @@ export function App() {
               element={<ProtectedRoute>
                 <Home />
               </ProtectedRoute>} />
+              <Route
+              path="/parafrasear"
+              element={<ProtectedRoute>
+               <Parafrasear/>
+              </ProtectedRoute>} />
+              <Route
+              path="/resumir"
+              element={<ProtectedRoute>
+               <Resumir/>
+              </ProtectedRoute>} />
+              <Route
+              path="/gemini"
+              element={<ProtectedRoute>
+               <Gemini/>
+              </ProtectedRoute>} />
 
             <Route path="/register" element={<Register />} />
             <Route path="/speech-generator" element={<SpeechGenerator />} />
-            <Route path="/gemini" element={<Gemini />} />
+  
 
             <Route path="/product" element={<ProtectedRoute><Product /></ProtectedRoute>} />
 
@@ -49,7 +65,7 @@ export function App() {
             <Route path="/storage" element={<Storage />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="dashboard" element={<Dashboard/>}></Route>
-            <Route path="parafrasear" element={<Parafrasear/>}> </Route>
+     
             <Route path="turis" element={<Turis/>}> </Route>
           </Routes>
       </AuthProvider>

@@ -48,7 +48,7 @@ export function NavBar() {
 
     return (
         <>
-            <div className="  w-full">
+            <div className="  w-full z-50">
                 {/* Code block starts */}
                 <nav className="  w-full mx-auto hidden xl:block bg-gray-200 dark:bg-slate-800 shadow">
                     <div className="container px-6 justify-between h-16 flex items-center lg:items-stretch mx-auto">
@@ -65,18 +65,17 @@ export function NavBar() {
                                 <h3 className="text-base text-slate-700 dark:text-white font-bold tracking-normal leading-tight ml-3 hidden lg:block"><Link to="/">Flour</Link></h3>
                             </div>
                             <ul className="pr-12 xl:flex items-center h-full hidden">
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white  tracking-normal border-b-2 border-white"><Link to="/dashboard"> Dashboard</Link></li>
+                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white  tracking-normal border-b-2 border-white"><Link to="/home"> Home</Link></li>
                                 <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white mx-10 tracking-normal"><Link to="/gemini"> Gemini</Link></li>
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white mr-10 tracking-normal"><Link to="/speech-generator"> speech-generator</Link></li>
                                 <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white mr-10 tracking-normal"><Link to="/parafrasear"> Parafrasea</Link></li>
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white tracking-normal"><Link to="/product"> Product</Link></li>
+                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white tracking-normal"><Link to="/resumir"> Resumir</Link></li>
 
                             </ul>
                         </div>
 
                         <div className="h-full xl:flex items-center justify-end hidden">
                             <div className="w-full h-full flex items-center">
-                            <button onClick={toggleTheme} className={` h-12 w-12 rounded-lg p-2 mr-2 hover:bg-gray-300 ${theme === 'dark' ? 'dark:bg-gray-700' : ''}`}>
+                                <button onClick={toggleTheme} className={` h-12 w-12 rounded-lg p-2 mr-2 hover:bg-gray-300 ${theme === 'dark' ? 'dark:bg-gray-700' : ''}`}>
                                     <svg className={`${theme === 'dark' ? 'fill-yellow-500' : 'fill-violet-800'} block dark:hidden`} fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                                     </svg>

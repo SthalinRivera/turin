@@ -23,7 +23,8 @@ module.exports = {
       backgroundImage: {
         "close-menu": "url('/public/images/icon-close.svg')",
         "open-menu": "url('/public/images/icon-hamburger.svg')",
-          'fondo-portal': "url('/public/images/fondo.jpg')",
+        'fondo-negro': "url('/public/images/fondo_negro.jpg')",
+        'fondo-blanco': "url('/public/images/fondo_blanco.jpg')",
 
       }
     },

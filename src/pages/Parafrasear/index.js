@@ -52,7 +52,7 @@ export function Parafrasear() {
 
     setLoading(true)
     // For text-only input, use the gemini-pro model
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const prompt = "Eres un experto en parafrasear texto de forma " + tipoText + " parafrasea el siguiente texto:" + inputText;
     console.log(prompt);
     const result = await model.generateContent(prompt);
@@ -89,7 +89,7 @@ export function Parafrasear() {
 
 
   return (
-    <div className="h-screen dark:bg-slate-900">
+    <div className="h-full dark:bg-slate-900">
       <NavBar />
       <div className="wrapper">
         <div className=''>

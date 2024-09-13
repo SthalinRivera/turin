@@ -34,11 +34,9 @@ export function Home() {
   // Obtener la fecha y hora actual
   const currentDate = new Date().toDateString();;
 
-  const handleVisibilityChange = (e) => {
-    // Cambiar el estado de visibilidad basado en el radio seleccionado
-    setVisibility(e.target.value === 'public');
+  const handleVisibilityChange = (value) => {
+    setVisibility(value);
   };
-
   const LimpiarInput = () => {
     setInputValue('')
 
@@ -58,7 +56,46 @@ export function Home() {
       setButtonDisabled(true); // Deshabilitar el botón mientras se carga la respuesta
       const completion = await openai.chat.completions.create({
         messages: [
-          { role: "system", content: "Generar una tabla en html (solo tabla) de una matriz de consistencia teniendo en cuenta el Problema general y específicos, Objetivo General y específicos,Hipótesis General y específicos, Variables y dimensiones ,Metodología y dentro de metodología considerar ,Nivel, tipo, método, diseño y población , del siguiente titulo de investigación:" },
+          { role: "system", content: "Eres un asistente útil que proporciona respuestas en formato JSON con una estructura específica." },
+          { role: "user", content: "Por favor, genera una tabla en formato JSON para una matriz de consistencia utilizando los siguientes nombres de claves: 'ProblemaGeneral', 'ProblemasEspecificos', 'ObjetivoGeneral', 'ObjetivosEspecificos', 'HipotesisGeneral', 'HipotesisEspecificas', 'VariablesYDimensiones', 'Metodologia'. A continuación, te proporciono un ejemplo de cómo debería ser el formato JSON:" },
+          {
+            role: "assistant", content: `{
+            "ProblemaGeneral": "Descripción del problema general aquí.",
+            "ProblemasEspecificos": [
+              "Pregunta específica 1",
+              "Pregunta específica 2"
+            ],
+            "ObjetivoGeneral": "Objetivo principal de la investigación aquí.",
+            "ObjetivosEspecificos": [
+              "Objetivo específico 1",
+              "Objetivo específico 2"
+            ],
+            "HipotesisGeneral": "Hipótesis general de la investigación aquí.",
+            "HipotesisEspecificas": [
+              "Hipótesis específica 1",
+              "Hipótesis específica 2"
+            ],
+            "VariablesYDimensiones": {
+              "VariablePrincipal": "Descripción de la variable principal aquí.",
+              "Dimensiones": [
+                "Dimensión 1",
+                "Dimensión 2"
+              ],
+              "VariableSecundaria": "Descripción de la variable secundaria aquí.",
+              "Dimensiones": [
+                "Dimensión 1",
+                "Dimensión 2"
+              ]
+            },
+            "Metodologia": {
+              "Nivel": "Nivel de investigación aquí.",
+              "Tipo": "Tipo de investigación aquí.",
+              "Metodo": "Método utilizado aquí.",
+              "Diseno": "Diseño de investigación aquí.",
+              "Poblacion": "Descripción de la población aquí.",
+              "Muestra": "Descripción de la muestra aquí."
+            }
+          }`},
           { role: "user", content: inputValue }
         ],
         model: "gpt-3.5-turbo",
@@ -80,25 +117,6 @@ export function Home() {
     } finally {
       setLoading(false); // Establecer el estado de carga a false después de la solicitud
       setButtonDisabled(false); // Habilitar el botón después de la respuesta
-
-    }
-  }
-  async function generateImge() {
-    try {
-      const response = await openai.images.generate({
-        model: "dall-e-3",
-        prompt: inputValue,
-        n: 1,
-        size: "1024x1024",
-      });
-      const image_url = response.data[0].url;
-      setImagen_url(image_url)
-      console.log(image_url);
-      if (image_url) {
-        store(image_url)
-      }
-    } catch (error) {
-      console.error('Ocurrio este error', error);
 
     }
   }
@@ -131,11 +149,13 @@ export function Home() {
   const getMyProducts = async () => {
     const q = query(collection(db, "products"), limit(pageSize), where('userEmail', '==', user.email), orderBy("timestamp"));
     const data = await getDocs(q)
+    console.log(data);
+    
     setMyProduct(
       data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
     )
   };
-
+  
   //Add data
   const productsCollectionStore = collection(db, "products")
   const userName = user.displayName
@@ -173,29 +193,70 @@ export function Home() {
       "Estrategias de marketing experiencial para impulsar el turismo cultural en ciudades históricas",
       "El papel de la tecnología en la mejora de la experiencia turística: Una revisión de aplicaciones móviles y realidad aumentada",
       "Desarrollo de un plan de gestión de crisis para destinos turísticos frente a desastres naturales y pandemias: Experiencias del COVID-19",
-      // Agrega más inputs según sea necesario
+      "Implementación de un sistema basado en inteligencia artificial para la personalización de itinerarios turísticos en tiempo real",
+      "Desarrollo y evaluación de una plataforma de gestión de datos turísticos usando blockchain para la transparencia y seguridad en el sector",
+      "Optimización de la logística turística mediante el uso de algoritmos de optimización y sistemas de información geográfica (SIG)",
+      "Impacto de las tecnologías de realidad virtual en la promoción de destinos turísticos: Un análisis comparativo",
+      "Análisis de la eficacia de los sistemas de gestión de reservas en línea y su influencia en la satisfacción del cliente en el turismo"
     ]);
     getAllProducts();
     getMyProducts();
   }, [response, pageSize])
 
-  const generateSpeech = async (respuesta) => {
-    setLoading(true);
-    try {
-      const mp3 = await openai.audio.speech.create({
-        model: "tts-1",
-        voice: "alloy",
-        input: respuesta,
-      });
-      const blob = new Blob([await mp3.arrayBuffer()], { type: "audio/mp3" });
-      const url = URL.createObjectURL(blob);
-      setSpeechUrl(url);
-    } catch (error) {
-      console.error("Error generating speech:", error);
-    }
-    setLoading(false);
-  };
+
   const [cards, setCards] = useState([]);
+  const jsonToTable = (jsonData) => {
+    if (!jsonData || typeof jsonData !== 'object') return null;
+
+    const createTableRows = (obj) => {
+      return Object.keys(obj).map(key => {
+        const value = obj[key];
+        return (
+          <tr key={key} className="border-b border-gray-200 dark:border-gray-700">
+            <td className="px-4 py-1 text-start whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800">
+              {key}
+            </td>
+            <td className="px-4 py-1 text-start whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900">
+              {typeof value === 'object' && !Array.isArray(value) ? (
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700">
+                  <tbody>
+                    {createTableRows(value)}
+                  </tbody>
+                </table>
+              ) : Array.isArray(value) ? (
+                <ul className="list-disc pl-5">
+                  {value.map((item, index) => (
+                    <li key={index}>
+                      {typeof item === 'object' ? JSON.stringify(item) : item}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                value
+              )}
+            </td>
+          </tr>
+        );
+      });
+    };
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700">
+          <thead className="bg-gray-100 dark:bg-gray-900">
+            <tr>
+              <th className="px-1 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Key</th>
+              <th className="px-1 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Value</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+            {createTableRows(jsonData)}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
 
   return (
     <div className='bg-zinc-200 dark:bg-slate-600'>
@@ -207,60 +268,62 @@ export function Home() {
             <form onSubmit={handleSubmit} className='  rounded-xl p-1 mt-4 z-0'>
               <textarea required type="text" rows={4} className='p-4  resize-none block bg-zinc-300 dark:bg-zinc-800 w-full p-4 ps-10 text-sm pl-9  text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300' placeholder="Ej:Implemtacion de plan de marketing en proceso de ventas del Travi Sac ." value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)} />
-              <p className='text-slate-700 dark:text-white text-center font-bold mt-2 '>Visibilidad</p>
-              <input type="radio" name="hs-default-radio"
-                value="private"
-                onChange={handleVisibilityChange}
-                id="private-radio"
-                checked={!visibility}
-                className="m-2" />
-              <label for="hs-default-radio" class="text-sm text-slate-700 dark:text-white">Privado</label>
-              <input type="radio" name="hs-default-radio"
-                onChange={handleVisibilityChange}
-                value="public"
-                id="private-radio"
-                checked={visibility} className="m-2" />
-              <label for="hs-checked-radio" class="text-sm text-slate-700 dark:text-white">Público</label>
-              <div class="  text-gray-100 dark:text-gray-400 py-2 px-2 inline-flex items-center" onClick={LimpiarInput}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                </svg>
-                <span className='text-sm ml-2 text-slate-700 dark:text-white'  >Limpiar</span>
+              <div class="flex justify-center ">
+                <nav className=" my-1 flex overflow-x-auto bg-slate-600 items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600 bg-gray-500/5 rounded-xl dark:bg-slate-700">
+                  <button
+                    role="tab"  type="button"
+                    className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none focus:ring-2 focus:ring-salte-900 focus:ring-inset ${visibility === 'private' ? 'bg-slate-900 text-white' : 'text-slate-100  hover:text-slate-200'}`}
+                    aria-selected={visibility === 'private' ? 'true' : 'false'}
+                    onClick={() => handleVisibilityChange('private')}
+                  > Privado
+                  </button>
+
+                  <button
+                    role="tab" type="button"
+                    className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none focus:ring-2 focus:ring-salte-900 focus:ring-inset ${visibility === 'public' ? 'bg-slate-900 text-white' : 'text-slate-100  hover:text-slate-200'}`}
+                    aria-selected={visibility === 'public' ? 'true' : 'false'}
+                    onClick={() => handleVisibilityChange('public')}
+                  >Público
+                  </button>
+                </nav>
               </div>
               <button className=' text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm   text-center w-full h-10  '
                 type="submit" disabled={buttonDisabled}>Generate
               </button>
             </form>
-            <div class=" text-cyan-50 font-bold py-1 px-1 rounded inline-flex items-center justify-start text-sm" onClick={handleRandomInput}>
+            <button
+              onClick={handleRandomInput}
+              className="flex items-center justify-start text-cyan-50 font-bold  rounded inline-flex text-sm   focus:outline-none  transition-transform transform hover:scale-105 active:scale-95 cursor-pointer "
+            >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 pr-2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
               </svg>
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
               <span className='text-slate-700 dark:text-white'>Sorpréndeme</span>
+            </button>
+
+            <div className=""
+              onClick={LimpiarInput}
+            ><span className='text-sm text-slate-700 dark:text-white'>Limpiar</span>
             </div>
           </div>
 
-          <div class="md:w-1/2 p-2 text-center ">
 
+          <div class="md:w-full p-2 text-center ">
             <div class="justify-center">
               {loading ? (
                 <div className=''>
-                  <button type="button" class="py-2 mb-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg max-w-full">
-                    <svg width="20" height="20" fill="currentColor" class="mr-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
-                      </path>
-                    </svg>
-                    loading
-                  </button>
-                  <ListPlaceholder></ListPlaceholder>
+                  <ListPlaceholder />
                 </div>
               ) : null}
-
               {response && !loading && (
                 <div className='flex flex-col bg-gray-200 dark:bg-zinc-900 rounded-lg p-4 m-2'>
                   <div className="w-full rounded overflow-hidden shadow-lg">
                     <div className="px-6 py-4">
                       <div className="font-bold text-xl mb-2 dark:text-slate-100">{inputValue}</div>
-                      <div className=' text-slate-900 dark:text-slate-100' dangerouslySetInnerHTML={{ __html: response }} />
+                      <div className=' text-slate-900 dark:text-slate-100'>
+                        {jsonToTable(JSON.parse(response))} {/* Convierte y muestra la tabla aquí */}
+                      </div>
                       <p className='mt-6 text-slate-700 dark:text-white '>Tiempo de generación: {generationTime.toFixed(2)} milisegundos</p>
                     </div>
                   </div>
@@ -285,7 +348,7 @@ export function Home() {
                       ))}
                     </div>
                   )}
-                  <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 '>
+                  <div className='grid xl:grid-cols-3 md:grid-cols-1 grid-cols-1 sm:z-0 '>
                     {Array.isArray(allProducts) && allProducts.map((product) => (
                       <Card key={product.id} product={product} />
                     ))}
@@ -322,9 +385,7 @@ export function Home() {
 
           </div>
           {/**/}
-          <div class="md:w-1/4 p-2 text-center text-sm ">
-            <p className=' font-bold italic text-slate-700 dark:text-white '>Selecciona un Shorcase</p>
-          </div>
+
         </div>
 
       </div>

@@ -1,14 +1,67 @@
 import React from "react";
 
 export function ViewHome({ isOpen, closeModal, product }) {
+
+  const jsonToTable = (jsonData) => {
+    if (!jsonData || typeof jsonData !== 'object') return null;
+
+    const createTableRows = (obj) => {
+      return Object.keys(obj).map(key => {
+        const value = obj[key];
+        return (
+          <tr key={key} className="border-b border-gray-200 dark:border-gray-700">
+            <td className="px-4 py-1 text-start whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800">
+              {key}
+            </td>
+            <td className="px-4 py-1 text-start whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900">
+              {typeof value === 'object' && !Array.isArray(value) ? (
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700">
+                  <tbody>
+                    {createTableRows(value)}
+                  </tbody>
+                </table>
+              ) : Array.isArray(value) ? (
+                <ul className="list-disc pl-5">
+                  {value.map((item, index) => (
+                    <li key={index}>
+                      {typeof item === 'object' ? JSON.stringify(item) : item}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                value
+              )}
+            </td>
+          </tr>
+        );
+      });
+    };
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700">
+          <thead className="bg-gray-100 dark:bg-gray-900">
+            <tr>
+              <th className="px-1 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Key</th>
+              <th className="px-1 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Value</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+            {createTableRows(jsonData)}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   return (
     <>
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm z-50">
-          <div className="relative bg-zinc-800 text-slate-100 w-full max-w-lg rounded-lg overflow-hidden">
+          <div className="relative w-auto rounded-lg overflow-hidden bg-slate-100 text-slate-900 dark:bg-gray-800 dark:text-slate-100 ">
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 rounded-full shadow-lg"
+              className="absolute top-4 right-4 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 m-6 rounded-full shadow-lg dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -27,11 +80,8 @@ export function ViewHome({ isOpen, closeModal, product }) {
               <p className="text-xl font-bold mb-4">
                 {product.name.charAt(0).toUpperCase() + product.name.slice(1)}
               </p>
-              <div className="overflow-y-auto h-96 mb-4">
-                <div
-                  className="text-slate-200"
-                  dangerouslySetInnerHTML={{ __html: product.response }}
-                />
+              <div className="overflow-y-auto h-auto mb-4">
+                {jsonToTable(JSON.parse(product.response))} {/* Convierte y muestra la tabla aquí */}
               </div>
               <div className="flex items-center mb-4">
                 <img
@@ -40,12 +90,12 @@ export function ViewHome({ isOpen, closeModal, product }) {
                   alt="Avatar"
                 />
                 <div>
-                  <p className="text-slate-200">{product.userEmail?.split('@')[0]}</p>
-                  <p className="text-slate-300">{product.timestamp}</p>
+                  <p className="text-slate-900 dark:text-slate-200">{product.userEmail?.split('@')[0]}</p>
+                  <p className="text-slate-900 dark:text-slate-300">{product.timestamp}</p>
                 </div>
               </div>
               <div className="flex justify-between">
-                <button className="flex items-center text-blue-100 hover:bg-gray-700 font-medium rounded-lg py-2 px-4">
+                <button className="flex items-center text-blue-100 bg-gray-700 hover:bg-gray-900 font-medium rounded-lg py-2 px-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -58,7 +108,7 @@ export function ViewHome({ isOpen, closeModal, product }) {
                   </svg>
                   <span>{product.views}</span>
                 </button>
-                <button className="flex items-center text-blue-100 hover:bg-gray-700 font-medium rounded-lg py-2 px-4">
+                <button className="flex items-center text-blue-100  bg-gray-700 hover:bg-gray-900 font-medium rounded-lg py-2 px-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"

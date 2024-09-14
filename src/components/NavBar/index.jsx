@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from "../../context/AuthContext";
 export function NavBar() {
     const [show, setShow] = useState(null);
@@ -45,7 +45,12 @@ export function NavBar() {
     const toggleTheme = () => {
         setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
     };
+    // Get the current location
+    const location = useLocation();
+    const currentPath = location.pathname;
 
+    // Helper function to determine if a link is active
+    const isActive = (path) => currentPath === path;
     return (
         <>
             <div className="  w-full z-50">
@@ -65,12 +70,19 @@ export function NavBar() {
                                 <h3 className="text-base text-slate-700 dark:text-white font-bold tracking-normal leading-tight ml-3 hidden lg:block"><Link to="/">Flour</Link></h3>
                             </div>
                             <ul className="pr-12 xl:flex items-center h-full hidden">
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white  tracking-normal border-b-2 border-white"><Link to="/home"> Generate Matriz Consc.</Link></li>
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white mx-10 tracking-normal"><Link to="/gemini"> Gemini</Link></li>
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white mr-10 tracking-normal"><Link to="/parafrasear"> Parafrasea</Link></li>
-                                <li className="cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm text-slate-700 dark:text-white tracking-normal"><Link to="/resumir"> Resumir</Link></li>
-
-                            </ul>
+                            <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm tracking-normal ${isActive('/home') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300': 'text-slate-700 dark:text-white'}`}>
+                                <Link to="/home">Generate Matriz Consc.</Link>
+                            </li>
+                            <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 dark:hover:text-indigo-200 text-sm mx-10 tracking-normal ${isActive('/gemini') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                <Link to="/gemini">Gemini</Link>
+                            </li>
+                            <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm mr-10 tracking-normal ${isActive('/parafrasear') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                <Link to="/parafrasear">Parafrasea</Link>
+                            </li>
+                            <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm tracking-normal ${isActive('/resumir') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                <Link to="/resumir">Resumir</Link>
+                            </li>
+                        </ul>
                         </div>
 
                         <div className="h-full xl:flex items-center justify-end hidden">

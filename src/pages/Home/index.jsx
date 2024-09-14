@@ -58,8 +58,7 @@ export function Home() {
         messages: [
           { role: "system", content: "Eres un asistente útil que proporciona respuestas en formato JSON con una estructura específica." },
           { role: "user", content: "Por favor, genera una tabla en formato JSON para una matriz de consistencia utilizando los siguientes nombres de claves: 'ProblemaGeneral', 'ProblemasEspecificos', 'ObjetivoGeneral', 'ObjetivosEspecificos', 'HipotesisGeneral', 'HipotesisEspecificas', 'VariablesYDimensiones', 'Metodologia'. A continuación, te proporciono un ejemplo de cómo debería ser el formato JSON:" },
-          {
-            role: "assistant", content: `{
+          { role: "assistant", content: `{
             "ProblemaGeneral": "Descripción del problema general aquí.",
             "ProblemasEspecificos": [
               "Pregunta específica 1",
@@ -266,13 +265,13 @@ export function Home() {
           <div class="mt-10 md:mt-0 w-full md:w-1/4 p-2 h-auto  md:h-screen">
             <p className='mt-10 md:mt-0 text-slate-700 dark:text-white font-bold text-center'>Describe your variables </p>
             <form onSubmit={handleSubmit} className='  rounded-xl p-1 mt-4 z-0'>
-              <textarea required type="text" rows={4} className='p-4  resize-none block bg-zinc-300 dark:bg-zinc-800 w-full p-4 ps-10 text-sm pl-9  text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300' placeholder="Ej:Implemtacion de plan de marketing en proceso de ventas del Travi Sac ." value={inputValue}
+              <textarea required type="text" rows={4} className='resize-none block bg-zinc-300 dark:bg-zinc-800 w-full p-2 ps-10 text-[12px]   text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-600 dark:placeholder-slate-400' placeholder="Ej:Implementación de plan de marketing para mejorarel  proceso de ventas de la empresa TraviSAC." value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)} />
               <div class="flex justify-center ">
-                <nav className=" my-1 flex overflow-x-auto bg-slate-600 items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600 bg-gray-500/5 rounded-xl dark:bg-slate-700">
+                <nav className=" my-1 flex overflow-x-auto bg-slate-00 items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600 bg-gray-500/5 rounded-xl dark:bg-slate-700">
                   <button
                     role="tab"  type="button"
-                    className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none focus:ring-2 focus:ring-salte-900 focus:ring-inset ${visibility === 'private' ? 'bg-slate-900 text-white' : 'text-slate-100  hover:text-slate-200'}`}
+                    className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none focus:ring-2 focus:ring-salte-900 focus:ring-inset ${visibility === 'private' ? 'bg-slate-900 dark:bg-slate-900 text-white dark:text-white' : ' dark:text-slate-100 hover:text-slate-800 dark:hover:text-slate-200'}`}
                     aria-selected={visibility === 'private' ? 'true' : 'false'}
                     onClick={() => handleVisibilityChange('private')}
                   > Privado
@@ -280,7 +279,7 @@ export function Home() {
 
                   <button
                     role="tab" type="button"
-                    className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none focus:ring-2 focus:ring-salte-900 focus:ring-inset ${visibility === 'public' ? 'bg-slate-900 text-white' : 'text-slate-100  hover:text-slate-200'}`}
+                    className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none focus:ring-2 focus:ring-salte-900 focus:ring-inset ${visibility === 'public' ? ' bg-slate-900 dark:bg-slate-900 text-white dark:text-white' : 'dark:text-slate-100  hover:text-slate-800 dark:hover:text-slate-200'}`}
                     aria-selected={visibility === 'public' ? 'true' : 'false'}
                     onClick={() => handleVisibilityChange('public')}
                   >Público
@@ -330,19 +329,20 @@ export function Home() {
                 </div>
               )}
             </div>
+
             <Tabs>
-              <Tab title="All Showcase">
+              <Tab title="Todos" className="active:bg-violet-700"> 
                 <>
                   <div className='flex  justify-between  md:m-1'>
-                    <h1 className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300 md:text-xl font-bold pointer-events-auto'>
-                      Showcase</h1>
+                    <h1 className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300 md:text-sm font-bold pointer-events-auto'>
+                    Demostración:  </h1>
                     <button
                       onClick={loadMoreProducts}
-                      className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300 md:text-xl font-bold justify-end'
-                    > Show more +  </button>
+                      className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300 md:text-sm font-bold justify-end'
+                    > Mostrar más +  </button>
                   </div>
                   {allProducts ? "" : (
-                    <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 ' >
+                    <div className='grid xl:grid-cols-3 md:grid-cols-1 grid-cols-1 sm:z-0 ' >
                       {cantidadCardPlaceholder.map((item, id) => (
                         <CardPlaceholder key={id}></CardPlaceholder>
                       ))}
@@ -356,18 +356,18 @@ export function Home() {
                 </>
               </Tab>
 
-              <Tab title="My Showcase">
+              <Tab title="Mi presentación">
                 <>
                   <div className='flex  justify-between  md:m-1'>
-                    <h1 className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300  md:text-2xl font-bold pointer-events-auto'>
-                      Showcase</h1>
+                    <h1 className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300  md:text-sm font-bold pointer-events-auto'>
+                    Demostración:</h1>
                     <button
                       onClick={loadMoreProducts}
-                      className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300 md:text-2xl font-bold justify-end'
-                    > Show more +  </button>
+                      className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300 md:text-sm font-bold justify-end'
+                    >  Mostrar más + </button>
                   </div>
                   {myProduct ? "" : (
-                    <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 ' >
+                    <div className='grid xl:grid-cols-3 md:grid-cols-1 grid-cols-1 sm:z-0 ' >
                       {cantidadCardPlaceholder.map((item, id) => (
                         <CardPlaceholder key={id}></CardPlaceholder>
                       ))}

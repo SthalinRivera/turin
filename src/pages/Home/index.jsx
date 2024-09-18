@@ -56,47 +56,72 @@ export function Home() {
       setButtonDisabled(true); // Deshabilitar el botón mientras se carga la respuesta
       const completion = await openai.chat.completions.create({
         messages: [
-          { role: "system", content: "Eres un asistente útil que proporciona respuestas en formato JSON con una estructura específica." },
-          { role: "user", content: "Por favor, genera una tabla en formato JSON para una matriz de consistencia utilizando los siguientes nombres de claves: 'ProblemaGeneral', 'ProblemasEspecificos', 'ObjetivoGeneral', 'ObjetivosEspecificos', 'HipotesisGeneral', 'HipotesisEspecificas', 'VariablesYDimensiones', 'Metodologia'. A continuación, te proporciono un ejemplo de cómo debería ser el formato JSON:" },
-          { role: "assistant", content: `{
-            "ProblemaGeneral": "Descripción del problema general aquí.",
-            "ProblemasEspecificos": [
-              "Pregunta específica 1",
-              "Pregunta específica 2"
-            ],
-            "ObjetivoGeneral": "Objetivo principal de la investigación aquí.",
-            "ObjetivosEspecificos": [
-              "Objetivo específico 1",
-              "Objetivo específico 2"
-            ],
-            "HipotesisGeneral": "Hipótesis general de la investigación aquí.",
-            "HipotesisEspecificas": [
-              "Hipótesis específica 1",
-              "Hipótesis específica 2"
-            ],
-            "VariablesYDimensiones": {
-              "VariablePrincipal": "Descripción de la variable principal aquí.",
-              "Dimensiones": [
-                "Dimensión 1",
-                "Dimensión 2"
-              ],
-              "VariableSecundaria": "Descripción de la variable secundaria aquí.",
-              "Dimensiones": [
-                "Dimensión 1",
-                "Dimensión 2"
-              ]
-            },
-            "Metodologia": {
-              "Nivel": "Nivel de investigación aquí.",
-              "Tipo": "Tipo de investigación aquí.",
-              "Metodo": "Método utilizado aquí.",
-              "Diseno": "Diseño de investigación aquí.",
-              "Poblacion": "Descripción de la población aquí.",
-              "Muestra": "Descripción de la muestra aquí."
-            }
-          }`},
-          { role: "user", content: inputValue }
+    {
+      "role": "system",
+      "content": "Eres un asistente útil que proporciona respuestas en formato JSON con una estructura específica."
+    },
+    {
+      "role": "user",
+      "content": "Por favor, genera una tabla en formato JSON para una matriz de consistencia utilizando las siguientes claves: 'ProblemaGeneral', 'ProblemasEspecificos', 'ObjetivoGeneral', 'ObjetivosEspecificos', 'HipotesisGeneral', 'HipotesisEspecificas', 'VariablesYDimensiones', 'Metodologia'. A continuación, te proporciono un ejemplo del formato JSON esperado:"
+    },
+            {
+      "role": "user",
+      "content": "Por ejemplo, si es de Nivel Explicativo, considera las siguientes preguntas clave para formular problemas generales y específicos: ¿Qué efectos produce ..., ¿De qué manera influye ..., ¿En qué medida favorece ...? La formulación debe incluir: 1. Pregunta clave, 2. Variable Independiente, 3. Enlace o relacionante, 4. Variable Dependiente, 5. Muestra/Población, 6. Ámbito organizacional (accesible), 7. Ámbito geográfico (objetivo), 8. Tiempo. Ejemplo: ¿De qué manera (1) el Programa Experimental VIDA (2) influye (3) en la Sostenibilidad Ambiental (4) en los estudiantes de la Facultad de Ingeniería (5) de la Universidad Ricardo Palma (6) de Lima (7) en el año 2020 (8)?"
+    },
+    {
+      "role": "user",
+      "content": "Si el nivel es Correlacional, utiliza estas preguntas clave: ¿Qué relación existe entre ..., ¿Cuál es la relación que se presenta entre ...? La formulación debe incluir: 1. Pregunta clave, 2. Variable 1, 3. Enlace o relacionante, 4. Variable 2, 5. Muestra/Población, 6. Ámbito organizacional (accesible), 7. Ámbito geográfico (objetivo), 8. Tiempo. Ejemplo: ¿Qué relación existe entre (1) el síndrome de Burnout (2) y (3) la gestión pública (4) en los colaboradores (5) de la Municipalidad Provincial (6) de Cañete (7) en el año 2020 (8)?"
+    },
+    {
+      "role": "assistant",
+      "content": `{
+        "ProblemaGeneral": "Descripción del problema general aquí.",
+        "ProblemasEspecificos": [
+          "Pregunta específica 1",
+          "Pregunta específica 2"
         ],
+        "ObjetivoGeneral": "Objetivo principal de la investigación aquí.",
+        "ObjetivosEspecificos": [
+          "Objetivo específico 1",
+          "Objetivo específico 2"
+        ],
+        "HipotesisGeneral": "Hipótesis general de la investigación aquí.",
+        "HipotesisEspecificas": [
+          "Hipótesis específica 1",
+          "Hipótesis específica 2"
+        ],
+        "VariablesYDimensiones": {
+          "VariablePrincipal": {
+            "Descripcion": "Descripción de la variable principal aquí.",
+            "Dimensiones": [
+              "Dimensión 1",
+              "Dimensión 2"
+            ]
+          },
+          "VariableSecundaria": {
+            "Descripcion": "Descripción de la variable secundaria aquí.",
+            "Dimensiones": [
+              "Dimensión 1",
+              "Dimensión 2"
+            ]
+          }
+        },
+        "Metodologia": {
+          "Nivel": "Nivel de investigación aquí.",
+          "Tipo": "Tipo de investigación aquí.",
+          "Metodo": "Método utilizado aquí.",
+          "Diseno": "Diseño de investigación aquí.",
+          "Poblacion": "Descripción de la población aquí.",
+          "Muestra": "Descripción de la muestra aquí."
+        }
+      }`
+    },
+  
+    {
+      "role": "user",
+      "content": "inputValue"
+    }
+  ],
         model: "gpt-3.5-turbo",
       });
       const endTime = performance.now(); // Detener el temporizador

@@ -119,7 +119,7 @@ export function Home() {
   
     {
       "role": "user",
-      "content": "inputValue"
+      "content":  inputValue
     }
   ],
         model: "gpt-3.5-turbo",

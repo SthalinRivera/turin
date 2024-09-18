@@ -16,7 +16,7 @@ import Tabs from './Tabs';
 import Tab from './Tab';
 
 
-export function Home() {
+export function Opera() {
   const { logout, user } = useAuth();
   const [inputValue, setInputValue] = useState('');
   const [response, setResponse] = useState('');
@@ -56,65 +56,46 @@ export function Home() {
       setButtonDisabled(true); // Deshabilitar el botón mientras se carga la respuesta
       const completion = await openai.chat.completions.create({
         messages: [
+          { role: "system", content: "Eres un asistente útil que proporciona respuestas en formato JSON con una estructura específica." },
+          { role: "user", content: "Por favor, genera una tabla en formato JSON para una Operacionalización de las variables utilizando los siguientes nombres de claves: 'ProblemaGeneral', 'ProblemasEspecificos', 'ObjetivoGeneral', 'ObjetivosEspecificos', 'HipotesisGeneral', 'HipotesisEspecificas', 'VariablesYDimensiones', 'Metodologia'. A continuación, te proporciono un ejemplo de cómo debería ser el formato JSON:" },
           {
-            "role": "system",
-            "content": "Eres un asistente útil que proporciona respuestas en formato JSON con una estructura específica."
-          },
-          {
-            "role": "user",
-            "content": "Por favor, genera una tabla en formato JSON para una matriz de consistencia utilizando las siguientes claves: 'ProblemaGeneral', 'ProblemasEspecificos', 'ObjetivoGeneral', 'ObjetivosEspecificos', 'HipotesisGeneral', 'HipotesisEspecificas', 'VariablesYDimensiones', 'Metodologia'. A continuación, te proporciono un ejemplo del formato JSON esperado:"
-          },
-          {
-            "role": "user",
-            "content": "Por ejemplo, si es de Nivel Explicativo, considera las siguientes preguntas clave para formular problemas generales y específicos: ¿Qué efectos produce ..., ¿De qué manera influye ..., ¿En qué medida favorece ...? La formulación debe incluir: 1. Pregunta clave, 2. Variable Independiente, 3. Enlace o relacionante, 4. Variable Dependiente, 5. Muestra/Población, 6. Ámbito organizacional (accesible), 7. Ámbito geográfico (objetivo), 8. Tiempo. Ejemplo: ¿De qué manera (1) el Programa Experimental VIDA (2) influye (3) en la Sostenibilidad Ambiental (4) en los estudiantes de la Facultad de Ingeniería (5) de la Universidad Ricardo Palma (6) de Lima (7) en el año 2020 (8)?"
-          },
-          {
-            "role": "user",
-            "content": "Si el nivel es Correlacional, utiliza estas preguntas clave: ¿Qué relación existe entre ..., ¿Cuál es la relación que se presenta entre ...? La formulación debe incluir: 1. Pregunta clave, 2. Variable 1, 3. Enlace o relacionante, 4. Variable 2, 5. Muestra/Población, 6. Ámbito organizacional (accesible), 7. Ámbito geográfico (objetivo), 8. Tiempo. Ejemplo: ¿Qué relación existe entre (1) el síndrome de Burnout (2) y (3) la gestión pública (4) en los colaboradores (5) de la Municipalidad Provincial (6) de Cañete (7) en el año 2020 (8)?"
-          },
-          {
-            "role": "assistant",
-            "content": `{
-        "ProblemaGeneral": "Descripción del problema general aquí.",
-        "ProblemasEspecificos": [
-          "Pregunta específica 1",
-          "Pregunta específica 2"
-        ],
-        "ObjetivoGeneral": "Objetivo principal de la investigación aquí.",
-        "ObjetivosEspecificos": [
-          "Objetivo específico 1",
-          "Objetivo específico 2"
-        ],
-        "HipotesisGeneral": "Hipótesis general de la investigación aquí.",
-        "HipotesisEspecificas": [
-          "Hipótesis específica 1",
-          "Hipótesis específica 2"
-        ],
-        "VariablesYDimensiones": {
-          "VariablePrincipal": {
-            "Descripcion": "Descripción de la variable principal aquí.",
-            "Dimensiones": [
-              "Dimensión 1",
-              "Dimensión 2"
-            ]
-          },
-          "VariableSecundaria": {
-            "Descripcion": "Descripción de la variable secundaria aquí.",
-            "Dimensiones": [
-              "Dimensión 1",
-              "Dimensión 2"
-            ]
-          }
-        },
-        "Metodologia": {
-          "Nivel": "Nivel de investigación aquí.",
-          "Tipo": "Tipo de investigación aquí.",
-          "Metodo": "Método utilizado aquí.",
-          "Diseno": "Diseño de investigación aquí.",
-          "Poblacion": "Descripción de la población aquí.",
-          "Muestra": "Descripción de la muestra aquí."
-        }
-      }`},
+            role: "assistant", content: `{
+            "ProblemaGeneral": "Descripción del problema general aquí.",
+            "ProblemasEspecificos": [
+              "Pregunta específica 1",
+              "Pregunta específica 2"
+            ],
+            "ObjetivoGeneral": "Objetivo principal de la investigación aquí.",
+            "ObjetivosEspecificos": [
+              "Objetivo específico 1",
+              "Objetivo específico 2"
+            ],
+            "HipotesisGeneral": "Hipótesis general de la investigación aquí.",
+            "HipotesisEspecificas": [
+              "Hipótesis específica 1",
+              "Hipótesis específica 2"
+            ],
+            "VariablesYDimensiones": {
+              "VariablePrincipal": "Descripción de la variable principal aquí.",
+              "Dimensiones": [
+                "Dimensión 1",
+                "Dimensión 2"
+              ],
+              "VariableSecundaria": "Descripción de la variable secundaria aquí.",
+              "Dimensiones": [
+                "Dimensión 1",
+                "Dimensión 2"
+              ]
+            },
+            "Metodologia": {
+              "Nivel": "Nivel de investigación aquí.",
+              "Tipo": "Tipo de investigación aquí.",
+              "Metodo": "Método utilizado aquí.",
+              "Diseno": "Diseño de investigación aquí.",
+              "Poblacion": "Descripción de la población aquí.",
+              "Muestra": "Descripción de la muestra aquí."
+            }
+          }`},
           { role: "user", content: inputValue }
         ],
         model: "gpt-3.5-turbo",
@@ -169,14 +150,14 @@ export function Home() {
     const q = query(collection(db, "products"), limit(pageSize), where('userEmail', '==', user.email), orderBy("timestamp"));
     const data = await getDocs(q)
     console.log(data);
-
+    
     setMyProduct(
       data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
     )
   };
-
+  
   //Add data
-  const productsCollectionStore = collection(db, "products")
+  const productsCollectionStore = collection(db, "OperaVaviables")
   const userName = user.displayName
   const photoURL = user.photoURL
   const userEmail = user.email
@@ -219,8 +200,32 @@ export function Home() {
       "Análisis de la eficacia de los sistemas de gestión de reservas en línea y su influencia en la satisfacción del cliente en el turismo"
     ]);
     getAllProducts();
+
     getMyProducts();
+    TitleStatus();
   }, [response, pageSize])
+
+const TitleStatus =()=>{
+  const originalTitle = document.title;
+
+  // Función para cambiar el título cuando se cambia la visibilidad
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      document.title = "¡🐝No te vayas 😭💔!";
+    } else {
+      document.title = originalTitle;
+    }
+  };
+
+  // Agregamos el evento de cambio de visibilidad
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+
+  // Limpiamos el evento cuando el componente se desmonta
+  return () => {
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
+    document.title = originalTitle; // Restauramos el título original
+  };
+}
 
 
   const [cards, setCards] = useState([]);
@@ -285,12 +290,12 @@ export function Home() {
           <div class="mt-10 md:mt-0 w-full md:w-1/4 p-2 h-auto  md:h-screen">
             <p className='mt-10 md:mt-0 text-slate-700 dark:text-white font-bold text-center'>Describe your variables </p>
             <form onSubmit={handleSubmit} className='  rounded-xl p-1 mt-4 z-0'>
-              <textarea required type="text" rows={4} className='p-4  resize-none block bg-zinc-300 dark:bg-zinc-800 w-full p-4 ps-10 text-sm pl-9  text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300' placeholder="Ej:Implemtacion de plan de marketing en proceso de ventas del Travi Sac ." value={inputValue}
+              <textarea required type="text" rows={4} className='p-4  resize-none block bg-zinc-300 dark:bg-zinc-800 w-full p-4 ps-10 text-sm pl-9  text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300' placeholder="Ej: Your variable 1 y Variable 02." value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)} />
               <div class="flex justify-center ">
                 <nav className=" my-1 flex overflow-x-auto bg-slate-600 items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600 bg-gray-500/5 rounded-xl dark:bg-slate-700">
                   <button
-                    role="tab" type="button"
+                    role="tab"  type="button"
                     className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none focus:ring-2 focus:ring-salte-900 focus:ring-inset ${visibility === 'private' ? 'bg-slate-900 text-white' : 'text-slate-100  hover:text-slate-200'}`}
                     aria-selected={visibility === 'private' ? 'true' : 'false'}
                     onClick={() => handleVisibilityChange('private')}

@@ -73,6 +73,9 @@ export function NavBar() {
                             <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm tracking-normal ${isActive('/home') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300': 'text-slate-700 dark:text-white'}`}>
                                 <Link to="/home">Generate Matriz Consc.</Link>
                             </li>
+                            <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 dark:hover:text-indigo-200 text-sm mx-10 tracking-normal ${isActive('/opera') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                <Link to="/opera">Oper. Variables</Link>
+                            </li>
                             <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 dark:hover:text-indigo-200 text-sm mx-10 tracking-normal ${isActive('/gemini') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
                                 <Link to="/gemini">Gemini</Link>
                             </li>

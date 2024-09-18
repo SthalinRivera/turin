@@ -7,12 +7,12 @@ import { getStorage} from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDFxPNu_LJY-bANvpD0QLtPSKuRDBQEDxg",
-  authDomain: "tutorial-538a4.firebaseapp.com",
-  projectId: "tutorial-538a4",
-  storageBucket: "tutorial-538a4.appspot.com",
-  messagingSenderId: "453631372977",
-  appId: "1:453631372977:web:87e5815fb4762737737c90"
+ apiKey: "AIzaSyAnxhOJkGzCMxsGq3txpqdcfUDbKxmZnAQ",
+  authDomain: "traviweb-peru.firebaseapp.com",
+  projectId: "traviweb-peru",
+  storageBucket: "traviweb-peru.appspot.com",
+  messagingSenderId: "42392203234",
+  appId: "1:42392203234:web:3acfaec0f9d2ad04f153bb"
 };
 
 // Initialize Firebase

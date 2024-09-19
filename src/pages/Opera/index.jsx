@@ -57,45 +57,91 @@ export function Opera() {
       const completion = await openai.chat.completions.create({
         messages: [
           { role: "system", content: "Eres un asistente útil que proporciona respuestas en formato JSON con una estructura específica." },
-          { role: "user", content: "Por favor, genera una tabla en formato JSON para una Operacionalización de las variables utilizando los siguientes nombres de claves: 'ProblemaGeneral', 'ProblemasEspecificos', 'ObjetivoGeneral', 'ObjetivosEspecificos', 'HipotesisGeneral', 'HipotesisEspecificas', 'VariablesYDimensiones', 'Metodologia'. A continuación, te proporciono un ejemplo de cómo debería ser el formato JSON:" },
+          { role: "user", content: "Por favor, genera una tabla en formato JSON para una Operacionalización de las variables utilizando los siguientes nombres  claves: 'Variables', 'Definición operacional', 'Dimensiones', 'Indicadores', 'Ítems o formula', 'Instrumento y escala de medición'. A continuación, te proporciono un ejemplo de cómo debería ser el formato JSON:" },
           {
             role: "assistant", content: `{
-            "ProblemaGeneral": "Descripción del problema general aquí.",
-            "ProblemasEspecificos": [
-              "Pregunta específica 1",
-              "Pregunta específica 2"
-            ],
-            "ObjetivoGeneral": "Objetivo principal de la investigación aquí.",
-            "ObjetivosEspecificos": [
-              "Objetivo específico 1",
-              "Objetivo específico 2"
-            ],
-            "HipotesisGeneral": "Hipótesis general de la investigación aquí.",
-            "HipotesisEspecificas": [
-              "Hipótesis específica 1",
-              "Hipótesis específica 2"
-            ],
-            "VariablesYDimensiones": {
-              "VariablePrincipal": "Descripción de la variable principal aquí.",
-              "Dimensiones": [
-                "Dimensión 1",
-                "Dimensión 2"
-              ],
-              "VariableSecundaria": "Descripción de la variable secundaria aquí.",
-              "Dimensiones": [
-                "Dimensión 1",
-                "Dimensión 2"
+   {
+    "Variable1": {
+      "DefinicionOperacional": "Definición variable 1",
+      "Dimensiones": [
+        {
+          "Nombre": "Dimensión 1",
+          "Indicadores": [
+            {
+              "Indicador1": "Indicador 1",
+              "Formula": "Formula 1",
+              "Instrumento": "Cuestionario (Escala de Likert)",
+              "Escala": [
+                "Muy Ineficiente",
+                "Ineficiente",
+                "Neutral",
+                "Eficiente",
+                "Muy Eficiente"
               ]
             },
-            "Metodologia": {
-              "Nivel": "Nivel de investigación aquí.",
-              "Tipo": "Tipo de investigación aquí.",
-              "Metodo": "Método utilizado aquí.",
-              "Diseno": "Diseño de investigación aquí.",
-              "Poblacion": "Descripción de la población aquí.",
-              "Muestra": "Descripción de la muestra aquí."
+            {
+              "Indicador2": "Indicador 2",
+              "Formula": "N/A",
+              "Instrumento": "Ficha de registro",
+              "Escala": "N/A"
             }
-          }`},
+          ]
+        }
+      ]
+    },
+    "Variable2": {
+      "DefinicionOperacional": "Definición variable 2",
+      "Dimensiones": [
+        {
+          "Nombre": "Dimensión 1",
+          "Indicadores": [
+            {
+              "Indicador1": "Indicador 1",
+              "Formula": "Formula 2",
+              "Instrumento": "Cuestionario (Escala de Likert)",
+              "Escala": [
+                "Muy Ineficiente",
+                "Ineficiente",
+                "Neutral",
+                "Eficiente",
+                "Muy Eficiente"
+              ]
+            },
+            {
+              "Nombre": "Indicador 2",
+              "Formula": "N/A",
+              "Instrumento": "Ficha de registro",
+              "Escala": "N/A"
+            }
+          ]
+        },
+        {
+          "Nombre": "Dimensión 2",
+          "Indicadores": [
+            {
+              "Indicador1": "Indicador 1",
+              "Formula": "N/A",
+              "Instrumento": "N/A",
+              "Escala": "N/A"
+            }
+          ]
+        },
+        {
+          "Nombre": "Dimensión 3",
+          "Indicadores": [
+            {
+              "Indicador2": "Indicador 2",
+              "Formula": "N/A",
+              "Instrumento": "N/A",
+              "Escala": "N/A"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+`},
           { role: "user", content: inputValue }
         ],
         model: "gpt-3.5-turbo",
@@ -138,7 +184,7 @@ export function Opera() {
   // Lis data all user 
   const [allProducts, setAllProducts] = useState('');
   const getAllProducts = async () => {
-    const q = query(collection(db, "products"), orderBy("timestamp"), limit(pageSize), startAfter(lastDoc));
+    const q = query(collection(db, "OperaVariables"), orderBy("timestamp"), limit(pageSize), startAfter(lastDoc));
     const data = await getDocs(q)
     setAllProducts(
       data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
@@ -147,17 +193,17 @@ export function Opera() {
   // Lis data by user 
   const [myProduct, setMyProduct] = useState('');
   const getMyProducts = async () => {
-    const q = query(collection(db, "products"), limit(pageSize), where('userEmail', '==', user.email), orderBy("timestamp"));
+    const q = query(collection(db, "OperaVariables"), limit(pageSize), where('userEmail', '==', user.email), orderBy("timestamp"));
     const data = await getDocs(q)
     console.log(data);
-    
+
     setMyProduct(
       data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
     )
   };
-  
+
   //Add data
-  const productsCollectionStore = collection(db, "OperaVaviables")
+  const productsCollectionStore = collection(db, "OperaVariables")
   const userName = user.displayName
   const photoURL = user.photoURL
   const userEmail = user.email
@@ -205,27 +251,27 @@ export function Opera() {
     TitleStatus();
   }, [response, pageSize])
 
-const TitleStatus =()=>{
-  const originalTitle = document.title;
+  const TitleStatus = () => {
+    const originalTitle = document.title;
 
-  // Función para cambiar el título cuando se cambia la visibilidad
-  const handleVisibilityChange = () => {
-    if (document.hidden) {
-      document.title = "¡🐝No te vayas 😭💔!";
-    } else {
-      document.title = originalTitle;
-    }
-  };
+    // Función para cambiar el título cuando se cambia la visibilidad
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        document.title = "¡🐝No te vayas no puedo vivir sin tiii... 😭💔!";
+      } else {
+        document.title = originalTitle;
+      }
+    };
 
-  // Agregamos el evento de cambio de visibilidad
-  document.addEventListener("visibilitychange", handleVisibilityChange);
+    // Agregamos el evento de cambio de visibilidad
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-  // Limpiamos el evento cuando el componente se desmonta
-  return () => {
-    document.removeEventListener("visibilitychange", handleVisibilityChange);
-    document.title = originalTitle; // Restauramos el título original
-  };
-}
+    // Limpiamos el evento cuando el componente se desmonta
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.title = originalTitle; // Restauramos el título original
+    };
+  }
 
 
   const [cards, setCards] = useState([]);
@@ -295,7 +341,7 @@ const TitleStatus =()=>{
               <div class="flex justify-center ">
                 <nav className=" my-1 flex overflow-x-auto bg-slate-600 items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600 bg-gray-500/5 rounded-xl dark:bg-slate-700">
                   <button
-                    role="tab"  type="button"
+                    role="tab" type="button"
                     className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none focus:ring-2 focus:ring-salte-900 focus:ring-inset ${visibility === 'private' ? 'bg-slate-900 text-white' : 'text-slate-100  hover:text-slate-200'}`}
                     aria-selected={visibility === 'private' ? 'true' : 'false'}
                     onClick={() => handleVisibilityChange('private')}

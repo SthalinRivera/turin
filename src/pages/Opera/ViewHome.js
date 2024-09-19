@@ -1,39 +1,98 @@
 import React from "react";
 
 export function ViewHome({ isOpen, closeModal, product }) {
-
   const jsonToTable = (jsonData) => {
     if (!jsonData || typeof jsonData !== 'object') return null;
 
     const createTableRows = (obj) => {
       return Object.keys(obj).map(key => {
         const value = obj[key];
-        return (
-          <tr key={key} className="border-b border-gray-200 dark:border-gray-700">
-            <td className="px-4 py-1 text-start  text-sm font-medium text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800">
-              {key}
-            </td>
-            <td className="px-4 py-1 text-start  text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900">
-              {typeof value === 'object' && !Array.isArray(value) ? (
+
+        if (typeof value === 'object' && !Array.isArray(value)) {
+          // Si es un objeto, recursivamente desglosar sus campos
+          return (
+            <tr key={key} className="border-b border-gray-200 dark:border-gray-700">
+              <td className="px-4 py-1 text-start text-sm font-medium text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800">
+                {key}
+              </td>
+              <td className="px-4 py-1 text-start text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900">
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700">
                   <tbody>
                     {createTableRows(value)}
                   </tbody>
                 </table>
-              ) : Array.isArray(value) ? (
+              </td>
+            </tr>
+          );
+        } else if (Array.isArray(value)) {
+          // Si es un array, procesar los elementos de forma clara, incluyendo dimensiones e indicadores
+          return (
+            <tr key={key} className="border-b border-gray-200 dark:border-gray-700">
+              <td className="px-4 py-1 text-start text-sm font-medium text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800">
+                {key}
+              </td>
+              <td className="px-4 py-1 text-start text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900">
                 <ul className="list-disc pl-5">
                   {value.map((item, index) => (
                     <li key={index}>
-                      {typeof item === 'object' ? JSON.stringify(item) : item}
+                      {typeof item === 'object' ? (
+                        <>
+                          {/* Mostrar el nombre de la dimensión */}
+                          {item.Nombre && (
+                            <div className="mb-2">
+                              <strong>Dimensión: {item.Nombre}</strong>
+                              {/* Mostrar los indicadores en una tabla */}
+                              {item.Indicadores && Array.isArray(item.Indicadores) && (
+                                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700 mt-2">
+                                  <thead>
+                                    <tr>
+                                      <th className="px-2 py-2 text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Indicador</th>
+                                      <th className="px-2 py-2 text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Ítems o Fórmula</th>
+                                      <th className="px-2 py-2 text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Instrumento y Escala de Medición</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {item.Indicadores.map((indicador, indIndex) => (
+                                      <tr key={indIndex}>
+                                        <td className="px-2 py-2 text-sm text-gray-900 dark:text-gray-100">
+                                          {indicador.Indicador}
+                                        </td>
+                                        <td className="px-2 py-2 text-sm text-gray-500 dark:text-gray-400">
+                                          {indicador["Ítems o formula"]}
+                                        </td>
+                                        <td className="px-2 py-2 text-sm text-gray-500 dark:text-gray-400">
+                                          {indicador["Instrumento y escala de medición"]}
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              )}
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        item
+                      )}
                     </li>
                   ))}
                 </ul>
-              ) : (
-                value
-              )}
-            </td>
-          </tr>
-        );
+              </td>
+            </tr>
+          );
+        } else {
+          // Si es un valor primitivo, solo mostrarlo
+          return (
+            <tr key={key} className="border-b border-gray-200 dark:border-gray-700">
+              <td className="px-4 py-1 text-start text-sm font-medium text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800">
+                {key}
+              </td>
+              <td className="px-4 py-1 text-start text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900">
+                {value}
+              </td>
+            </tr>
+          );
+        }
       });
     };
 
@@ -43,7 +102,7 @@ export function ViewHome({ isOpen, closeModal, product }) {
           <thead className="bg-gray-100 dark:bg-gray-900">
             <tr>
               <th className="px-1 py-4 text-center text-xs font-medium text-gray-500 uppercase dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Key</th>
-              <th className="px-1 py-4 text-center text-xs font-medium text-gray-500 uppercase  dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Value</th>
+              <th className="px-1 py-4 text-center text-xs font-medium text-gray-500 uppercase dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Value</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
@@ -81,12 +140,12 @@ export function ViewHome({ isOpen, closeModal, product }) {
                 {product.name.charAt(0).toUpperCase() + product.name.slice(1)}
               </p>
               <div className="overflow-y-auto h-auto mb-4">
-                {jsonToTable(JSON.parse(product.response))} {/* Convierte y muestra la tabla aquí */}
+                {jsonToTable(product.response)} {/* Renderiza la tabla a partir de 'product.response' */}
               </div>
               <div className="flex items-center mb-1">
                 <img
                   className="w-6 h-6 rounded-full mr-4"
-                  src={product.photoURL || "https://firebasestorage.googleapis.com/v0/b/tutorial-538a4.appspot.com/o/userDefault.jpg?alt=media&token=3939f559-10ba-4287-ba28-ebcc03779ba6"}
+                  src={product.photoURL || "https://example.com/default-image.jpg"}
                   alt="Avatar"
                 />
                 <div className="text-start">
@@ -107,17 +166,6 @@ export function ViewHome({ isOpen, closeModal, product }) {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                   </svg>
                   <span>{product.views}</span>
-                </button>
-                <button className="flex items-center text-blue-100  bg-gray-700 hover:bg-gray-900 font-medium rounded-lg py-1 px-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-4 h-4 mr-2"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-                  </svg>
                 </button>
               </div>
             </div>

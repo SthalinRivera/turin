@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { db } from "../../firebase";
 import { collection, getDocs, getDoc, deleteDoc, addDoc, query, limit, startAfter, orderBy, where } from 'firebase/firestore';
 import { NavBar } from "../../components/NavBar";
-import { Card } from "../../components/Card";
+import { Card } from "../../components/CardOpera";
 import { useAuth } from "../../context/AuthContext";
 import { Modal } from "../../components/Modal";
 import { NavLink } from 'react-router-dom';
@@ -20,6 +20,7 @@ export function Opera() {
   const { logout, user } = useAuth();
   const [inputValue, setInputValue] = useState('');
   const [response, setResponse] = useState('');
+  const [apiResponse, setApiResponse] = useState([]); // Estado para la respuesta de la API
   const [visibility, setVisibility] = useState('public')
   const [loading, setLoading] = useState(false); // Estado para controlar la carga
   const [generationTime, setGenerationTime] = useState(0); // Tiempo de generación
@@ -56,101 +57,108 @@ export function Opera() {
       setButtonDisabled(true); // Deshabilitar el botón mientras se carga la respuesta
       const completion = await openai.chat.completions.create({
         messages: [
-          { role: "system", content: "Eres un asistente útil que proporciona respuestas en formato JSON con una estructura específica." },
-          { role: "user", content: "Por favor, genera una tabla en formato JSON para una Operacionalización de las variables utilizando los siguientes nombres  claves: 'Variables', 'Definición operacional', 'Dimensiones', 'Indicadores', 'Ítems o formula', 'Instrumento y escala de medición'. A continuación, te proporciono un ejemplo de cómo debería ser el formato JSON:" },
           {
-            role: "assistant", content: `{
-   {
-    "Variable1": {
-      "DefinicionOperacional": "Definición variable 1",
-      "Dimensiones": [
-        {
-          "Nombre": "Dimensión 1",
-          "Indicadores": [
-            {
-              "Indicador1": "Indicador 1",
-              "Formula": "Formula 1",
-              "Instrumento": "Cuestionario (Escala de Likert)",
-              "Escala": [
-                "Muy Ineficiente",
-                "Ineficiente",
-                "Neutral",
-                "Eficiente",
-                "Muy Eficiente"
+            role: "system",
+            content: "Eres un asistente útil que proporciona respuestas en formato JSON con una estructura específica. Tu tarea es generar datos en un formato JSON específico sin modificar las claves de los objetos que te proporciono."
+          },
+          {
+            role: "user",
+            content: "Por favor, genera una tabla en formato JSON para una Operacionalización de las variables utilizando los siguientes nombres clave: 'Variables', 'Definición operacional', 'Dimensiones', 'Indicadores', 'Ítems o fórmula', 'Instrumento y escala de medición'. A continuación, te proporciono un ejemplo de cómo debería ser el formato JSON, Solo cambia los valores, manteniendo intactas las claves de los objetos."
+          },
+          {
+            role: "assistant",
+            content: JSON.stringify({
+              "variables": [
+                {
+                  "nombre": "Satisfacción Laboral",
+                  "definicion_operacional": "Grado en que los empleados se sienten satisfechos con su trabajo.",
+                  "dimensiones": [
+                    {
+                      "nombre": "Satisfacción Intrínseca",
+                      "indicadores": [
+                        {
+                          "nombre": "Nivel de satisfacción con tareas del puesto",
+                          "items_formula": "Preguntas sobre disfrute de tareas y realización personal (1-5)",
+                          "instrumento_escala": "Cuestionario de satisfacción laboral. Escala Likert (1-5)"
+                        }
+                      ]
+                    },
+                    {
+                      "nombre": "Satisfacción Extrínseca",
+                      "indicadores": [
+                        {
+                          "nombre": "Satisfacción con el salario y condiciones",
+                          "items_formula": "Preguntas sobre satisfacción con salario, ambiente y beneficios (1-5)",
+                          "instrumento_escala": "Cuestionario de satisfacción laboral. Escala Likert (1-5)"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "nombre": "Productividad",
+                  "definicion_operacional": "Rendimiento del empleado en la realización de tareas laborales.",
+                  "dimensiones": [
+                    {
+                      "nombre": "Eficiencia",
+                      "indicadores": [
+                        {
+                          "nombre": "Tareas realizadas en tiempo y forma",
+                          "items_formula": "Medición de cantidad de tareas completadas por semana.",
+                          "instrumento_escala": "Registro de tareas completadas. Escala numérica"
+                        }
+                      ]
+                    },
+                    {
+                      "nombre": "Eficacia",
+                      "indicadores": [
+                        {
+                          "nombre": "Calidad del trabajo realizado",
+                          "items_formula": "Evaluación del supervisor sobre la calidad de trabajo (1-5)",
+                          "instrumento_escala": "Evaluación del desempeño del supervisor. Escala Likert (1-5)"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "nombre": "Motivación Laboral",
+                  "definicion_operacional": "Nivel de compromiso y energía con la que un empleado desempeña sus funciones.",
+                  "dimensiones": [
+                    {
+                      "nombre": "Motivación Intrínseca",
+                      "indicadores": [
+                        {
+                          "nombre": "Interés en el desarrollo profesional y personal",
+                          "items_formula": "Preguntas sobre el deseo de crecer en el trabajo (1-5)",
+                          "instrumento_escala": "Cuestionario de motivación laboral. Escala Likert (1-5)"
+                        }
+                      ]
+                    },
+                    {
+                      "nombre": "Motivación Extrínseca",
+                      "indicadores": [
+                        {
+                          "nombre": "Incentivos económicos y reconocimiento externo",
+                          "items_formula": "Preguntas sobre la importancia del salario y reconocimiento (1-5)",
+                          "instrumento_escala": "Cuestionario de motivación laboral. Escala Likert (1-5)"
+                        }
+                      ]
+                    }
+                  ]
+                }
               ]
-            },
-            {
-              "Indicador2": "Indicador 2",
-              "Formula": "N/A",
-              "Instrumento": "Ficha de registro",
-              "Escala": "N/A"
-            }
-          ]
-        }
-      ]
-    },
-    "Variable2": {
-      "DefinicionOperacional": "Definición variable 2",
-      "Dimensiones": [
-        {
-          "Nombre": "Dimensión 1",
-          "Indicadores": [
-            {
-              "Indicador1": "Indicador 1",
-              "Formula": "Formula 2",
-              "Instrumento": "Cuestionario (Escala de Likert)",
-              "Escala": [
-                "Muy Ineficiente",
-                "Ineficiente",
-                "Neutral",
-                "Eficiente",
-                "Muy Eficiente"
-              ]
-            },
-            {
-              "Nombre": "Indicador 2",
-              "Formula": "N/A",
-              "Instrumento": "Ficha de registro",
-              "Escala": "N/A"
-            }
-          ]
-        },
-        {
-          "Nombre": "Dimensión 2",
-          "Indicadores": [
-            {
-              "Indicador1": "Indicador 1",
-              "Formula": "N/A",
-              "Instrumento": "N/A",
-              "Escala": "N/A"
-            }
-          ]
-        },
-        {
-          "Nombre": "Dimensión 3",
-          "Indicadores": [
-            {
-              "Indicador2": "Indicador 2",
-              "Formula": "N/A",
-              "Instrumento": "N/A",
-              "Escala": "N/A"
-            }
-          ]
-        }
-      ]
-    }
-  }
-}
-`},
-          { role: "user", content: inputValue }
+            }, null, 2), // Envía el objeto inicial en formato JSON
+          },
+          { role: "user", content: inputValue },
         ],
         model: "gpt-3.5-turbo",
       });
       const endTime = performance.now(); // Detener el temporizador
       setGenerationTime(endTime - startTime); // Calcular el tiempo transcurrido
-      setResponse(completion.choices[0].message.content);
-      const response = completion.choices[0].message.content
-      console.log(response);
+      const response = JSON.parse(completion.choices[0].message.content);
+      setApiResponse(response.variables); // Actualiza el estado con la respuesta
+      setResponse(response.variables);
       // Verifica si hay una respuesta antes de llamar a store()
       if (response) {
         setResponse(response);
@@ -275,57 +283,6 @@ export function Opera() {
 
 
   const [cards, setCards] = useState([]);
-  const jsonToTable = (jsonData) => {
-    if (!jsonData || typeof jsonData !== 'object') return null;
-
-    const createTableRows = (obj) => {
-      return Object.keys(obj).map(key => {
-        const value = obj[key];
-        return (
-          <tr key={key} className="border-b border-gray-200 dark:border-gray-700">
-            <td className="px-4 py-1 text-start whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800">
-              {key}
-            </td>
-            <td className="px-4 py-1 text-start whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900">
-              {typeof value === 'object' && !Array.isArray(value) ? (
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700">
-                  <tbody>
-                    {createTableRows(value)}
-                  </tbody>
-                </table>
-              ) : Array.isArray(value) ? (
-                <ul className="list-disc pl-5">
-                  {value.map((item, index) => (
-                    <li key={index}>
-                      {typeof item === 'object' ? JSON.stringify(item) : item}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                value
-              )}
-            </td>
-          </tr>
-        );
-      });
-    };
-
-    return (
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700">
-          <thead className="bg-gray-100 dark:bg-gray-900">
-            <tr>
-              <th className="px-1 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Key</th>
-              <th className="px-1 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Value</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
-            {createTableRows(jsonData)}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
 
 
   return (
@@ -387,17 +344,82 @@ export function Opera() {
                 </div>
               ) : null}
               {response && !loading && (
-                <div className='flex flex-col bg-gray-200 dark:bg-zinc-900 rounded-lg p-4 m-2'>
-                  <div className="w-full rounded overflow-hidden shadow-lg">
-                    <div className="px-6 py-4">
-                      <div className="font-bold text-xl mb-2 dark:text-slate-100">{inputValue}</div>
-                      <div className=' text-slate-900 dark:text-slate-100'>
-                        {jsonToTable(JSON.parse(response))} {/* Convierte y muestra la tabla aquí */}
-                      </div>
-                      <p className='mt-6 text-slate-700 dark:text-white '>Tiempo de generación: {generationTime.toFixed(2)} milisegundos</p>
-                    </div>
-                  </div>
-                </div>
+                <table className="min-w-full border-collapse border border-gray-300 text-center mt-4 rounded-lg shadow-lg bg-white dark:bg-gray-800">
+                  <thead>
+                    <tr className="bg-gray-100 dark:bg-gray-700">
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Variable
+                      </th>
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Definición Operacional
+                      </th>
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Dimensión
+                      </th>
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Indicador
+                      </th>
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Ítems o Fórmula
+                      </th>
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Instrumento y Escala
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {apiResponse.map((variable, variableIndex) =>
+                      variable.dimensiones.map((dimension, dimensionIndex) =>
+                        dimension.indicadores.map((indicador, indicadorIndex) => (
+                          <tr
+                            key={`${variableIndex}-${dimensionIndex}-${indicadorIndex}`}
+                            className="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-800 dark:even:bg-gray-700"
+                          >
+                            {dimensionIndex === 0 && indicadorIndex === 0 ? (
+                              <td
+                                className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100"
+                                rowSpan={variable.dimensiones.reduce(
+                                  (total, dim) => total + dim.indicadores.length,
+                                  0
+                                )}
+                              >
+                                {variable.nombre}
+                              </td>
+                            ) : null}
+                            {dimensionIndex === 0 && indicadorIndex === 0 ? (
+                              <td
+                                className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100"
+                                rowSpan={variable.dimensiones.reduce(
+                                  (total, dim) => total + dim.indicadores.length,
+                                  0
+                                )}
+                              >
+                                {variable.definicion_operacional}
+                              </td>
+                            ) : null}
+                            {indicadorIndex === 0 ? (
+                              <td
+                                className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100"
+                                rowSpan={dimension.indicadores.length}
+                              >
+                                {dimension.nombre}
+                              </td>
+                            ) : null}
+                            <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100">
+                              {indicador.nombre}
+                            </td>
+                            <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100">
+                              {indicador.items_formula}
+                            </td>
+                            <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100">
+                              {indicador.instrumento_escala}
+                            </td>
+                          </tr>
+                        ))
+                      )
+                    )}
+                  </tbody>
+                </table>
               )}
             </div>
             <Tabs>
@@ -412,7 +434,7 @@ export function Opera() {
                     > Show more +  </button>
                   </div>
                   {allProducts ? "" : (
-                    <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 ' >
+                    <div className='grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 sm:z-0 ' >
                       {cantidadCardPlaceholder.map((item, id) => (
                         <CardPlaceholder key={id}></CardPlaceholder>
                       ))}

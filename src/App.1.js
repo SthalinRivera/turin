@@ -20,6 +20,7 @@ import { Parafrasear } from "./pages/Parafrasear";
 import { Turis } from "./pages/Turis";
 import { Resumir } from "./pages/Resumir";
 import { Opera } from "./pages/Opera";
+import { Teste } from "./pages/Teste";
 export function App() {
 
   return (
@@ -69,6 +70,7 @@ export function App() {
           <Route path="/places/new-place" element={<ProtectedRoute><NewPlace /></ProtectedRoute>} />
 
           <Route path="/storage" element={<Storage />} />
+          <Route path="/teste" element={<Teste />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="dashboard" element={<Dashboard />}></Route>
 

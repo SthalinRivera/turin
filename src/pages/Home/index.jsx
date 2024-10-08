@@ -361,7 +361,7 @@ export function Home() {
                     > Show more +  </button>
                   </div>
                   {allProducts ? "" : (
-                    <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 ' >
+                    <div className='grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 sm:z-0 ' >
                       {cantidadCardPlaceholder.map((item, id) => (
                         <CardPlaceholder key={id}></CardPlaceholder>
                       ))}

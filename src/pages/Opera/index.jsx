@@ -203,7 +203,7 @@ export function Opera() {
   const getMyProducts = async () => {
     const q = query(collection(db, "OperaVariables"), limit(pageSize), where('userEmail', '==', user.email), orderBy("timestamp"));
     const data = await getDocs(q)
-    console.log(data);
+    console.log("aqui estou soy aopera",data);
 
     setMyProduct(
       data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))

@@ -24,7 +24,7 @@ const Tabs = ({ children }) => {
           </button>
         ))}
       </div>
-      <hr className="border-t border-slate-400 dark:border-slate-700 w-96 mx-auto" />
+      <hr className="border-t border-slate-400 dark:border-slate-700 w-auto mx-auto" />
       <div className="p-4">{children[activeTab]}</div>
     </div>
   );

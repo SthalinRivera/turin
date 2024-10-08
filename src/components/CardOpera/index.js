@@ -23,7 +23,7 @@ export function Card({ product }) {
 
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(doc(db, "products", product.id), (doc) => {
+        const unsubscribe = onSnapshot(doc(db, "OperaVariables", product.id), (doc) => {
             if (doc.exists()) {
                 setLike(doc.data().like);
                 setViews(doc.data().views); // Actualiza el estado de las vistas al valor de la base de datos
@@ -33,7 +33,7 @@ export function Card({ product }) {
             }
         });
         // Suscribirse a cambios en la colección de "likes" para el usuario y el producto actual
-        const likesQuery = query(collection(db, 'likes'),
+        const likesQuery = query(collection(db, 'likesOpera'),
             where('userId', '==', user.uid),
             where('productId', '==', product.id));
         const unsubscribeLikes = onSnapshot(likesQuery, (snapshot) => {
@@ -53,7 +53,7 @@ export function Card({ product }) {
 
         if (userLiked) {
             // Si el usuario ya dio like, eliminar el like
-            const q = query(collection(db, 'likes'),
+            const q = query(collection(db, 'likesOpera'),
                 where('userId', '==', user.uid),
                 where('productId', '==', product.id));
             const querySnapshot = await getDocs(q);
@@ -61,18 +61,18 @@ export function Card({ product }) {
                 await deleteDoc(doc.ref);
             });
             // Disminuir el contador de likes en la tabla de productos
-            await updateDoc(doc(db, 'products', product.id), {
+            await updateDoc(doc(db, 'OperaVariables', product.id), {
                 like: like - 1
             });
         } else {
             // Si el usuario no ha dado like, agregar el like
-            await addDoc(collection(db, 'likes'), {
+            await addDoc(collection(db, 'likesOpera'), {
                 userId: user.uid,
                 productId: product.id,
                 timestamp: new Date()
             });
             // Aumentar el contador de likes en la tabla de productos
-            await updateDoc(doc(db, 'products', product.id), {
+            await updateDoc(doc(db, 'OperaVariables', product.id), {
                 like: like + 1
             });
 
@@ -80,7 +80,7 @@ export function Card({ product }) {
     };
     const handleView = async () => {
         // Agregar la cantidad de vistas
-        await updateDoc(doc(db, 'products', product.id), {
+        await updateDoc(doc(db, 'OperaVariables', product.id), {
             views: views + 1
         });
     }

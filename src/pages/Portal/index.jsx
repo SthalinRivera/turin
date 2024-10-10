@@ -68,16 +68,10 @@ export function Portal() {
     <>
       <NavBar />
       {isBannerOpen && (
-         <Banner showBanner={showBanner} />
+        <Banner showBanner={showBanner} />
       )}
 
-      
-      
-
-
-      <div className=" h-screen bg-fondo-blanco dark:bg-fondo-negro  z-0 ">
-
-
+      <div className=" h-screen bg-slate-200 dark:bg-slate-900  z-0 ">
         <div className=" ">
           <div class="">
             <div class="relative isolate px-2 pt-4 lg:px-8">

@@ -3,6 +3,8 @@ import { useAuth } from "../../context/AuthContext";
 import { NavBar } from "../NavBar";
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from "react-router-dom";
+import icono from '../../asset/images/logo.png'; // Asegúrate de que la ruta sea correcta
+
 export function Footer() {
   ;
 
@@ -14,8 +16,9 @@ export function Footer() {
           <div class="container px-4 mx-auto">
             <div class="-mx-4 flex flex-wrap justify-between">
               <div class="px-4 my-4 w-full xl:w-1/2">
-                <a href="/" class="block w-56 mb-10">
-                  <p className="text-2xl font-bold">Traviweb</p>
+                <a href="/" class="block w-56 mb-4 flex items-center">
+                  <img src={icono} alt="Icono" className="mr-2 w-6 h-6" />
+                  <p className="text-2xl font-bold">Travi</p>
                 </a>
                 <p class="text-justify">
                   Travi te ayudará en tus investigaciones académicas de manera más innovadora que nunca. ¡Mejora tu descripción y únete a nuestra plataforma en línea hoy mismo!            </p>

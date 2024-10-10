@@ -4,6 +4,9 @@ import Base64 from 'base64-js';
 import MarkdownIt from 'markdown-it';
 import { NavBar } from "../../components/NavBar";
 import { Footer } from "../../components/Footer";
+import { FaRobot } from "react-icons/fa";
+import { FaRegUserCircle } from "react-icons/fa";
+import { FaRegUser } from "react-icons/fa";
 
 import Webcam from "react-webcam";
 const API_KEY = process.env.REACT_APP_GEMINI_API_KEY
@@ -57,8 +60,6 @@ export const Gemini = () => {
     try {
       // Si se capturó una imagen, la agregamos a los contenidos
       if (imageCapture) {
-
-
         let capturedImageBase64 = imageCapture.split(",")[1];
         // Assemble the prompt by combining the text with the chosen image
         let contents = [
@@ -81,9 +82,7 @@ export const Gemini = () => {
             },
           ],
         });
-
         const result = await model.generateContentStream({ contents });
-
         // Read from the stream and interpret the output as markdown
         let buffer = [];
         let md = new MarkdownIt();
@@ -96,7 +95,6 @@ export const Gemini = () => {
 
       if (imageFile) {
         // Convert the image file to a base64 string
-
         let reader = new FileReader();
         reader.readAsArrayBuffer(imageFile);
         reader.onloadend = async () => {
@@ -136,8 +134,6 @@ export const Gemini = () => {
           }
         };
       }
-
-
     } catch (e) {
       setOutput(prevOutput => prevOutput + '<hr>' + e);
     }
@@ -147,42 +143,34 @@ export const Gemini = () => {
   };
   return (
     <>
-
-      <div className='dark:bg-zinc-800 h-full '>
+      <div className='h-full dark:bg-slate-900'>
         <NavBar></NavBar>
         <div className='wrapper '>
-          <div className=''>
-            <p className='mt-[80px] md:mt-4 text-center text-lg md:text-[35px] font-bold dark:text-slate-200'>Vision Gemini Pro </p>
-            <p className='text-center text-sm md:text-lg dark:text-slate-200 mt-4'>Captura en Tiempo real y enterate de la magia que se puede hacer.</p>
-          </div>
-
-          <div class=" bg-white dark:bg-zinc-900 p-6 rounded-lg w-[50%] ">
-            <div class="flex flex-col space-y-1.5 pb-6">
-              <h2 class="font-semibold text-lg tracking-tight text-slate-900 dark:text-slate-100">Bot Travito</h2>
-              <p class="text-sm text-slate-900 dark:text-slate-100 leading-3">Soportado con Gimini Google</p>
-            </div>
+          <p className='mt-[80px] md:mt-4 text-center text-lg md:text-[35px] font-bold dark:text-slate-200'>Vision Gemini Pro </p>
+          <p className='text-center text-sm md:text-lg dark:text-slate-200 mt-4'>Captura en Tiempo real y enterate de la magia que se puede hacer.</p>
+          
+          {/* Inicio de chat */}
+          <div class=" bg-slate-100 dark:bg-slate-800 p-6 rounded-lg w-full mb-12">
             <div class="pr-4 h-80 overflow-y-auto" >
+               {/* chat de sisitema */}
               <div class="flex gap-3 my-4 text-gray-600 text-sm flex-1">
                 <span
                   class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
-                  <div class="rounded-full bg-gray-100 border p-1"><svg stroke="none" fill="black" stroke-width="1.5"
-                    viewBox="0 0 24 24" aria-hidden="true" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z">
-                    </path>
-                  </svg></div>
+                  <div class="rounded-full bg-gray-100 border p-2">
+                  <FaRobot />
+                  </div>
                 </span>
-                <p class="leading-relaxed text-slate-900 dark:text-slate-100"><span class="block font-bold text-slate-900 dark:text-slate-100">AI </span>Hi, how can I help you today?
+                <p class="leading-relaxed text-slate-900 dark:text-slate-100">
+                  <span class="block font-bold text-slate-900 dark:text-slate-100">AI </span>Hi, how can I help you today?
                 </p>
               </div>
-              <div class="flex gap-3 my-4 text-slate-900 dark:text-slate-100 dar text-sm flex-1"><span
+               {/* chat de usurario */}
+
+              <div class="flex gap-3 my-4 text-gray-600 text-sm flex-1"><span
                 class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
-                <div class="rounded-full bg-gray-100 border p-1"><svg stroke="none" fill="black" stroke-width="0"
-                  viewBox="0 0 16 16" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z">
-                  </path>
-                </svg></div>
+                <div class="rounded-full bg-gray-100 border p-2">
+                <FaRegUser />
+                </div>
               </span>
                 <div class="leading-relaxed"><span class="block font-bold text-slate-900 dark:text-slate-100">You </span>
                   <div className='' >
@@ -190,23 +178,23 @@ export const Gemini = () => {
                       <img className=' object-cover mt-4 rounded-xl w-40  h-40' src={imageFile ? URL.createObjectURL(imageFile) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"} alt="" />
                     )}
                     {showCamera && (
-                      <>
-                        <div className='p-2'>
-                          <div className='relative justify-center'>
-                            <div>
-                              <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" className='  w-full mx-auto md:w-full  rounded-2xl' videoConstraints={videoConstraints} />
-                            </div>
-                            <div className='absolute inset-0 w-full justify-center text-center content-end '>
-                              <button className=' text-slate-100   dark:text-slate-300 p-2  mt-3 bg-white rounded-full opacity-40' onClick={capture}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                  <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2" />
-                                </svg>
-                              </button>
-                            </div>
 
+                      <div className='p-2'>
+                        <div className='relative justify-center'>
+                          <div>
+                            <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" className='  w-full mx-auto md:w-full  rounded-2xl' videoConstraints={videoConstraints} />
                           </div>
+                          <div className='absolute inset-0 w-full justify-center text-center content-end '>
+                            <button className=' text-slate-100   dark:text-slate-300 p-2  mt-3 bg-white rounded-full opacity-40' onClick={capture}>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 2" />
+                              </svg>
+                            </button>
+                          </div>
+
                         </div>
-                      </>
+                      </div>
+
                     )}
                     {imageCapture && (
                       <div>
@@ -221,12 +209,8 @@ export const Gemini = () => {
                   <div class="flex gap-3 my-4 text-gray-600 text-sm flex-1">
                     <span
                       class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
-                      <div class="rounded-full bg-gray-100  border p-1"><svg stroke="none" fill="black" stroke-width="1.5"
-                        viewBox="0 0 24 24" aria-hidden="true" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z">
-                        </path>
-                      </svg>
+                      <div class="rounded-full bg-gray-100  border p-2">
+                      <FaRobot />
                       </div>
                     </span>
                     <div class="leading-relaxed"><span class="block font-bold text-slate-900 dark:text-slate-100">AI </span>
@@ -236,11 +220,11 @@ export const Gemini = () => {
                 )
               }
             </div>
-
+  {/* chat de usurario */}
             <div className='w-full mx-auto xl:block  bottom-0 left-0 right-0'>
               <form onSubmit={handleSubmit} className='mt-2 md:mt-2'>
                 <label for="chat" class="sr-only">Your message</label>
-                <div class="flex items-center  md:py-2 px-2 md:px-3 bg-gray-50 rounded-lg dark:bg-zinc-900">
+                <div class="flex items-center  md:py-2 px-2 md:px-3  rounded-lg ">
                   <div className="flex items-center">
                     <input
                       type="file"
@@ -248,7 +232,7 @@ export const Gemini = () => {
                       name="chosen-image"
                       accept="image/*"
                       onChange={(e) => setImageFile(e.target.files[0])}
-                      className="hidden "
+                      className="hidden"
                     />
                     <div onClick={handleIconClick} className="inline-flex justify-center md:p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
                       <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -275,7 +259,7 @@ export const Gemini = () => {
                   <textarea id="chat" rows="2" type="text" required
                     name="prompt"
                     value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)} class="block mx-2  my-2 md:mx-4 p-1 md:p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
+                    onChange={(e) => setPrompt(e.target.value)} class="block mx-2  my-2 md:mx-4 p-1 md:p-2.5 w-full text-sm text-gray-900 bg-white dark:bg-slate-700 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
                   <button type="submit" class="inline-flex justify-center p-1 dark:text-slate-100 rounded-full cursor-pointer hover:bg-blue-100  dark:hover:bg-gray-600">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8" xmlns="http://www.w3.org/2000/svg">
                       <path d="M20.7639 12H10.0556M3 8.00003H5.5M4 12H5.5M4.5 16H5.5M9.96153 12.4896L9.07002 15.4486C8.73252 16.5688 8.56376 17.1289 8.70734 17.4633C8.83199 17.7537 9.08656 17.9681 9.39391 18.0415C9.74792 18.1261 10.2711 17.8645 11.3175 17.3413L19.1378 13.4311C20.059 12.9705 20.5197 12.7402 20.6675 12.4285C20.7961 12.1573 20.7961 11.8427 20.6675 11.5715C20.5197 11.2598 20.059 11.0295 19.1378 10.5689L11.3068 6.65342C10.2633 6.13168 9.74156 5.87081 9.38789 5.95502C9.0808 6.02815 8.82627 6.24198 8.70128 6.53184C8.55731 6.86569 8.72427 7.42461 9.05819 8.54246L9.96261 11.5701C10.0137 11.7411 10.0392 11.8266 10.0493 11.9137C10.0583 11.991 10.0582 12.069 10.049 12.1463C10.0387 12.2334 10.013 12.3188 9.96153 12.4896Z" />

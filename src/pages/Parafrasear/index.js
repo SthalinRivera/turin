@@ -91,7 +91,7 @@ export function Parafrasear() {
   return (
     <div className="h-full dark:bg-slate-900">
       <NavBar />
-      <div className="wrapper">
+      <div className="wrapper mb-12">
         <div className=''>
           <p className='mt-[80px] md:mt-4 text-center text-lg md:text-[35px] font-bold dark:text-slate-200'>Parafraseador </p>
           <p className='text-center text-sm md:text-lg dark:text-slate-200 mt-4'>Más de 5000 caracteres para parafrasear online utilizando nuestra plataforma Traviweb</p>

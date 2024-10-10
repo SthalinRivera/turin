@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import OpenAI from "openai";
 import { NavBar } from "../../components/NavBar";
+import { Footer } from "../../components/Footer";
+import { SideBar } from "../../components/SideBar";
 import { ListPlaceholder } from "../../components/Skeleton/ListPlaceholder";
 import { ChartComponent } from "../../components/ChartComponent";
 
@@ -37,9 +39,15 @@ export function Dashboard(props) {
   }, [])
 
   return (
-    <div className="h-full">
-      <NavBar />
-      <div className="wrapper">
+    <div className="flex flex-col min-h-screen">
+    <NavBar />
+
+    <div className="flex flex-1">
+      {/* Barra Lateral */}
+      <SideBar />
+
+      {/* Contenido Principal */}
+      <main className="flex-1 p-4 md:p-6 bg-gray-100">
         <p className='text-black font-bold'>Dashboard</p>
         {/*bloque fila 1*/}
         <div class="md:flex mt-20 md:mt-0 mb-4">
@@ -206,7 +214,12 @@ export function Dashboard(props) {
             </div>
           </div>
         </div>
+        </main>
       </div>
+
+      <Footer />
+
+
     </div>
   );
 }

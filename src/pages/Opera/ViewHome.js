@@ -3,6 +3,12 @@ import { saveAs } from "file-saver";
 import html2pdf from "html2pdf.js";
 import { FacebookShareButton, TwitterShareButton, EmailShareButton } from 'react-share';
 
+import { FaRegFilePdf } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
+import { FaRegEnvelope } from "react-icons/fa";
+
+import { FaFileWord } from "react-icons/fa";
 export function ViewHome({ isOpen, closeModal, product }) {
   const apiResponse = product.response.variables;
 
@@ -42,7 +48,7 @@ export function ViewHome({ isOpen, closeModal, product }) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
               </svg>
             </button>
-            
+
             {/* Modal Content */}
             <div className="p-2">
               <p className="text-lg font-semibold mb-1">
@@ -51,7 +57,7 @@ export function ViewHome({ isOpen, closeModal, product }) {
               <p className="text-sm font-bold mb-1">
                 {product.name.charAt(0).toUpperCase() + product.name.slice(1)}
               </p>
-              
+
               {/* Table */}
               <div className="overflow-y-auto h-auto mb-4" id="table-content">
                 <table className="min-w-full border-collapse border border-gray-300 text-center mt-4 rounded-lg shadow-lg bg-white dark:bg-gray-800">
@@ -144,47 +150,40 @@ export function ViewHome({ isOpen, closeModal, product }) {
                   <p className="text-slate-900 dark:text-slate-300 text-[10px]">{product.timestamp}</p>
                 </div>
               </div>
-              
+
               {/* Export Buttons */}
               <div className="flex justify-between mb-2">
+                <div className="flex">
                 <button
                   onClick={handlePDFExport}
                   className="flex items-center text-white bg-green-500 hover:bg-green-700 font-medium rounded-lg py-1 px-2 mr-2"
                 >
-                  Convertir a PDF
+                  <FaRegFilePdf />
                 </button>
                 <button
                   onClick={handleWordExport}
                   className="flex items-center text-white bg-blue-500 hover:bg-blue-700 font-medium rounded-lg py-1 px-2 mr-2"
                 >
-                  Guardar como Word
+                  <FaFileWord />
                 </button>
+                </div>
                 <div className="flex space-x-2">
                   <FacebookShareButton url={window.location.href}>
                     <button className="flex items-center text-white bg-blue-600 hover:bg-blue-800 font-medium rounded-lg py-1 px-2">
-                      Compartir en Facebook
+                      <FaFacebook />
                     </button>
                   </FacebookShareButton>
                   <TwitterShareButton url={window.location.href}>
                     <button className="flex items-center text-white bg-blue-400 hover:bg-blue-600 font-medium rounded-lg py-1 px-2">
-                      Compartir en Twitter
+                      <FaTwitter />
                     </button>
                   </TwitterShareButton>
                   <EmailShareButton url={window.location.href}>
                     <button className="flex items-center text-white bg-green-600 hover:bg-green-800 font-medium rounded-lg py-1 px-2">
-                      Compartir por Email
+                      <FaRegEnvelope />
                     </button>
                   </EmailShareButton>
                 </div>
-              </div>
-              
-              <div className="flex justify-between">
-                <button
-                  onClick={closeModal}
-                  className="text-white bg-red-500 hover:bg-red-700 font-medium rounded-lg py-1 px-2"
-                >
-                  Cerrar
-                </button>
               </div>
             </div>
           </div>

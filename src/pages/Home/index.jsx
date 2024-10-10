@@ -278,7 +278,7 @@ export function Home() {
 
 
   return (
-    <div className='bg-zinc-200 dark:bg-slate-600'>
+    <div className='bg-zinc-200 dark:bg-slate-900'>
       <NavBar />
       <div className='m-4'>
         <div class="md:flex mb-4">

@@ -62,13 +62,16 @@ export function Product() {
   };
 
   return (
-    <div className="">
-      <div class="flex">
-        <div class="">
-          <SideBar></SideBar>
-        </div>
-        <div class="wrapper mt-4  ">
-          <div className='bg-white shadow-[0_8px_12px_-6px_rgba(0,0,0,0.2)] border p-1 md:p-6 w-full  rounded-lg font-[sans-serif] overflow-hidden mx-auto my-4'>
+    <div className="flex flex-col min-h-screen">
+      <NavBar />
+
+      <div className="flex flex-1">
+        {/* Barra Lateral */}
+        <SideBar />
+
+        {/* Contenido Principal */}
+        <main className="flex-1 p-4 md:p-6 bg-gray-100">
+          <div className='bg-white  border p-1 md:p-6 w-full  rounded-lg  overflow-hidden '>
             <div className='flex  py-6 px-6 rounded-xl justify-between'>
               <div className=''>
                 <p>All Post</p>
@@ -152,9 +155,12 @@ export function Product() {
             </div>
 
           </div>
-        </div>
+        </main>
       </div>
-      <Footer></Footer>
+
+      <Footer />
+
+
     </div>
   );
 }

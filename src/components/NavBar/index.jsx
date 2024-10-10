@@ -60,27 +60,29 @@ export function NavBar() {
                     <div className="container px-6 justify-between h-16 flex items-center lg:items-stretch mx-auto">
                         <div className="h-full flex items-center">
                             <div className="mr-10 flex items-center">
-                            <img src={icono} alt="Icono" className="mr-2 w-6 h-6" />
-
+                                <img src={icono} alt="Icono" className="mr-2 w-6 h-6" />
                                 <h3 className="text-base text-slate-700 dark:text-white font-bold tracking-normal leading-tight ml-3 hidden lg:block"><Link to="/">Travi</Link></h3>
                             </div>
-                            <ul className="pr-12 xl:flex items-center h-full hidden">
-                            <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm tracking-normal ${isActive('/home') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300': 'text-slate-700 dark:text-white'}`}>
-                                <Link to="/home">Generate Matriz Consc.</Link>
-                            </li>
-                            <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 dark:hover:text-indigo-200 text-sm mx-10 tracking-normal ${isActive('/opera') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
-                                <Link to="/opera">Oper. Variables</Link>
-                            </li>
-                            <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 dark:hover:text-indigo-200 text-sm mx-10 tracking-normal ${isActive('/gemini') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
-                                <Link to="/gemini">Gemini</Link>
-                            </li>
-                            <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm mr-10 tracking-normal ${isActive('/parafrasear') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
-                                <Link to="/parafrasear">Parafrasea</Link>
-                            </li>
-                            <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm tracking-normal ${isActive('/resumir') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
-                                <Link to="/resumir">Resumir</Link>
-                            </li>
-                        </ul>
+                            <ul className=" xl:flex items-center h-full hidden">
+                                <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm mr-4 tracking-normal ${isActive('/home') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                    <Link to="/home">Generate Matriz Consc.</Link>
+                                </li>
+                                <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm mr-4 tracking-normal ${isActive('/opera') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                    <Link to="/opera">Oper. Variables</Link>
+                                </li>
+                                <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm mr-4 tracking-normal ${isActive('/gemini') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                    <Link to="/gemini">Gemini</Link>
+                                </li>
+                                <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm mr-4 tracking-normal ${isActive('/parafrasear') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                    <Link to="/parafrasear">Parafrasea</Link>
+                                </li>
+                                <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm mr-4 tracking-normal ${isActive('/resumir') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                    <Link to="/resumir">Resumir</Link>
+                                </li>
+                                <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm tracking-normal ${isActive('/preguntas') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                    <Link to="/preguntas">Preguntas</Link>
+                                </li>
+                            </ul>
                         </div>
 
                         <div className="h-full xl:flex items-center justify-end hidden">
@@ -139,7 +141,7 @@ export function NavBar() {
                 <nav>
                     <div className="py-4 px-6 w-full flex xl:hidden justify-between items-center bg-slate-300 dark:bg-gray-800 fixed top-0 z-40">
                         <div className="w-24">
-                      <img src={icono} alt="Icono" className="mr-2 w-6 h-6" />
+                            <img src={icono} alt="Icono" className="mr-2 w-6 h-6" />
                         </div>
                         <div className='flex'>
                             <div className="  mr-2">
@@ -176,7 +178,7 @@ export function NavBar() {
                                         <div className=" flex w-full items-center justify-between">
                                             <div className="flex items-center justify-between w-full">
                                                 <div className="flex items-center">
-                                                <img src={icono} alt="Icono" className="mr-2 w-6 h-6" />
+                                                    <img src={icono} alt="Icono" className="mr-2 w-6 h-6" />
                                                     <p className="text-base  text-white ml-3">Travi</p>
                                                 </div>
                                                 <div id="cross" className="text-white" onClick={() => setShow(!show)}>
@@ -279,8 +281,8 @@ export function NavBar() {
                                         </div>
                                     </div>
                                 </div>
-                                </div>
                             </div>
+                        </div>
                     </div>
                 </nav>
                 {/* Sidebar ends */}

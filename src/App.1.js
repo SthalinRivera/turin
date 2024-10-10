@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
@@ -21,8 +21,36 @@ import { Turis } from "./pages/Turis";
 import { Resumir } from "./pages/Resumir";
 import { Opera } from "./pages/Opera";
 import { Teste } from "./pages/Teste";
+import { Preguntas } from "./pages/Preguntas";
 export function App() {
+  useEffect(() => {
+    // Código del efecto que se ejecutará después del renderizado
+    TitleStatus();
+    return () => {
+      // Código de limpieza opcional (cleanup)
+    };
+  }, [/* dependencias opcionales */]);
+  const TitleStatus = () => {
+    const originalTitle = document.title;
 
+    // Función para cambiar el título cuando se cambia la visibilidad
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        document.title = "¡😭💔No te vayas no puedo vivir sin tiii... !";
+      } else {
+        document.title = originalTitle;
+      }
+    };
+
+    // Agregamos el evento de cambio de visibilidad
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Limpiamos el evento cuando el componente se desmonta
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.title = originalTitle; // Restauramos el título original
+    };
+  }
   return (
     <div className="  ">
       <AuthProvider>
@@ -73,7 +101,7 @@ export function App() {
           <Route path="/teste" element={<Teste />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="dashboard" element={<Dashboard />}></Route>
-
+          <Route path="/preguntas" element={<Preguntas/>}> </Route>
           <Route path="turis" element={<Turis />}> </Route>
         </Routes>
       </AuthProvider>

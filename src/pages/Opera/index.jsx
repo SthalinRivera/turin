@@ -256,37 +256,17 @@ export function Opera() {
     getAllProducts();
 
     getMyProducts();
-    TitleStatus();
+   
   }, [response, pageSize])
 
-  const TitleStatus = () => {
-    const originalTitle = document.title;
 
-    // Función para cambiar el título cuando se cambia la visibilidad
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        document.title = "¡🐝No te vayas no puedo vivir sin tiii... 😭💔!";
-      } else {
-        document.title = originalTitle;
-      }
-    };
-
-    // Agregamos el evento de cambio de visibilidad
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    // Limpiamos el evento cuando el componente se desmonta
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      document.title = originalTitle; // Restauramos el título original
-    };
-  }
 
 
   const [cards, setCards] = useState([]);
 
 
   return (
-    <div className='bg-zinc-200 dark:bg-slate-600'>
+    <div className='bg-zinc-200 dark:bg-slate-900'>
       <NavBar />
       <div className='m-4'>
         <div class="md:flex mb-4">

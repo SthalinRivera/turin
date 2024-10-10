@@ -58,7 +58,7 @@ export function ViewHome({ isOpen, closeModal, product }) {
     <>
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm z-50">
-          <div className="relative w-full max-w-3xl sm:max-w-3xl mx-auto my-4 max-h-screen overflow-y-auto rounded-lg bg-slate-100 text-slate-900 dark:bg-gray-800 dark:text-slate-100">
+          <div className="relative w-full h-full sm:max-w-full mx-auto max-h-screen overflow-y-auto rounded-lg bg-slate-100 text-slate-900 dark:bg-gray-800 dark:text-slate-100">
             <button
               onClick={closeModal}
               className="absolute top-1 right-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80 font-medium rounded-full text-sm px-2 py-2 text-center me-2 mb-2"

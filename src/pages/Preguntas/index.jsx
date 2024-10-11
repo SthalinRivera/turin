@@ -258,7 +258,7 @@ export function Preguntas() {
               <form onSubmit={onSubmit}>
                 <textarea
                   rows="4"
-                  className="w-full p-3 bg-slate-100 dark:bg-gray-600 rounded-lg focus:ring-purple-500 focus:border-purple-500 text-slate-800"
+                  className="w-full p-3 bg-slate-100 dark:bg-gray-600 rounded-lg focus:ring-purple-500 focus:border-purple-500 text-slate-800 dark:text-slate-200"
                   placeholder="Escribe tu pregunta..."
                   value={pregunta}
                   onChange={(e) => setPregunta(e.target.value)}

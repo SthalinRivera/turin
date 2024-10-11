@@ -79,8 +79,11 @@ export function NavBar() {
                                 <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm mr-4 tracking-normal ${isActive('/resumir') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
                                     <Link to="/resumir">Resumir</Link>
                                 </li>
-                                <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm tracking-normal ${isActive('/preguntas') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm mr-4 tracking-normal ${isActive('/preguntas') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
                                     <Link to="/preguntas">Preguntas</Link>
+                                </li>
+                                <li className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm tracking-normal ${isActive('/search') ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                    <Link to="/search">Search</Link>
                                 </li>
                             </ul>
                         </div>

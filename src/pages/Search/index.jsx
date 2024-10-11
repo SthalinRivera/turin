@@ -15,7 +15,7 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-export const Teste = () => {
+export const Search = () => {
   const [query, setQuery] = useState('');
   const [resultados, setResultados] = useState([]);
   const [loading, setLoading] = useState(false);

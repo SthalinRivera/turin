@@ -22,6 +22,9 @@ import { Resumir } from "./pages/Resumir";
 import { Opera } from "./pages/Opera";
 import { Teste } from "./pages/Teste";
 import { Preguntas } from "./pages/Preguntas";
+import { Encuesta } from "./pages/Encuesta";
+import { NewEncuesta } from "./pages/Encuesta/NewEncuesta";
+import {Search  } from "./pages/Search/";
 export function App() {
   useEffect(() => {
     // Código del efecto que se ejecutará después del renderizado
@@ -103,6 +106,10 @@ export function App() {
           <Route path="dashboard" element={<Dashboard />}></Route>
           <Route path="/preguntas" element={<Preguntas/>}> </Route>
           <Route path="turis" element={<Turis />}> </Route>
+          <Route path="encuesta" element={<Encuesta />}> </Route>
+          <Route path="encuesta/new-encuesta" element={<NewEncuesta />}> </Route>
+
+          <Route path="search" element={<Search />}> </Route>
         </Routes>
       </AuthProvider>
     </div>

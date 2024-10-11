@@ -1,80 +1,68 @@
-
-import {useAuth  } from "../../context/AuthContext";
-import OpenAI from 'openai';
-import { NavBar } from "../../components/NavBar";
 import React, { useState } from 'react';
-export function Home() {
-  const { logout, user } = useAuth();
+import OpenAI from 'openai';
+
+export function Teste() {
   const [inputValue, setInputValue] = useState('');
-  const [response, setResponse] = useState('');
+  const [apiResponse, setApiResponse] = useState([]); // Estado para la respuesta de la API
+console.log(apiResponse);
 
-  console.log(user);
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
+  // Access the API key from .env
   const openai = new OpenAI({
+    apiKey: process.env.REACT_APP_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
-     apiKey: process.env.OPENAI_API_KEY,
   });
-  console.log(process.env.OPENAI_API_KEY)
+
   async function fetchResponse() {
     try {
       const completion = await openai.chat.completions.create({
         messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          { role: "user", content: inputValue }
+          {
+            role: "system",
+            content: "Eres un asistente útil ."
+          },
+       
+          { role: "user", content: inputValue },
         ],
         model: "gpt-3.5-turbo",
       });
-
-      setResponse(completion.choices[0].message.content);
+      const response = JSON.parse(completion.choices[0].message.content);
+      setApiResponse(response.variables); // Actualiza el estado con la respuesta
     } catch (error) {
       console.error('Error fetching response:', error);
     }
   }
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fetchResponse();
+    await fetchResponse(); // Asegúrate de que fetchResponse sea una función asíncrona
   };
-
 
   return (
-    <>
-    <NavBar />
-      <div className="w-full max-w-xs m-auto text-black">
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Escribe tu solicitud..."
+    <div className="text-slate-900 dark:text-slate-100">
+      <form onSubmit={handleSubmit} className="rounded-xl p-1 mt-4 z-0">
+        <textarea
+          required
+          rows={4}
+          className="p-4 resize-none block bg-zinc-300 dark:bg-zinc-800 w-full text-sm text-slate-700 dark:text-white border dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300"
+          placeholder="Ej: Your variable 1 y Variable 02."
           value={inputValue}
-          onChange={handleInputChange}
+          onChange={(e) => setInputValue(e.target.value)}
         />
-        <button type="submit">Enviar</button>
-      </form>
-      {response && <p>{response}</p>}
-
-      
-        <img src={user.photoURL} alt="Logo" /> 
-        <p className="text-xl mb-4">welcome {user.displayName }</p>
-        <p className="text-xl mb-4"> { user.email}</p>
-        <button
-            className="bg-slate-200 hover:bg-slate-300 rounded py-2 px-4 text-black"
-            onClick={handleLogout}
-          >
-            logout
-          </button>
+        <div className="flex justify-center">
+          <nav className="my-1 flex overflow-x-auto bg-slate-600 items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600 bg-gray-500/5 rounded-xl dark:bg-slate-700"></nav>
         </div>
-      </div>
-    </>
+        <button
+          className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm text-center w-full h-10"
+          type="submit"
+        >
+          Generate
+        </button>
+      </form>
+
+      <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Matriz de Operacionalización de Variables</h1>
+    	{apiResponse}
+    </div>
+    </div>
   );
 }

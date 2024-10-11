@@ -1,136 +1,147 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NavBar } from "../../../components/NavBar";
 import { SideBar } from "../../../components/SideBar";
 import { Footer } from "../../../components/Footer";
-import { db, storage } from "../../../firebase";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { db } from "../../../firebase";
+import { collection, addDoc } from 'firebase/firestore';
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FaList } from "react-icons/fa";
 
 export function NewEncuesta() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [state, setState] = useState('');
-  const [file, setFile] = useState();
-  const [downloadURL, setDownloadURL] = useState(null);
-  const [per, setPerc] = useState(null);
+  const [responses, setResponses] = useState({
+    question1: '',
+    question2: '',
+    question3: '',
+    question4: '',
+    question5: ''
+  });
+  
+  const [error, setError] = useState('');
+  const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
 
-  // Agregar datos a Firebase
-  const productsCollection = collection(db, "places");
-  const store = (e) => {
+  // Guardar respuestas en Firebase
+  const surveysCollection = collection(db, "customer_satisfaction_surveys");
+  const storeSurvey = async (e) => {
     e.preventDefault();
-    addDoc(productsCollection, {
-      title: title,
-      description: description,
-      category: category,
-      state: state,
-      downloadURL: downloadURL,
-    });
-    navigate('/places');
+
+    // Validaciones
+    if (Object.values(responses).some(response => response === '')) {
+      setError('Por favor, responde todas las preguntas.');
+      return;
+    }
+
+    await addDoc(surveysCollection, responses);
+    setSubmitted(true);
+    setError('');
+    setTimeout(() => navigate('/encuesta'), 2000); // Navegar después de 2 segundos
   };
 
-  // Leer datos de Firebase
-  const [posts, setPosts] = useState('');
-  const postsCollection = collection(db, "places");
-  const getPosts = async () => {
-    const data = await getDocs(postsCollection);
-    setPosts(
-      data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-    );
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setResponses((prev) => ({ ...prev, [name]: value }));
   };
-
-  useEffect(() => {
-    const uploadFile = () => {
-      const name = new Date().getTime() + file.name;
-      console.log(name);
-      const storageRef = ref(storage, 'images/' + name);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on('state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          setPerc(progress);
-        },
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
-            setDownloadURL(downloadURL);
-          });
-        }
-      );
-    };
-    file && uploadFile();
-    getPosts();
-  }, [file]);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-800 transition-all duration-300">
       <NavBar />
       <div className="flex flex-1">
         <SideBar />
-        {/* Contenido Principal */}
-        <main className="flex-1 p-4 md:p-6 bg-gray-100">
-          <div className="">
-            <div className='bg-white shadow-lg border p-6 rounded-lg'>
-              <div className='flex justify-between mb-4'>
-                <p className="font-semibold text-xl">New Place</p>
-                <Link to="/places">
-                  <button className='button bg-blue-500 text-white px-4 py-2 rounded flex items-center'>
+        <main className="flex-1 p-4 md:p-6">
+          <div className="bg-white dark:bg-gray-700 shadow-lg border p-6 rounded-lg">
+            <div className='flex justify-between mb-4'>
+              <p className="font-semibold text-xl text-gray-900 dark:text-gray-200">Customer Satisfaction Survey</p>
+              <Link to="/surveys">
+                <button className='bg-blue-500 text-white px-4 py-2 rounded flex items-center'>
                   <FaList />
-                  <p className="text-base ml-2">List post</p>
-                  </button>
-                </Link>
-              </div>
-
-              <form onSubmit={store}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="col-span-2">
-                    <label htmlFor="title" className="block text-gray-700">Title</label>
-                    <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded" />
-                  </div>
-
-                  <div className="col-span-2">
-                    <label htmlFor="description" className="block text-gray-700">Description</label>
-                    <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full p-2 border rounded" rows="4"></textarea>
-                  </div>
-
-                  <div>
-                    <label htmlFor="category" className="block text-gray-700">Category</label>
-                    <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} className="w-full p-2 border rounded" />
-                  </div>
-
-                  <div>
-                    <label htmlFor="state" className="block text-gray-700">State</label>
-                    <input type="text" id="state" value={state} onChange={(e) => setState(e.target.value)} className="w-full p-2 border rounded" />
-                  </div>
-
-                  <div className="col-span-2">
-                    <label htmlFor="dropzone-file" className="block text-gray-700">Image Upload</label>
-                    <input type="file" id="dropzone-file" onChange={(e) => setFile(e.target.files[0])} className="block w-full p-2 border rounded" />
-                  </div>
-
-                  <div className="col-span-2 text-right">
-                    <button type="submit" className={`text-white font-bold py-2 px-4 rounded ${per !== null && per < 100 ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500'}`} disabled={per !== null && per < 100}>
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              </form>
+                  <p className="text-base ml-2">List Surveys</p>
+                </button>
+              </Link>
             </div>
-        
+
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+            {submitted && <p className="text-green-500 mb-4">Gracias por su encuesta.</p>}
+
+            <form onSubmit={storeSurvey}>
+              <div className="grid grid-cols-1 gap-4">
+
+                {/* Pregunta 1 */}
+                <div>
+                  <label className="block text-gray-700 dark:text-gray-300">1. ¿Cómo calificaría la calidad de nuestro servicio?</label>
+                  <select name="question1" value={responses.question1} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-600 dark:text-white">
+                    <option value="">Seleccionar</option>
+                    <option value="1">1 - Muy insatisfecho</option>
+                    <option value="2">2 - Insatisfecho</option>
+                    <option value="3">3 - Neutral</option>
+                    <option value="4">4 - Satisfecho</option>
+                    <option value="5">5 - Muy satisfecho</option>
+                  </select>
+                </div>
+
+                {/* Pregunta 2 */}
+                <div>
+                  <label className="block text-gray-700 dark:text-gray-300">2. ¿Cómo evalúa la atención al cliente?</label>
+                  <select name="question2" value={responses.question2} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-600 dark:text-white">
+                    <option value="">Seleccionar</option>
+                    <option value="1">1 - Muy insatisfecho</option>
+                    <option value="2">2 - Insatisfecho</option>
+                    <option value="3">3 - Neutral</option>
+                    <option value="4">4 - Satisfecho</option>
+                    <option value="5">5 - Muy satisfecho</option>
+                  </select>
+                </div>
+
+                {/* Pregunta 3 */}
+                <div>
+                  <label className="block text-gray-700 dark:text-gray-300">3. ¿Qué tan satisfecho está con la rapidez del servicio?</label>
+                  <select name="question3" value={responses.question3} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-600 dark:text-white">
+                    <option value="">Seleccionar</option>
+                    <option value="1">1 - Muy insatisfecho</option>
+                    <option value="2">2 - Insatisfecho</option>
+                    <option value="3">3 - Neutral</option>
+                    <option value="4">4 - Satisfecho</option>
+                    <option value="5">5 - Muy satisfecho</option>
+                  </select>
+                </div>
+
+                {/* Pregunta 4 */}
+                <div>
+                  <label className="block text-gray-700 dark:text-gray-300">4. ¿Cómo evalúa la facilidad para contactar con nosotros?</label>
+                  <select name="question4" value={responses.question4} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-600 dark:text-white">
+                    <option value="">Seleccionar</option>
+                    <option value="1">1 - Muy insatisfecho</option>
+                    <option value="2">2 - Insatisfecho</option>
+                    <option value="3">3 - Neutral</option>
+                    <option value="4">4 - Satisfecho</option>
+                    <option value="5">5 - Muy satisfecho</option>
+                  </select>
+                </div>
+
+                {/* Pregunta 5 */}
+                <div>
+                  <label className="block text-gray-700 dark:text-gray-300">5. ¿Qué tan probable es que recomiende nuestros servicios?</label>
+                  <select name="question5" value={responses.question5} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-600 dark:text-white">
+                    <option value="">Seleccionar</option>
+                    <option value="1">1 - Muy improbable</option>
+                    <option value="2">2 - Improbable</option>
+                    <option value="3">3 - Neutral</option>
+                    <option value="4">4 - Probable</option>
+                    <option value="5">5 - Muy probable</option>
+                  </select>
+                </div>
+
+                <div className="col-span-2 text-right">
+                  <button type="submit" className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition-all">
+                    Submit Survey
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
         </main>
       </div>
       <Footer />
-
     </div>
   );
 }

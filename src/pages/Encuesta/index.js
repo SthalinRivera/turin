@@ -1,169 +1,175 @@
-// src/pages/Places/Places.jsx
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-import { db } from "../../firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase"; // Asegúrate de tener la configuración correcta de Firebase
 import { NavBar } from "../../components/NavBar";
 import { Footer } from "../../components/Footer";
 import { SideBar } from "../../components/SideBar";
-import { Edit } from "../../pages/Places/Edit";
-import { FaPlusCircle } from "react-icons/fa";
+import { Bar, Pie } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 
+// Registrar los componentes de Chart.js
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 export function Encuesta() {
-  const navigate = useNavigate();
-  const [posts, setPosts] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [postId, setPostId] = useState(null);
+  const [surveys, setSurveys] = useState([]);
+  const [chartData, setChartData] = useState(null);
+  const [pieData, setPieData] = useState({}); // Para gráficos de pastel
 
-  const openModal = (id) => {
-    setPostId(id);
-    setModalOpen(true);
+  // Función para obtener los datos desde Firebase
+  const fetchSurveys = async () => {
+    try {
+      const surveysCollection = collection(db, "customer_satisfaction_surveys");
+      const surveySnapshot = await getDocs(surveysCollection);
+      const surveyList = surveySnapshot.docs.map((doc) => doc.data());
+      setSurveys(surveyList);
+      generateChartData(surveyList); // Generar datos para el gráfico
+    } catch (error) {
+      console.error("Error al obtener las encuestas:", error);
+    }
   };
 
-  const closeModal = () => {
-    setModalOpen(false);
+  // Función para generar los datos del gráfico de barras
+  const generateChartData = (surveyList) => {
+    const questionAverages = [1, 2, 3, 4, 5].map((qNum) => {
+      const questionKey = `question${qNum}`;
+      const total = surveyList.reduce((sum, survey) => sum + parseFloat(survey[questionKey] || 0), 0);
+      return total / surveyList.length;
+    });
+
+    setChartData({
+      labels: ['Pregunta 1', 'Pregunta 2', 'Pregunta 3', 'Pregunta 4', 'Pregunta 5'],
+      datasets: [
+        {
+          label: 'Promedio de respuestas',
+          data: questionAverages,
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+        },
+      ],
+    });
+
+    // Generar datos para gráficos circulares
+    const pieChartData = {};
+    [1, 2, 3, 4, 5].forEach((qNum) => {
+      const questionKey = `question${qNum}`;
+      const responseCounts = surveyList.reduce((counts, survey) => {
+        const response = survey[questionKey];
+        counts[response] = (counts[response] || 0) + 1;
+        return counts;
+      }, {});
+
+      pieChartData[questionKey] = {
+        labels: Object.keys(responseCounts),
+        datasets: [
+          {
+            label: `Distribución de respuestas para Pregunta ${qNum}`,
+            data: Object.values(responseCounts),
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+            ],
+            borderWidth: 1,
+          },
+        ],
+      };
+    });
+
+    setPieData(pieChartData);
   };
 
-  const getPosts = async () => {
-    const postsCollection = collection(db, "places");
-    const data = await getDocs(postsCollection);
-    setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  };
-
+  // Hook para obtener los resultados al montar el componente
   useEffect(() => {
-    getPosts();
+    fetchSurveys();
   }, []);
-
-  const deletePost = async (id) => {
-    const postDoc = doc(db, "places", id);
-    await deleteDoc(postDoc);
-    getPosts(); // Refresca los posts después de eliminar
-  };
 
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
       <div className="flex flex-1">
         <SideBar />
-        {/* Contenido Principal */}
         <main className="flex-1 p-4 md:p-6 bg-gray-100">
-          <div className="bg-white shadow-lg border p-4 rounded-lg font-sans">
-            {/* Cabecera */}
-            <div className="flex justify-between items-center mb-4">
-              <h1 className="text-xl font-bold">All Places</h1>
-              <Link to="/places/new-place">
-                <button className="button text-white px-4 py-2 rounded hover:bg-blue-700 transition flex items-center">
-                  <FaPlusCircle />
-                  <p className="text-base ml-2"> New Place</p>
-                </button>
-              </Link>
-            </div>
+          <div className="bg-white shadow-lg border p-6 rounded-lg">
+            <h2 className="font-semibold text-xl mb-4">Resultados de las Encuestas</h2>
 
-            <hr className="my-4 border-gray-300" />
-
-            {/* Tabla de Posts */}
-            <div className="overflow-x-auto">
-              <table className="min-w-full table-auto">
-                <thead className="bg-gray-50 text-gray-700 text-xs uppercase">
-                  <tr>
-                    <th className="px-6 py-3">#</th>
-                    <th className="px-6 py-3">Foto</th>
-                    <th className="px-6 py-3">Title</th>
-                    <th className="px-6 py-3">Description</th>
-                    <th className="px-6 py-3">Category</th>
-                    <th className="px-6 py-3">State</th>
-                    <th className="px-6 py-3">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(posts) && posts.length > 0 ? (
-                    posts.map((post, index) => (
-                      <tr
-                        key={post.id}
-                        className="bg-white border-b hover:bg-gray-50"
-                      >
-                        <td className="px-6 py-4">{index + 1}</td>
-                        <td className="px-6 py-4">
-                          <img
-                            className="h-12 w-18 object-cover rounded"
-                            src={
-                              post.downloadURL ||
-                              "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-                            }
-                            alt="Place"
-                          />
-                        </td>
-                        <td className="px-6 py-4">{post.title}</td>
-                        <td className="px-6 py-4">{post.description}</td>
-                        <td className="px-6 py-4">{post.category}</td>
-                        <td className="px-6 py-4">{post.state}</td>
-                        <td className="px-6 py-4 flex space-x-2">
-                          <button
-                            className="bg-green-600 text-white p-2 rounded hover:bg-green-700 transition"
-                            onClick={() => openModal(post.id)}
-                            aria-label="Editar Post"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zM19.5 7.125L16.862 4.487"
-                              />
-                            </svg>
-                          </button>
-                          <button
-                            className="bg-red-600 text-white p-2 rounded hover:bg-red-700 transition"
-                            onClick={() => deletePost(post.id)}
-                            aria-label="Eliminar Post"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19.428 15.428L18 14M6 9V19a2 2 0 002 2h8a2 2 0 002-2V9m-4 4v6m0 0H8m4 0h4"
-                              />
-                            </svg>
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
+            {/* Comprobar si hay encuestas */}
+            {surveys.length > 0 ? (
+              <>
+                <table className="table-auto w-full mb-6">
+                  <thead>
                     <tr>
-                      <td
-                        colSpan="7"
-                        className="text-center py-4 text-gray-500"
-                      >
-                        No hay lugares disponibles.
-                      </td>
+                      <th className="border px-4 py-2">Pregunta 1</th>
+                      <th className="border px-4 py-2">Pregunta 2</th>
+                      <th className="border px-4 py-2">Pregunta 3</th>
+                      <th className="border px-4 py-2">Pregunta 4</th>
+                      <th className="border px-4 py-2">Pregunta 5</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {surveys.map((survey, index) => (
+                      <tr key={index}>
+                        <td className="border px-4 py-2 text-center">{survey.question1}</td>
+                        <td className="border px-4 py-2 text-center">{survey.question2}</td>
+                        <td className="border px-4 py-2 text-center">{survey.question3}</td>
+                        <td className="border px-4 py-2 text-center">{survey.question4}</td>
+                        <td className="border px-4 py-2 text-center">{survey.question5}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {/* Gráfico de resultados en barras */}
+                {chartData && (
+                  <div className="mt-8">
+                    <h3 className="font-semibold text-lg mb-4">Gráfico de Promedios de Respuestas</h3>
+                    <Bar data={chartData} options={{
+                      responsive: true,
+                      plugins: {
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Promedio de Respuestas por Pregunta',
+                        },
+                      },
+                    }} />
+                  </div>
+                )}
+
+                {/* Gráficos de pastel para cada pregunta */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                  {[1, 2, 3, 4, 5].map((qNum) => (
+                    <div key={qNum}>
+                      <h3 className="font-semibold text-lg mb-4">{`Distribución de Respuestas: Pregunta ${qNum}`}</h3>
+                      {pieData[`question${qNum}`] && (
+                        <Pie data={pieData[`question${qNum}`]} options={{
+                          responsive: true,
+                          plugins: {
+                            legend: {
+                              position: 'top',
+                            },
+                            title: {
+                              display: true,
+                              text: `Distribución de Respuestas para Pregunta ${qNum}`,
+                            },
+                          },
+                        }} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p className="text-gray-600">No hay encuestas registradas.</p>
+            )}
           </div>
         </main>
       </div>
-
       <Footer />
-
-      {/* Modal de Edición */}
-      {modalOpen && <Edit closeModal={closeModal} postId={postId} />}
     </div>
   );
 }

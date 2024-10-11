@@ -24,6 +24,7 @@ import { Teste } from "./pages/Teste";
 import { Preguntas } from "./pages/Preguntas";
 import { Encuesta } from "./pages/Encuesta";
 import { NewEncuesta } from "./pages/Encuesta/NewEncuesta";
+import { EditEncuesta } from "./pages/Encuesta/EditEncuesta";
 import {Search  } from "./pages/Search/";
 export function App() {
   useEffect(() => {
@@ -108,7 +109,7 @@ export function App() {
           <Route path="turis" element={<Turis />}> </Route>
           <Route path="encuesta" element={<Encuesta />}> </Route>
           <Route path="encuesta/new-encuesta" element={<NewEncuesta />}> </Route>
-
+          <Route path="encuesta/edit" element={<EditEncuesta />}> </Route>
           <Route path="search" element={<Search />}> </Route>
         </Routes>
       </AuthProvider>

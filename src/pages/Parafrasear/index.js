@@ -89,7 +89,7 @@ export function Parafrasear() {
 
 
   return (
-    <div className="h-full dark:bg-slate-900">
+    <div className="h-full dbg-zinc-200 dark:bg-slate-900">
       <NavBar />
       <div className="wrapper mb-12">
         <div className=''>

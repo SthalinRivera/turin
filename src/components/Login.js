@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Alert } from "./Alert";
 import { NavBar } from "../components/NavBar";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore"; // Métodos de Firestore
 import { Footer } from "../components/Footer";
 export function Login() {
   const [user, setUser] = useState({
@@ -33,6 +35,8 @@ export function Login() {
   const handleGoogleSignin = async () => {
     try {
       await loginWithGoogle();
+     
+     
       navigate("/home");
     } catch (error) {
       setError(error.message);

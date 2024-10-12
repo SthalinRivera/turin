@@ -278,14 +278,15 @@ export function Home() {
 
 
   return (
-    <div className='bg-zinc-200 dark:bg-slate-900'>
+    <div className='h-full dbg-zinc-200 dark:bg-slate-900'>
       <NavBar />
-      <div className='m-4'>
+      <div className='wrapper mb-12'>
         <div class="md:flex mb-4">
           <div class="mt-10 md:mt-0 w-full md:w-1/4 p-2 h-auto  md:h-screen">
-            <p className='mt-10 md:mt-0 text-slate-700 dark:text-white font-bold text-center'>Describe your variables </p>
+          <h1 className='mt-10 md:mt-0 text-slate-700 dark:text-white  text-lg font-bold text-center'>Generador de Matriz de consistencia </h1>
+            <p className='mt-4 md:mt-0 text-slate-700 dark:text-white  text-center'>Describe your variables </p>
             <form onSubmit={handleSubmit} className='  rounded-xl p-1 mt-4 z-0'>
-              <textarea required type="text" rows={4} className='p-4  resize-none block bg-zinc-300 dark:bg-zinc-800 w-full p-4 ps-10 text-sm pl-9  text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300' placeholder="Ej:Implemtacion de plan de marketing en proceso de ventas del Travi Sac ." value={inputValue}
+              <textarea required type="text" rows={4} className='p-2 resize-none block bg-zinc-300 dark:bg-zinc-800 w-full  text-sm font-semibold italic text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300' placeholder="Ej:Implemtacion de plan de marketing en proceso de ventas del Travi Sac ." value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)} />
               <div class="flex justify-center ">
                 <nav className=" my-1 flex overflow-x-auto bg-slate-600 items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600 bg-gray-500/5 rounded-xl dark:bg-slate-700">

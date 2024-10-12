@@ -242,16 +242,16 @@ export function Opera() {
 
   useEffect(() => {
     setPossibleInputs([
-      "Análisis del impacto del turismo comunitario en el desarrollo socioeconómico: Un estudio de caso en [ubicación específica]",
-      "Exploración de las percepciones de los turistas extranjeros sobre la sostenibilidad en destinos emergentes",
-      "Estrategias de marketing experiencial para impulsar el turismo cultural en ciudades históricas",
-      "El papel de la tecnología en la mejora de la experiencia turística: Una revisión de aplicaciones móviles y realidad aumentada",
-      "Desarrollo de un plan de gestión de crisis para destinos turísticos frente a desastres naturales y pandemias: Experiencias del COVID-19",
-      "Implementación de un sistema basado en inteligencia artificial para la personalización de itinerarios turísticos en tiempo real",
-      "Desarrollo y evaluación de una plataforma de gestión de datos turísticos usando blockchain para la transparencia y seguridad en el sector",
-      "Optimización de la logística turística mediante el uso de algoritmos de optimización y sistemas de información geográfica (SIG)",
-      "Impacto de las tecnologías de realidad virtual en la promoción de destinos turísticos: Un análisis comparativo",
-      "Análisis de la eficacia de los sistemas de gestión de reservas en línea y su influencia en la satisfacción del cliente en el turismo"
+      "Aplicación web, gestión de reservas en hoteles",
+      "Sistema de atención al cliente, agencias de viajes",
+      "Plataforma de ventas, productos artesanales",
+      "Software de gestión de flotas, empresas de transporte turístico",
+      "Aplicación móvil, promoción de eventos culturales",
+      "Sistema de evaluación de calidad, servicios turísticos",
+      "Análisis de datos turísticos, inteligencia artificial",
+      "Realidad aumentada, guía de turistas en sitios históricos",
+      "Gestión de inventarios, tiendas de souvenirs",
+      "Software de gestión, experiencias personalizadas en turismo de aventura"
     ]);
     getAllProducts();
 
@@ -266,14 +266,16 @@ export function Opera() {
 
 
   return (
-    <div className='bg-zinc-200 dark:bg-slate-900'>
+    <div className='h-full dbg-zinc-200 dark:bg-slate-900'>
       <NavBar />
-      <div className='m-4'>
+   
+      <div className='wrapper mb-12'>
         <div class="md:flex mb-4">
           <div class="mt-10 md:mt-0 w-full md:w-1/4 p-2 h-auto  md:h-screen">
-            <p className='mt-10 md:mt-0 text-slate-700 dark:text-white font-bold text-center'>Describe your variables </p>
+          <h1 className='mt-10 md:mt-0 text-slate-700 dark:text-white  text-lg font-bold text-center'>Generador de Operalización de variables </h1>
+            <p className='mt-4 md:mt-0 text-slate-700 dark:text-white  text-center'>Describe your variables </p>
             <form onSubmit={handleSubmit} className='  rounded-xl p-1 mt-4 z-0'>
-              <textarea required type="text" rows={4} className='p-4  resize-none block bg-zinc-300 dark:bg-zinc-800 w-full p-4 ps-10 text-sm pl-9  text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300' placeholder="Ej: Your variable 1 y Variable 02." value={inputValue}
+              <textarea required type="text" rows={4} className='p-2 resize-none block bg-zinc-300 dark:bg-zinc-800 w-full  text-sm font-bold italic text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300' placeholder="Ej: Your variable 1 y Variable 02." value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)} />
               <div class="flex justify-center ">
                 <nav className=" my-1 flex overflow-x-auto bg-slate-600 items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600 bg-gray-500/5 rounded-xl dark:bg-slate-700">

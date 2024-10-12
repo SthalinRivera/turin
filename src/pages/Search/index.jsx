@@ -140,10 +140,14 @@ export const Search = () => {
     <div className='bg-zinc-200 dark:bg-slate-900 '>
       <NavBar />
       <div className=" min-h-screen  container mx-auto p-6  rounded-lg transition-colors duration-300">
-        <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 text-center">
-          La plataforma de investigación más rápida de la historia
-        </h1>
-        <p className='text-sm  text-gray-900 dark:text-gray-100 mb-6 text-center'>Herramientas de IA todo en uno para estudiantes e investigadores.</p>
+
+        <div className='mt-[80px] md:mt-4 '>
+          <h1 className=" text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 text-center">
+            La plataforma de investigación más rápida de la historia
+          </h1>
+          <p className='text-sm  text-gray-900 dark:text-gray-100 mb-6 text-center'>Herramientas de IA todo en uno para estudiantes e investigadores.</p>
+        </div>
+
         <div className="relative w-full mb-4">
           <input
             type="text"

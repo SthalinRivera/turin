@@ -67,9 +67,7 @@ export function Portal() {
   return (
     <>
       <NavBar />
-      {isBannerOpen && (
-        <Banner showBanner={showBanner} />
-      )}
+   
 
       <div className=" h-screen bg-slate-200 dark:bg-slate-900  z-0 ">
         <div className=" ">

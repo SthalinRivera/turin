@@ -15,7 +15,7 @@ import { Storage } from "./pages/Storage";
 import { Gallery } from "./pages/Gallery";
 import { Places } from "./pages/Places";
 import { NewPlace } from "./pages/Places/NewPlace";
-import { Dashboard } from "./pages/Dashboard"
+import { Dashboard } from "./pages/Dashboard";
 import { Parafrasear } from "./pages/Parafrasear";
 import { Turis } from "./pages/Turis";
 import { Resumir } from "./pages/Resumir";
@@ -25,19 +25,29 @@ import { Preguntas } from "./pages/Preguntas";
 import { Encuesta } from "./pages/Encuesta";
 import { NewEncuesta } from "./pages/Encuesta/NewEncuesta";
 import { EditEncuesta } from "./pages/Encuesta/EditEncuesta";
-import {Search  } from "./pages/Search/";
+import { Search } from "./pages/Search/";
+import { useState } from "react";
+import { Banner } from "./components/Banner";
 export function App() {
+  const [isBannerOpen, setIsBannerOpen] = useState(false);
+  const showBanner = () => {
+    setIsBannerOpen(false);
+  };
+
   useEffect(() => {
-    // Código del efecto que se ejecutará después del renderizado
     TitleStatus();
+    const timer = setTimeout(() => {
+      setIsBannerOpen(true); // Mostrar el banner después de 3 segundos
+    }, 10000);
+
     return () => {
-      // Código de limpieza opcional (cleanup)
+      clearTimeout(timer); // Limpiar el temporizador al desmontar el componente
     };
-  }, [/* dependencias opcionales */]);
+  }, []);
+
   const TitleStatus = () => {
     const originalTitle = document.title;
 
-    // Función para cambiar el título cuando se cambia la visibilidad
     const handleVisibilityChange = () => {
       if (document.hidden) {
         document.title = "¡😭💔No te vayas no puedo vivir sin tiii... !";
@@ -46,71 +56,47 @@ export function App() {
       }
     };
 
-    // Agregamos el evento de cambio de visibilidad
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // Limpiamos el evento cuando el componente se desmonta
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      document.title = originalTitle; // Restauramos el título original
+      document.title = originalTitle;
     };
-  }
+  };
+
   return (
-    <div className="  ">
+    <div>
+      {isBannerOpen && (
+        <Banner showBanner={showBanner} />
+      )}
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Portal />} />
           <Route path="/*" element={<NotFound />} />
-
-          <Route
-            path="/home"
-            element={<ProtectedRoute>
-              <Home />
-            </ProtectedRoute>} />
-          <Route
-            path="/parafrasear"
-            element={<ProtectedRoute>
-              <Parafrasear />
-            </ProtectedRoute>} />
-          <Route
-            path="/resumir"
-            element={<ProtectedRoute>
-              <Resumir />
-            </ProtectedRoute>} />
-            <Route
-            path="/opera"
-            element={<ProtectedRoute>
-              <Opera />
-            </ProtectedRoute>} />
-          <Route
-            path="/gemini"
-            element={<ProtectedRoute>
-              <Gemini />
-            </ProtectedRoute>} />
+          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/parafrasear" element={<ProtectedRoute><Parafrasear /></ProtectedRoute>} />
+          <Route path="/resumir" element={<ProtectedRoute><Resumir /></ProtectedRoute>} />
+          <Route path="/opera" element={<ProtectedRoute><Opera /></ProtectedRoute>} />
+          <Route path="/gemini" element={<ProtectedRoute><Gemini /></ProtectedRoute>} />
+          <Route path="/product" element={<ProtectedRoute><Product /></ProtectedRoute>} />
+          <Route path="/product/new-posts" element={<ProtectedRoute><NewPosts /></ProtectedRoute>} />
+          <Route path="/places" element={<ProtectedRoute><Places /></ProtectedRoute>} />
+          <Route path="/places/new-place" element={<ProtectedRoute><NewPlace /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/encuesta" element={<ProtectedRoute><Encuesta /></ProtectedRoute>} />
+          <Route path="/encuesta/new-encuesta" element={<ProtectedRoute><NewEncuesta /></ProtectedRoute>} />
+          <Route path="/encuesta/edit" element={<ProtectedRoute><EditEncuesta /></ProtectedRoute>} />
+          <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
+          <Route path="/preguntas" element={<ProtectedRoute><Preguntas /></ProtectedRoute>} />
 
           <Route path="/register" element={<Register />} />
           <Route path="/speech-generator" element={<SpeechGenerator />} />
-
-
-          <Route path="/product" element={<ProtectedRoute><Product /></ProtectedRoute>} />
-
-          <Route path="/product/new-posts" element={<ProtectedRoute><NewPosts /></ProtectedRoute>} />
-
-          <Route path="/places" element={<ProtectedRoute><Places /></ProtectedRoute>} />
-
-          <Route path="/places/new-place" element={<ProtectedRoute><NewPlace /></ProtectedRoute>} />
-
           <Route path="/storage" element={<Storage />} />
           <Route path="/teste" element={<Teste />} />
           <Route path="/gallery" element={<Gallery />} />
-          <Route path="dashboard" element={<Dashboard />}></Route>
-          <Route path="/preguntas" element={<Preguntas/>}> </Route>
-          <Route path="turis" element={<Turis />}> </Route>
-          <Route path="encuesta" element={<Encuesta />}> </Route>
-          <Route path="encuesta/new-encuesta" element={<NewEncuesta />}> </Route>
-          <Route path="encuesta/edit" element={<EditEncuesta />}> </Route>
-          <Route path="search" element={<Search />}> </Route>
+          <Route path="/turis" element={<Turis />} />
+
         </Routes>
       </AuthProvider>
     </div>

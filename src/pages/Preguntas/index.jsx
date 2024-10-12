@@ -103,7 +103,7 @@ export function Preguntas() {
 
   return (
 
-    <div className='bg-zinc-200 dark:bg-slate-600'>
+    <div className='bg-zinc-200 dark:bg-slate-900'>
     <NavBar />
     <div className="min-h-screen text-white">
       <div className="container mx-auto p-4">

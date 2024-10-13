@@ -23,8 +23,8 @@ export function NavBar() {
         resumir: { path: '/resumir', name: 'Resumir' },
         preguntas: { path: '/preguntas', name: 'Preguntas' },
         search: { path: '/search', name: 'Search' },
+        tesis: { path: '/tesis', name: 'Tesis' },
     };
-
 
     const handleLogout = async () => {
         try {
@@ -96,14 +96,41 @@ export function NavBar() {
                                 <div className="w-full h-full flex">
                                     <div className="w-full flex items-center justify-end relative cursor-pointer" onClick={() => setProfile(!profile)}>
                                         {profile && (
-                                            <ul className="p-2 w-40 border-r bg-white absolute rounded left-0 shadow mt-16 top-0 ">
-                                                <li onClick={handleLogout} className="cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+                                            <ul className="p-2 w-40 z-90 border-r bg-white dark:bg-gray-800 absolute rounded left-0 shadow mt-16 top-0">
+                                                {/* <li
+                                                    role="menuitem"
+                                                    className="cursor-pointer text-slate-800 dark:text-slate-100 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-200 dark:hover:bg-gray-700 focus:bg-slate-200 dark:focus:bg-gray-700 active:bg-slate-200 dark:active:bg-gray-700"
+                                                >
+                                                    {`Menu Item 1`}
+                                                </li>
+                                                <li
+                                                    role="menuitem"
+                                                    className="cursor-pointer text-slate-800 dark:text-slate-100 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-200 dark:hover:bg-gray-700 focus:bg-slate-200 dark:focus:bg-gray-700 active:bg-slate-200 dark:active:bg-gray-700"
+                                                >
+                                                    {`Menu Item 2`}
+                                                </li> */}
+                                                <li
+                                                    onClick={handleLogout}
+                                                    className="cursor-pointer text-slate-800 dark:text-slate-100 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-200 dark:hover:bg-gray-700 focus:bg-slate-200 dark:focus:bg-gray-700 active:bg-slate-200 dark:active:bg-gray-700"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        strokeWidth="1.5"
+                                                        stroke="currentColor"
+                                                        className="w-6 h-6 text-slate-600 dark:text-slate-300"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+                                                        />
                                                     </svg>
-                                                    <span className="ml-2"> Sign out</span>
+                                                    <span className="ml-2">Sign out</span>
                                                 </li>
                                             </ul>
+
                                         )}
 
                                         {/* Si hay una URL de foto del usuario, muestra la imagen */}
@@ -134,7 +161,7 @@ export function NavBar() {
                 <nav>
                     <div className="py-4 px-6 w-full flex xl:hidden justify-between items-center bg-slate-300 dark:bg-gray-800 fixed top-0 z-40">
                         <div className="w-24">
-                            <img src={icono} alt="Icono" className="mr-2 w-6 h-6" />
+                            <Link to={'/'}>  <img src={icono} alt="Icono" className="mr-2 w-6 h-6" /></Link>
                         </div>
                         <div className='flex'>
                             <div className="  mr-2">
@@ -184,8 +211,7 @@ export function NavBar() {
 
                                         <ul className="f-m-m">
                                             {Object.entries(routes).map(([key, { path, name }]) => (
-
-                                                <li key={key} className={`text-white pt-6 ${isActive(path) ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                                <li key={key} className={`text-white pt- ${isActive(path) ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
                                                     <div className='flex items-center'>
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
@@ -197,7 +223,6 @@ export function NavBar() {
                                                 </li>
                                             ))}
                                         </ul>
-
                                     </div>
                                     <div className="w-full pt-4">
                                         <div className="border-t border-gray-700">
@@ -218,7 +243,7 @@ export function NavBar() {
                                                 ) : (
                                                     /* Si no hay URL de foto del usuario, muestra una imagen alternativa */
                                                     <>
-                                                        <Link className="text-slate-100" to={"/login"}>LognIn</Link>
+                                                        <Link className="text-slate-100" to={"/login"}>Login</Link>
                                                     </>
                                                 )}
                                             </div>

@@ -34,7 +34,6 @@ export function Parafrasear() {
   const [clikCopy, setClikCopy] = useState(""); // Nuevo estado para almacenar el botón seleccionado
   const [error, setError] = useState("");
   const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
-  console.log(tipoText);
 
 
   const run = async () => {

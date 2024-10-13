@@ -35,8 +35,8 @@ export function Login() {
   const handleGoogleSignin = async () => {
     try {
       await loginWithGoogle();
-     
-     
+
+
       navigate("/home");
     } catch (error) {
       setError(error.message);
@@ -56,14 +56,14 @@ export function Login() {
 
   return (
 
-    <>
+    <div className="h-full bg-gradient-to-tl from-green-400 to-indigo-900 dark:bg-gradient-to-tl dark:from-green-700 dark:to-indigo-900 ">
 
       <NavBar></NavBar>
 
-      <div className="h-screen bg-gradient-to-tl from-green-400 to-indigo-900 dark:bg-gradient-to-tl dark:from-green-700 dark:to-indigo-900 w-full py-16 px-4">
+      <div className="wrapper">
         {error && <Alert message={error} />}
-        <div className="flex flex-col items-center justify-center">
-          <div className="bg-white dark:bg-slate-800 shadow rounded-xl lg:w-1/3  md:w-1/2 w-full p-10 mt-16">
+        <div className="flex items-center justify-center">
+          <div className="bg-white dark:bg-slate-800 shadow rounded-xl lg:w-1/3  md:w-1/2 w-full p-10 mt-24 md:mt-4 mb-4">
             <p tabIndex={0} role="heading" aria-label="Login to your account" className="text-2xl font-extrabold leading-6 text-gray-800 dark:text-stone-200">
               Login to your account
             </p>
@@ -126,8 +126,8 @@ export function Login() {
 
 
         </div>
-       
+
       </div> <Footer></Footer>
-    </>
+    </div>
   );
 }

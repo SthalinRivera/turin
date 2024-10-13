@@ -6,8 +6,6 @@ import { collection, getDocs, getDoc, deleteDoc, addDoc, query, limit, startAfte
 import { NavBar } from "../../components/NavBar";
 import { Card } from "../../components/CardOpera";
 import { useAuth } from "../../context/AuthContext";
-import { Modal } from "../../components/Modal";
-import { NavLink } from 'react-router-dom';
 import { ListPlaceholder } from "../../components/Skeleton/ListPlaceholder";
 import { CardPlaceholder } from "../../components/Skeleton/CardPlaceholder";
 import { } from "../Home/data.json";
@@ -18,6 +16,7 @@ import Tab from './Tab';
 
 export function Opera() {
   const { logout, user } = useAuth();
+  
   const [inputValue, setInputValue] = useState('');
   const [response, setResponse] = useState('');
   const [apiResponse, setApiResponse] = useState([]); // Estado para la respuesta de la API
@@ -203,7 +202,7 @@ export function Opera() {
   const getMyProducts = async () => {
     const q = query(collection(db, "OperaVariables"), limit(pageSize), where('userEmail', '==', user.email), orderBy("timestamp"));
     const data = await getDocs(q)
-    console.log("aqui estou soy aopera",data);
+    console.log("aqui estou soy aopera", data);
 
     setMyProduct(
       data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
@@ -256,7 +255,7 @@ export function Opera() {
     getAllProducts();
 
     getMyProducts();
-   
+
   }, [response, pageSize])
 
 
@@ -268,11 +267,11 @@ export function Opera() {
   return (
     <div className='h-full dbg-zinc-200 dark:bg-slate-900'>
       <NavBar />
-   
+
       <div className='wrapper mb-12'>
         <div class="md:flex mb-4">
           <div class="mt-10 md:mt-0 w-full md:w-1/4 p-2 h-auto  md:h-screen">
-          <h1 className='mt-10 md:mt-0 text-slate-700 dark:text-white  text-lg font-bold text-center'>Generador de Operalización de variables </h1>
+            <h1 className='mt-10 md:mt-0 text-slate-700 dark:text-white  text-lg font-bold text-center'>Generador de Operalización de variables </h1>
             <p className='mt-4 md:mt-0 text-slate-700 dark:text-white  text-center'>Describe your variables </p>
             <form onSubmit={handleSubmit} className='  rounded-xl p-1 mt-4 z-0'>
               <textarea required type="text" rows={4} className='p-2 resize-none block bg-zinc-300 dark:bg-zinc-800 w-full  text-sm font-bold italic text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300' placeholder="Ej: Your variable 1 y Variable 02." value={inputValue}

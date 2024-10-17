@@ -92,8 +92,8 @@ export function Resumir() {
     <div className="h-full dark:bg-slate-900">
       <NavBar />
       <div className="wrapper mb-12">
-        <div className=''>
-          <p className='mt-[80px] md:mt-4 text-center text-lg md:text-[35px] font-bold dark:text-slate-200'>Resumidor </p>
+        <div className='mt-[80px] md:mt-4'>
+          <p className=' text-center text-lg md:text-[35px] font-bold dark:text-slate-200'>Resumidor </p>
           <p className='text-center text-sm md:text-lg dark:text-slate-200 mt-4'>Más de 5000 caracteres para resumir online utilizando nuestra app Traviweb</p>
         </div>
         {error && <Alert message={error} />}

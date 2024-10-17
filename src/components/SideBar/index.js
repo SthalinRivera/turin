@@ -345,10 +345,10 @@ export function SideBar() {
 									<ul className="pl-6 mt-2 space-y-1">
 										<li>
 											<Link
-												to="/vendors/messages"
+												to="/reports"
 												className="flex items-center p-2 text-gray-600 rounded hover:bg-gray-300"
 											>
-												<span>Messages</span>
+												<span>Reporte models</span>
 											</Link>
 										</li>
 									</ul>

@@ -24,11 +24,13 @@ import { Teste } from "./pages/Teste";
 import { Preguntas } from "./pages/Preguntas";
 import { Encuesta } from "./pages/Encuesta";
 import { NewEncuesta } from "./pages/Encuesta/NewEncuesta";
+import { EndEncuesta } from "./pages/Encuesta/EndEncuesta";
 import { EditEncuesta } from "./pages/Encuesta/EditEncuesta";
 import { Search } from "./pages/Search/";
 import { useState } from "react";
 import { Banner } from "./components/Banner";
 import { Tesis } from "./pages/Tesis";
+import { Reports } from "./pages/Reports";
 export function App() {
   const [isBannerOpen, setIsBannerOpen] = useState(false);
   const showBanner = () => {
@@ -87,10 +89,12 @@ export function App() {
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/encuesta" element={<ProtectedRoute><Encuesta /></ProtectedRoute>} />
           <Route path="/encuesta/new-encuesta" element={<ProtectedRoute><NewEncuesta /></ProtectedRoute>} />
+          <Route path="/encuesta/end-encuesta" element={<ProtectedRoute><EndEncuesta /></ProtectedRoute>} />
           <Route path="/encuesta/edit" element={<ProtectedRoute><EditEncuesta /></ProtectedRoute>} />
           <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
           <Route path="/preguntas" element={<ProtectedRoute><Preguntas /></ProtectedRoute>} />
           <Route path="/tesis" element={<ProtectedRoute><Tesis /></ProtectedRoute>} />
+          <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />
           <Route path="/speech-generator" element={<SpeechGenerator />} />
           <Route path="/storage" element={<Storage />} />

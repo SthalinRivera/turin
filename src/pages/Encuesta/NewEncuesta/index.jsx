@@ -16,7 +16,7 @@ export function NewEncuesta() {
     question4: '',
     question5: ''
   });
-  
+
   const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ export function NewEncuesta() {
     await addDoc(surveysCollection, responses);
     setSubmitted(true);
     setError('');
-    setTimeout(() => navigate('/encuesta'), 2000); // Navegar después de 2 segundos
+    setTimeout(() => navigate('/encuesta/end-encuesta'), 10); // Navegar después de 2 segundos
   };
 
   const handleChange = (e) => {
@@ -44,32 +44,23 @@ export function NewEncuesta() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-800 transition-all duration-300">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-slate-900 transition-all duration-300">
       <NavBar />
       <div className="flex flex-1">
-        <SideBar />
-        <main className="flex-1 p-4 md:p-6">
-          <div className="bg-white dark:bg-gray-700 shadow-lg border p-6 rounded-lg">
-            <div className='flex justify-between mb-4'>
-              <p className="font-semibold text-xl text-gray-900 dark:text-gray-200">Customer Satisfaction Survey</p>
-              <Link to="/surveys">
-                <button className='bg-blue-500 text-white px-4 py-2 rounded flex items-center'>
-                  <FaList />
-                  <p className="text-base ml-2">List Surveys</p>
-                </button>
-              </Link>
-            </div>
 
+        <main className="flex-1 p-4 md:p-6">
+          <div className="bg-white dark:bg-slate-800 shadow-lg  p-6 rounded-lg bg-white dark:bg-slate-800 rounded shadow-md w-full md:max-w-lg mx-auto mt-[80px] md:mt-4">
+         
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {submitted && <p className="text-green-500 mb-4">Gracias por su encuesta.</p>}
 
-            <form onSubmit={storeSurvey}>
-              <div className="grid grid-cols-1 gap-4">
-
+            <form onSubmit={storeSurvey} className="flex flex-col items-center justify-center p-4 ">
+              <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">Encuesta de Satisfacción</h2>
+              <div className="w-full space-y-4">
                 {/* Pregunta 1 */}
                 <div>
                   <label className="block text-gray-700 dark:text-gray-300">1. ¿Cómo calificaría la calidad de nuestro servicio?</label>
-                  <select name="question1" value={responses.question1} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-600 dark:text-white">
+                  <select name="question1" value={responses.question1} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
                     <option value="1">1 - Muy insatisfecho</option>
                     <option value="2">2 - Insatisfecho</option>
@@ -82,7 +73,7 @@ export function NewEncuesta() {
                 {/* Pregunta 2 */}
                 <div>
                   <label className="block text-gray-700 dark:text-gray-300">2. ¿Cómo evalúa la atención al cliente?</label>
-                  <select name="question2" value={responses.question2} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-600 dark:text-white">
+                  <select name="question2" value={responses.question2} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
                     <option value="1">1 - Muy insatisfecho</option>
                     <option value="2">2 - Insatisfecho</option>
@@ -95,7 +86,7 @@ export function NewEncuesta() {
                 {/* Pregunta 3 */}
                 <div>
                   <label className="block text-gray-700 dark:text-gray-300">3. ¿Qué tan satisfecho está con la rapidez del servicio?</label>
-                  <select name="question3" value={responses.question3} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-600 dark:text-white">
+                  <select name="question3" value={responses.question3} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
                     <option value="1">1 - Muy insatisfecho</option>
                     <option value="2">2 - Insatisfecho</option>
@@ -108,7 +99,7 @@ export function NewEncuesta() {
                 {/* Pregunta 4 */}
                 <div>
                   <label className="block text-gray-700 dark:text-gray-300">4. ¿Cómo evalúa la facilidad para contactar con nosotros?</label>
-                  <select name="question4" value={responses.question4} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-600 dark:text-white">
+                  <select name="question4" value={responses.question4} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
                     <option value="1">1 - Muy insatisfecho</option>
                     <option value="2">2 - Insatisfecho</option>
@@ -121,7 +112,7 @@ export function NewEncuesta() {
                 {/* Pregunta 5 */}
                 <div>
                   <label className="block text-gray-700 dark:text-gray-300">5. ¿Qué tan probable es que recomiende nuestros servicios?</label>
-                  <select name="question5" value={responses.question5} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-600 dark:text-white">
+                  <select name="question5" value={responses.question5} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
                     <option value="1">1 - Muy improbable</option>
                     <option value="2">2 - Improbable</option>
@@ -130,14 +121,19 @@ export function NewEncuesta() {
                     <option value="5">5 - Muy probable</option>
                   </select>
                 </div>
+              </div>
 
-                <div className="col-span-2 text-right">
-                  <button type="submit" className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition-all">
-                    Submit Survey
-                  </button>
-                </div>
+              <div className="text-right mt-4">
+                <button type="submit" className="flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 rounded-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 mr-2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                  </svg>
+                  <span>Enviar encuesta</span>
+                </button>
               </div>
             </form>
+
+
           </div>
         </main>
       </div>

@@ -29,7 +29,7 @@ export function Home() {
   const [image_url, setImagen_url] = useState('')
   const [like, setLike] = useState(null)
   const [views, seViews] = useState(null)
-  const [cantidadCardPlaceholder, setCantidadCardPlaceholder] = useState([1, 2, 3, 4])
+  const [cantidadCardPlaceholder, setCantidadCardPlaceholder] = useState([1, 2, 3, 4, 5, 6])
   const [lastDoc, setLastDoc] = useState(null);
   // Obtener la fecha y hora actual
   const currentDate = new Date().toDateString();;
@@ -147,7 +147,7 @@ export function Home() {
 
 
   //Calculate pages
-  const [pageSize, setPageSize] = useState(4); // Estado para el número total de páginas
+  const [pageSize, setPageSize] = useState(6); // Estado para el número total de páginas
   const loadMoreProducts = () => {
     setPageSize(pageSize + 2); // Incrementar el número de página
     getAllProducts()

@@ -22,64 +22,12 @@ export function Encuesta() {
       const surveySnapshot = await getDocs(surveysCollection);
       const surveyList = surveySnapshot.docs.map((doc) => doc.data());
       setSurveys(surveyList);
-      generateChartData(surveyList); // Generar datos para el gráfico
+     
     } catch (error) {
       console.error("Error al obtener las encuestas:", error);
     }
   };
 
-  // Función para generar los datos del gráfico de barras
-  const generateChartData = (surveyList) => {
-    const questionAverages = [1, 2, 3, 4, 5].map((qNum) => {
-      const questionKey = `question${qNum}`;
-      const total = surveyList.reduce((sum, survey) => sum + parseFloat(survey[questionKey] || 0), 0);
-      return total / surveyList.length;
-    });
-
-    setChartData({
-      labels: ['Pregunta 1', 'Pregunta 2', 'Pregunta 3', 'Pregunta 4', 'Pregunta 5'],
-      datasets: [
-        {
-          label: 'Promedio de respuestas',
-          data: questionAverages,
-          backgroundColor: 'rgba(75, 192, 192, 0.6)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1,
-        },
-      ],
-    });
-
-    // Generar datos para gráficos circulares
-    const pieChartData = {};
-    [1, 2, 3, 4, 5].forEach((qNum) => {
-      const questionKey = `question${qNum}`;
-      const responseCounts = surveyList.reduce((counts, survey) => {
-        const response = survey[questionKey];
-        counts[response] = (counts[response] || 0) + 1;
-        return counts;
-      }, {});
-
-      pieChartData[questionKey] = {
-        labels: Object.keys(responseCounts),
-        datasets: [
-          {
-            label: `Distribución de respuestas para Pregunta ${qNum}`,
-            data: Object.values(responseCounts),
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.6)',
-              'rgba(54, 162, 235, 0.6)',
-              'rgba(255, 206, 86, 0.6)',
-              'rgba(75, 192, 192, 0.6)',
-              'rgba(153, 102, 255, 0.6)',
-            ],
-            borderWidth: 1,
-          },
-        ],
-      };
-    });
-
-    setPieData(pieChartData);
-  };
 
   // Hook para obtener los resultados al montar el componente
   useEffect(() => {
@@ -121,47 +69,7 @@ export function Encuesta() {
                   </tbody>
                 </table>
 
-                {/* Gráfico de resultados en barras */}
-                {chartData && (
-                  <div className="mt-8">
-                    <h3 className="font-semibold text-lg mb-4">Gráfico de Promedios de Respuestas</h3>
-                    <Bar data={chartData} options={{
-                      responsive: true,
-                      plugins: {
-                        legend: {
-                          position: 'top',
-                        },
-                        title: {
-                          display: true,
-                          text: 'Promedio de Respuestas por Pregunta',
-                        },
-                      },
-                    }} />
-                  </div>
-                )}
 
-                {/* Gráficos de pastel para cada pregunta */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                  {[1, 2, 3, 4, 5].map((qNum) => (
-                    <div key={qNum}>
-                      <h3 className="font-semibold text-lg mb-4">{`Distribución de Respuestas: Pregunta ${qNum}`}</h3>
-                      {pieData[`question${qNum}`] && (
-                        <Pie data={pieData[`question${qNum}`]} options={{
-                          responsive: true,
-                          plugins: {
-                            legend: {
-                              position: 'top',
-                            },
-                            title: {
-                              display: true,
-                              text: `Distribución de Respuestas para Pregunta ${qNum}`,
-                            },
-                          },
-                        }} />
-                      )}
-                    </div>
-                  ))}
-                </div>
               </>
             ) : (
               <p className="text-gray-600">No hay encuestas registradas.</p>

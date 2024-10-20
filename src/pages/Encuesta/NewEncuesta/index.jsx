@@ -114,11 +114,11 @@ export function NewEncuesta() {
                   <label className="block text-gray-700 dark:text-gray-300">5. ¿Qué tan probable es que recomiende nuestros servicios?</label>
                   <select name="question5" value={responses.question5} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
-                    <option value="1">1 - Muy improbable</option>
-                    <option value="2">2 - Improbable</option>
+                    <option value="1">1 - Muy insatisfecho</option>
+                    <option value="2">2 - Insatisfech</option>
                     <option value="3">3 - Neutral</option>
-                    <option value="4">4 - Probable</option>
-                    <option value="5">5 - Muy probable</option>
+                    <option value="4">4 - Satisfecho</option>
+                    <option value="5">5 - Muy satisfecho</option>
                   </select>
                 </div>
               </div>

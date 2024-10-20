@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes ,useLocation } from "react-router-dom";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { Home } from "./pages/Home";
@@ -31,8 +31,13 @@ import { useState } from "react";
 import { Banner } from "./components/Banner";
 import { Tesis } from "./pages/Tesis";
 import { Reports } from "./pages/Reports";
+import { TextToImage } from "./pages/TextToImage";
+import { SatisfactionReport } from "./pages/Reports/SatisfactionReport";
+import { Users } from "./pages/Users";
 export function App() {
   const [isBannerOpen, setIsBannerOpen] = useState(false);
+  const location = useLocation(); // Obtenemos la ubicación actual
+
   const showBanner = () => {
     setIsBannerOpen(false);
   };
@@ -66,10 +71,12 @@ export function App() {
       document.title = originalTitle;
     };
   };
-
+  // Lista de rutas en las que el banner se mostrará
+  const routesWithBanner = ["/home", "/opera", "/parafrasear", "/preguntas"];
   return (
     <div>
-      {isBannerOpen && (
+     {/* Mostrar el banner solo si la ruta actual está en la lista de rutas permitidas */}
+     {isBannerOpen && routesWithBanner.includes(location.pathname) && (
         <Banner showBanner={showBanner} />
       )}
       <AuthProvider>
@@ -95,15 +102,18 @@ export function App() {
           <Route path="/preguntas" element={<ProtectedRoute><Preguntas /></ProtectedRoute>} />
           <Route path="/tesis" element={<ProtectedRoute><Tesis /></ProtectedRoute>} />
           <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+          <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />
           <Route path="/speech-generator" element={<SpeechGenerator />} />
           <Route path="/storage" element={<Storage />} />
           <Route path="/teste" element={<Teste />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/turis" element={<Turis />} />
-
+          <Route path="/text-to-image" element={<TextToImage />} />
+          <Route path="/reports/satisfaction-report" element={<SatisfactionReport />} />
         </Routes>
       </AuthProvider>
     </div>
   );
 }
+

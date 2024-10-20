@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 
 export function SideBar() {
-	const menuArray = [true, true, true, true, true];
+	const menuArray = [false, false, false, false, false];
 	const [menu, setMenu] = useState(menuArray);
 	const [show, setShow] = useState(false); // Por defecto oculto en móviles
 
@@ -17,7 +17,6 @@ export function SideBar() {
 	};
 
 	const { logout, user } = useAuth();
-
 	const handleLogout = async () => {
 		try {
 			await logout();
@@ -100,7 +99,7 @@ export function SideBar() {
 
 			{/* Barra Lateral */}
 			<div
-				className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform ${show ? "translate-x-0" : "-translate-x-full"
+				className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-slate-900 shadow-lg transform ${show ? "translate-x-0" : "-translate-x-full"
 					} transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none z-40`}
 			>
 				<div className="flex flex-col h-full">
@@ -132,10 +131,10 @@ export function SideBar() {
 								/>
 							)}
 							<div className="flex flex-col">
-								<p className="text-sm font-bold text-gray-800">
+								<p className="text-sm font-bold text-slate-800 dark:text-slate-200">
 									{user.displayName}
 								</p>
-								<p className="text-xs text-gray-600">{user.email}</p>
+								<p className="text-xs text-slate-800 dark:text-slate-400">{user.email}</p>
 							</div>
 						</div>
 					)}
@@ -147,7 +146,7 @@ export function SideBar() {
 							<li>
 								<Link
 									to="/dashboard"
-									className="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200"
+									className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
 								>
 									<svg
 										className="w-6 h-6 mr-3"
@@ -171,7 +170,7 @@ export function SideBar() {
 							<li>
 								<Link
 									to="/users"
-									className="flex items-center p-2 text-gray-700 rounded hover:bg-gray-200"
+									className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
 								>
 									<svg
 										className="w-6 h-6 mr-3"
@@ -195,7 +194,7 @@ export function SideBar() {
 							<li>
 								<button
 									onClick={() => toggleMenu(0)}
-									className="flex justify-between items-center w-full p-2 text-gray-700 rounded hover:bg-gray-200 focus:outline-none"
+									className="flex justify-between items-center w-full p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none"
 								>
 									<span>Pots</span>
 									<svg
@@ -219,7 +218,7 @@ export function SideBar() {
 										<li>
 											<Link
 												to="/product/new-posts"
-												className="flex items-center p-2 text-gray-600 rounded hover:bg-gray-300"
+												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
 											>
 												<span>New Posts</span>
 											</Link>
@@ -227,7 +226,7 @@ export function SideBar() {
 										<li>
 											<Link
 												to="/product"
-												className="flex items-center p-2 text-gray-600 rounded hover:bg-gray-300"
+												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
 											>
 												<span>List Posts</span>
 											</Link>
@@ -240,7 +239,7 @@ export function SideBar() {
 							<li>
 								<button
 									onClick={() => toggleMenu(1)}
-									className="flex justify-between items-center w-full p-2 text-gray-700 rounded hover:bg-gray-200 focus:outline-none"
+									className="flex justify-between items-center w-full p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none"
 								>
 									<span>Places</span>
 									<svg
@@ -264,7 +263,7 @@ export function SideBar() {
 										<li>
 											<Link
 												to="/places/new-place"
-												className="flex items-center p-2 text-gray-600 rounded hover:bg-gray-300"
+												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
 											>
 												<span>New Attractive Place</span>
 											</Link>
@@ -272,7 +271,7 @@ export function SideBar() {
 										<li>
 											<Link
 												to="/places"
-												className="flex items-center p-2 text-gray-600 rounded hover:bg-gray-300"
+												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
 											>
 												<span>List Attractive Place</span>
 											</Link>
@@ -285,7 +284,7 @@ export function SideBar() {
 							<li>
 								<button
 									onClick={() => toggleMenu(2)}
-									className="flex justify-between items-center w-full p-2 text-gray-700 rounded hover:bg-gray-200 focus:outline-none"
+									className="flex justify-between items-center w-full p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none"
 								>
 									<span>Gallery</span>
 									<svg
@@ -309,7 +308,7 @@ export function SideBar() {
 										<li>
 											<Link
 												to="/gallery"
-												className="flex items-center p-2 text-gray-600 rounded hover:bg-gray-300"
+												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
 											>
 												<span>List Gallery</span>
 											</Link>
@@ -322,7 +321,7 @@ export function SideBar() {
 							<li>
 								<button
 									onClick={() => toggleMenu(3)}
-									className="flex justify-between items-center w-full p-2 text-gray-700 rounded hover:bg-gray-200 focus:outline-none"
+									className="flex justify-between items-center w-full p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none"
 								>
 									<span>Reports</span>
 									<svg
@@ -346,9 +345,17 @@ export function SideBar() {
 										<li>
 											<Link
 												to="/reports"
-												className="flex items-center p-2 text-gray-600 rounded hover:bg-gray-300"
+												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
 											>
 												<span>Reporte models</span>
+											</Link>
+										</li>
+										<li>
+											<Link
+												to="/reports/satisfaction-report"
+												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
+											>
+												<span>Reporte Satisfaciíon usuarios</span>
 											</Link>
 										</li>
 									</ul>
@@ -361,7 +368,7 @@ export function SideBar() {
 					<div className="p-4 border-t">
 						<button
 							onClick={handleLogout}
-							className="w-full flex items-center p-2 text-red-600 rounded hover:bg-red-100"
+							className="w-full flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-red-100 dark:hover:bg-gray-800"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"

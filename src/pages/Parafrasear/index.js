@@ -6,7 +6,9 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Alert } from "../../components/Alert";
 import { Footer } from "../../components/Footer";
 import MarkdownIt from 'markdown-it';
-
+import { useAuth } from "../../context/AuthContext";
+import { db } from "../../firebase";
+import { collection, getDocs, getDoc, deleteDoc, addDoc, query, limit, startAfter, orderBy, where } from 'firebase/firestore';
 class MarkdownRenderer extends React.Component {
   constructor(props) {
     super(props);
@@ -24,6 +26,8 @@ class MarkdownRenderer extends React.Component {
 }
 
 export function Parafrasear() {
+
+  const { logout, user } = useAuth();
   const { GoogleGenerativeAI } = require("@google/generative-ai");
   const [inputText, setInputText] = useState("");
   const [tipoText, setTipoText] = useState("");
@@ -35,7 +39,8 @@ export function Parafrasear() {
   const [error, setError] = useState("");
   const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
 
-
+  const [generationTime, setGenerationTime] = useState(0); // Tiempo de generación
+  const currentDate = new Date().toDateString();;
   const run = async () => {
     if (inputText.trim() === "") {
       setError("Please enter some text before paraphrasing.");
@@ -48,26 +53,34 @@ export function Parafrasear() {
     }
     // Reset input error state if no error
     setError("");
+    const startTime = performance.now(); // Iniciar el temporizador
+
+
+    const inputCharacters = inputText.length;
 
     setLoading(true)
     // For text-only input, use the gemini-pro model
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const prompt = "Eres un experto en parafrasear texto de forma " + tipoText + " parafrasea el siguiente texto:" + inputText;
-    console.log(prompt);
+
     const result = await model.generateContent(prompt);
+
+    const endTime = performance.now(); // Detener el temporizador
+    setGenerationTime(endTime - startTime); // Calcular el tiempo transcurrido
+    const responseTime = ((endTime - startTime) / 1000).toFixed(2); // Calcula el tiempo de respuesta
+
     const response = await result.response;
     const text = response.text();
+    const outputCharacters = text.length;
     setResponse(text)
-
 
     if (text) {
       setLoading(false)
+      storeReports(responseTime, inputCharacters, outputCharacters); // Almacenar datos en reports
+
     }
     console.log(text);
   }
-
-
-
 
   // Función para contar letras en el input
   const countLetters = (text) => {
@@ -85,7 +98,23 @@ export function Parafrasear() {
         console.error('Error copying text to clipboard: ', error);
       });
   };
-
+  //Add data
+  const reportsCollectionStore = collection(db, "reportsGemini")
+  const storeReports = async (responseTime, inputCharacters, outputCharacters) => {
+    console.log("Almacenando en reports...");
+    if (responseTime) {
+      await addDoc(reportsCollectionStore, {
+        inputCharacters: inputCharacters,
+        outputCharacters: outputCharacters,
+        responseTime: responseTime,
+        timestamp: currentDate,
+        userEmail: user.email,
+      });
+      console.log("Datos almacenados en reports.");
+    } else {
+      console.log("No hay respuesta para almacenar en reports.");
+    }
+  };
 
   return (
     <div className="h-full dbg-zinc-200 dark:bg-slate-900">

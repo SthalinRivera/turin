@@ -5,7 +5,7 @@ import { Footer } from "../../components/Footer";
 import { ListSearch } from "../../components/Skeleton/ListSearch";
 import ReactMarkdown from 'react-markdown';
 export function Tesis() {
-  const [inputValue, setInputValue] = useState('Inteligencia artificial y turismo alterno en cañete 2024');
+  const [inputValue, setInputValue] = useState('"Inteligencia Artificial y Turismo Alternativo en Cañete en el 2024');
   const [apiResponse, setApiResponse] = useState(''); // Estado para la respuesta de la primera API
   const [apiResponseMetodologia, setApiResponseMetodologia] = useState(''); // Estado para la respuesta de la segunda API
   const [textCrossRef, setTextCrossRef] = useState("");
@@ -13,6 +13,7 @@ export function Tesis() {
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
   // Acceso a la API de OpenAI usando la clave del entorno
   const openai = new OpenAI({
     apiKey: process.env.REACT_APP_OPENAI_API_KEY,
@@ -207,6 +208,41 @@ export function Tesis() {
       console.error("Error fetching response:", error);
     }
   }
+  // Lista de sugerencias (puedes obtener esto de una API o de otro lugar)
+  const allSuggestions = [
+    "Implementación de inteligencia artificial para la optimización de procesos logísticos en empresas de Cañete, 2024",
+    "Desarrollo de un sistema web para la gestión académica en universidades de Latinoamérica, 2024",
+    "Aplicación web para la automatización de tareas administrativas en pequeñas empresas, 2024",
+    "Uso de inteligencia artificial para la detección temprana de enfermedades en el sector salud, 204",
+    "Diseño de un sistema web para el control de inventarios en empresas comerciales, 2024",
+    "Integración de aplicaciones web en el proceso de enseñanza a distancia en tiempos de pandemia, 2020",
+    "Desarrollo de un sistema de recomendación basado en inteligencia artificial para plataformas de e-commerce, 2024",
+    "Aplicación web para la gestión de proyectos de desarrollo de software en startups tecnológicas, 2024",
+    "Impacto de la inteligencia artificial en la optimización de procesos productivos en la industria manufacturera, 2024",
+    "Implementación de sistemas web para mejorar la interacción entre usuarios y proveedores de servicios educativos, 2024"
+  ];
+
+  // Maneja el cambio en el input
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+
+    // Filtra las sugerencias basadas en el valor del input
+    if (value) {
+      const filteredSuggestions = allSuggestions.filter(suggestion =>
+        suggestion.toLowerCase().includes(value.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  // Maneja la selección de una sugerencia
+  const handleSuggestionClick = (suggestion) => {
+    setInputValue(suggestion);
+    setSuggestions([]);
+  };
 
   // Función para buscar en la API de CrossRef usando el DOI o consulta mejorada con fetch
   async function buscarEnCrossRef() {
@@ -227,6 +263,7 @@ export function Tesis() {
   // Manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     await fetchResponsePG(); // Inicia la cadena de llamadas a la API
   };
 
@@ -234,23 +271,88 @@ export function Tesis() {
     <div className="bg-zinc-200 dark:bg-slate-900 min-h-screen flex flex-col">
       <NavBar />
       <div className="mt-[80px] md:mt-2 flex-grow flex justify-center items-start m-2">
-        <div className="max-w-3xl w-full bg-white dark:bg-gray-800 p-8 shadow-lg rounded-lg border border-gray-300 dark:border-gray-700">
+
+     
+        <div className="max-w-3xl min-h-screen w-full bg-white dark:bg-gray-800 p-8 shadow-lg rounded-lg border border-gray-300 dark:border-gray-700">
           {/* Formulario de entrada */}
+   <div className=''>
+          <h1 className=" text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 text-center">
+          Define tu planteamiento y metodología con un solo click
+          </h1>
+          <p className='text-sm  text-gray-900 dark:text-gray-100 mb-6 text-center'>Herramientas de IA todo en uno para estudiantes e investigadores.</p>
+        </div>
           <form onSubmit={handleSubmit} className="mb-6">
-            <textarea
-              required
-              rows={2}
-              className="w-full p-2 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg resize-none shadow-sm"
-              placeholder="Ej: Describe el problema o pregunta."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-            />
-            <button
-              className="w-full mt-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white rounded-lg shadow-lg font-semibold hover:bg-gradient-to-l focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-purple-800 transition-all"
-              type="submit"
+            <label
+              className="mx-auto relative min-w-sm max-w-2xl flex flex-col md:flex-row items-center justify-center border py-2 px-2 rounded-2xl gap-2 shadow-2xl focus-within:border-gray-300 bg-white border-gray-300 dark:bg-gray-900 dark:border-gray-700"
+              htmlFor="search-bar"
             >
-              Generate
-            </button>
+              <div className="relative w-full md:w-auto flex-grow">
+                <input
+                  id="search-bar"
+                  required
+                  onChange={(e) => {
+                    setInputValue(e.target.value); // Actualiza el valor del input
+                    handleInputChange(e); // Llama a la función handleInputChange para realizar otras acciones
+                  }}
+                  value={inputValue}
+                  placeholder="Ej: Describe el problema o pregunta."
+                  className="px-6 py-2 w-full rounded-md outline-none bg-white text-black dark:bg-gray-900 dark:text-white border border-gray-300 dark:border-gray-700"
+                />
+
+                {/* Lista de sugerencias */}
+                {suggestions.length > 0 && (
+                  <ul className="absolute left-0 right-0 mt-2 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-600 rounded-md shadow-lg z-10">
+                    {suggestions.map((suggestion, index) => (
+                      <li
+                        key={index}
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        className="px-6 py-2 cursor-pointer  text-slate-900 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                      >
+                        {suggestion}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Botón */}
+              <button
+                type="submit"
+                className="w-full md:w-auto px-6 py-3  text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none   active:scale-95 duration-100 rounded-xl transition-all disabled:opacity-70"
+              >
+                <div className="relative">
+                  <div className="flex items-center justify-center h-3 w-3 absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 transition-all">
+                    <svg
+                      className="opacity-0 animate-spin w-full h-full"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div className="flex items-center transition-all opacity-1">
+                    <span className="text-sm font-semibold whitespace-nowrap truncate mx-auto">
+                      Generate
+                    </span>
+                  </div>
+                </div>
+              </button>
+            </label>
+
+
           </form>
           {loading && (
             <div className='w-full'>
@@ -283,7 +385,7 @@ export function Tesis() {
           )}
 
           {textCrossRef.length > 0 && (
-              <div className='bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md border border-gray-300 dark:border-gray-600 mb-2'>
+            <div className='bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md border border-gray-300 dark:border-gray-600 mb-2'>
               <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-1 text-center"> 20 Articulos encontrados:</h2>
               <ul className="">
                 {textCrossRef.map((item, index) => (
@@ -305,7 +407,7 @@ export function Tesis() {
                     >
                       {item.title[0]}
                     </a>
-                
+
                   </li>
                 ))}
               </ul>

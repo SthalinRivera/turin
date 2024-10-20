@@ -3,7 +3,7 @@ import { useState } from "react";
 import OpenAI from 'openai';
 import * as FaIcons from 'react-icons/fa';
 import { NavBar } from "../../components/NavBar";
-
+import categorias from './preguntas';
 
 export function Preguntas() {
 
@@ -294,6 +294,21 @@ export function Preguntas() {
               </div>
             </div>
           </div>
+
+          <div className="max-w-4xl mx-auto p-6">
+            <h1 className="text-3xl font-bold mb-6">Preguntas de Investigación</h1>
+            {categorias.map((categoria, index) => (
+              <div key={index} className="mb-1">
+                <h2 className="text-2xl font-semibold mb-4">{categoria.nombre}</h2>
+                <ul className="list-disc list-inside space-y-0">
+                  {categoria.preguntas.map((pregunta, idx) => (
+                    <li key={idx} className="ml-4">{pregunta}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
     </div>

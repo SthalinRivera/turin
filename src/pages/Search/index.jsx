@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from "../../context/AuthContext";
 import OpenAI from 'openai';
 
+import { Footer } from "../../components/Footer/";
 import { NavBar } from "../../components/NavBar";
 import toast, { Toaster } from 'react-hot-toast';
 import "../../index.css";
@@ -10,7 +11,7 @@ import { collection, getDocs, getDoc, deleteDoc, addDoc, query, limit, startAfte
 
 import { ListSearch } from "../../components/Skeleton/ListSearch";
 
-import { Footer } from "../../components/Footer/";
+
 // Access the API key from .env
 const openai = new OpenAI({
   apiKey: process.env.REACT_APP_OPENAI_API_KEY,

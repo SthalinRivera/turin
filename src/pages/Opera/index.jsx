@@ -32,7 +32,7 @@ export function Opera() {
   const [cantidadCardPlaceholder, setCantidadCardPlaceholder] = useState([1, 2, 3, 4, 5, 6])
   const [lastDoc, setLastDoc] = useState(null);
   // Obtener la fecha y hora actual
-  const currentDate = new Date().toDateString();;
+  const currentDate = new Date().toDateString();
 
   const handleVisibilityChange = (value) => {
     setVisibility(value);
@@ -55,8 +55,8 @@ export function Opera() {
       const startTime = performance.now(); // Iniciar el temporizador
       setButtonDisabled(true); // Deshabilitar el botón mientras se carga la respuesta
         // Conteo de palabras y letras en el input
-        const inputWordsCount = inputValue.split(' ').length;
-        const inputLettersCount = inputValue.length;
+        
+        const inputCharacters = inputValue.length;
 
       const completion = await openai.chat.completions.create({
         messages: [
@@ -164,11 +164,12 @@ export function Opera() {
       setApiResponse(response.variables); // Actualiza el estado con la respuesta
       setResponse(response.variables);
       const responseData =response.variables;
+     
       // Verifica si hay una respuesta antes de llamar a store()
       if (response) {
         setResponse(response);
         store(response)
-        storeReports(responseData, responseTime, inputWordsCount, inputLettersCount); // Almacenar datos en reports
+        storeReports(responseData, responseTime, inputCharacters); // Almacenar datos en reports
       } else {
         console.log("no tengo una respuesta ");
       }
@@ -245,18 +246,9 @@ export function Opera() {
 
     //Add data
     const reportsCollectionStore = collection(db, "reportsOperaVariables")
-    const storeReports = async (response, responseTime, inputWordsCount, inputLettersCount) => {
+    const storeReports = async (response, responseTime, inputCharacters) => {
       console.log("Almacenando en reports...");
-  
-      const totalResponseWords = response.reduce((acc, variable) => {
-          const definitionWords = variable.definicion_operacional.split(' ').length;
-          const dimensionWords = variable.dimensiones.reduce((dimAcc, dimension) => {
-              return dimAcc + dimension.indicadores.reduce((indAcc, indicator) => {
-                  return indAcc + indicator.items_formula.split(' ').length;
-              }, 0);
-          }, 0);
-          return acc + definitionWords + dimensionWords + 1; // +1 para incluir el nombre de la variable
-      }, 0);
+
   
       const totalResponseLetters = response.reduce((acc, variable) => {
           return acc + variable.definicion_operacional.length + variable.nombre.length;
@@ -264,13 +256,11 @@ export function Opera() {
   
       if (response) {
           await addDoc(reportsCollectionStore, {
-              totalInputWords: inputWordsCount,
-              totalInputLetters: inputLettersCount,
-              totalResponseWords: totalResponseWords,
-              totalResponseLetters: totalResponseLetters,
-              responseTime: responseTime,
-              timestamp: currentDate,
-              userEmail: user.email,
+            inputCharacters:inputCharacters,
+            outputCharacters:totalResponseLetters,
+            responseTime: responseTime,
+            timestamp: currentDate,
+            userEmail: user.email,
           });
           console.log("Datos almacenados en reports.");
       } else {

@@ -12,7 +12,7 @@ export function Footer() {
   return (
     <>
       <footer>
-        <div class="dark:bg-slate-800 bg-slate-100 py-4 dark:text-gray-400  text-slate-700">
+        <div class="dark:bg-slate-900 bg-slate-100 py-4 dark:text-gray-400  text-slate-700">
           <div class="container px-4 mx-auto">
             <div class="-mx-4 flex flex-wrap justify-between">
               <div class="px-4 my-4 w-full xl:w-1/2">
@@ -48,7 +48,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div class="dark:bg-slate-900 bg-slate-200 py-4 text-slate-800 dark:text-gray-100">
+        <div class="dark:bg-slate-800 bg-slate-200 py-4 text-slate-800 dark:text-gray-100">
           <div class="container mx-auto px-4">
             <div class="-mx-4 flex flex-wrap justify-between">
               <div class="px-4 w-full text-center sm:w-auto sm:text-left">

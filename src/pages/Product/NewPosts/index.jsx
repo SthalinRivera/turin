@@ -93,7 +93,7 @@ export function NewPosts() {
   }, [file])
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-slate-900 text-black dark:text-whiten">
       <NavBar />
 
       <div className="flex flex-1">
@@ -101,12 +101,12 @@ export function NewPosts() {
         <SideBar />
 
         {/* Contenido Principal */}
-        <main className="flex-1 p-4 md:p-6 bg-gray-100">
-          <div className='bg-white  border w-full p-6  rounded-lg overflow-hidden mx-auto'>
+        <main className="flex-1 p-2 md:p-6 bg-gray-100 dark:bg-slate-800">
+          <div className='bg-white dark:bg-slate-900 shadow-lg  p-2 md:p-4 rounded-lg font-sans overflow-hidden mx-auto'>
 
             <div className='flex py-2 px-4 rounded-xl justify-between'>
               <div className=''>
-                <p>New Post</p>
+                <p className='text-slate-900 dark:text-slate-200'>New Post</p>
               </div>
               <div className='flex '>
                 <Link to="/product"> <button className='button text-white mr-2' >List Posts</button></Link>
@@ -116,27 +116,27 @@ export function NewPosts() {
               <div class=" p-1 md:p-4 flex items-center justify-center">
                 <div class="container w-full">
 
-                  <div class="bg-white rounded   px-4 md:p-8 mb-6">
+                  <div class=" rounded  px-4 md:p-8 mb-6">
                     <div class="grid gap-6 gap-y-2 text-sm grid-cols-1 lg:grid-cols-1">
 
                       <div class="lg:col-span-2">
                         <form onSubmit={store}>
-                          <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+                          <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5 text-slate-900 dark:text-slate-200">
                             <div class="col-start-1 col-end-7 md:col-span-5">
                               <label for="full_name">Title</label>
-                              <input type="text" name="full_name" id="full_name" value={title} onChange={(e) => setTitle(e.target.value)} class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
+                              <input type="text" name="full_name" id="full_name" value={title} onChange={(e) => setTitle(e.target.value)} class="h-10 border mt-1 rounded px-4 w-full bg-gray-50 dark:bg-slate-800" />
                             </div>
                             <div class="col-start-1 col-end-7 md:col-span-5">
                               <label for="email">Description</label>
-                              <textarea type="text" name="text" id="text" rows="4" class="block  border mt-1 rounded w-full bg-gray-50" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="" />
+                              <textarea type="text" name="text" id="text" rows="4" class="block  border mt-1 rounded w-full bg-gray-50 dark:bg-slate-800" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="" />
                             </div>
                             <div class=" col-start-1 col-end-7 md:col-span-3">
                               <label for="address">Categoria</label>
-                              <input type="text" name="address" id="address" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="" />
+                              <input type="text" name="address" id="address" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50 dark:bg-slate-800" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="" />
                             </div>
                             <div class=" col-start-1 col-end-7 md:col-span-2">
                               <label for="city">State</label>
-                              <input type="text" name="city" id="city" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" value={state} onChange={(e) => setState(e.target.value)} placeholder="" />
+                              <input type="text" name="city" id="city" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50 dark:bg-slate-800" value={state} onChange={(e) => setState(e.target.value)} placeholder="" />
                             </div>
                             <div class="flex items-center justify-center w-full col-start-1 col-end-7 md:col-start-1 md:col-end-3">
                               <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -150,12 +150,12 @@ export function NewPosts() {
                                 <input id="dropzone-file" onChange={(e) => setFile(e.target.files[0])} type="file" class="hidden" />
                               </label>
                             </div>
-                            <img className='col-start-1 col-end-7 md:col-start-3 md:col-end-7 md:h-32  md:object-cover' src={file ? URL.createObjectURL(file) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}
+                            <img className='col-start-1 col-end-7 md:col-start-3 md:col-end-7 md:h-32  md:object-cover rounded-lg' src={file ? URL.createObjectURL(file) : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"}
                               alt=""
                             />
                             <div class="col-start-1 col-end-7  md:col-span-5 text-right">
                               <div class="md:inline-flex md:items-end">
-                                <button type="submit" className={` text-white font-bold py-2 w-full px-4  rounded ${per !== null && per < 100 ? ' bg-slate-500 disabled:bg-slate-500 cursor-not-allowed' : 'bg-blue-500'}`} >Submit</button>
+                                <button type="submit" className={` text-white font-bold py-2 w-full px-4  rounded ${per !== null && per < 100 ? ' bg-slate-500 disabled:bg-slate-500 cursor-not-allowed' : 'bg-blue-500'}`} >Guardar</button>
                               </div>
                             </div>
                           </div>

@@ -211,7 +211,7 @@ export function NavBar() {
 
                                         <ul className="f-m-m">
                                             {Object.entries(routes).map(([key, { path, name }]) => (
-                                                <li key={key} className={`text-white pt- ${isActive(path) ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                                <li key={key} className={`text-white pt- ${isActive(path) ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300 my-4' : 'text-slate-700 dark:text-white my-4'}`}>
                                                     <div className='flex items-center'>
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />

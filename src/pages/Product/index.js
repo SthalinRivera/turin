@@ -62,7 +62,7 @@ export function Product() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-slate-900 text-black dark:text-white">
       <NavBar />
 
       <div className="flex flex-1">
@@ -70,8 +70,8 @@ export function Product() {
         <SideBar />
 
         {/* Contenido Principal */}
-        <main className="flex-1 p-4 md:p-6 bg-gray-100">
-          <div className='bg-white  border p-1 md:p-6 w-full  rounded-lg  overflow-hidden '>
+        <main className="flex-1 p-2 md:p-6 bg-gray-100 dark:bg-slate-800">
+          <div className='bg-white dark:bg-slate-900 shadow-lg  p-2 md:p-4 rounded-lg font-sans  overflow-hidden '>
             <div className='flex  py-6 px-6 rounded-xl justify-between'>
               <div className=''>
                 <p>All Post</p>

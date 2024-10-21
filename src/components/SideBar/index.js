@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 
 export function SideBar() {
-	const menuArray = [false, false, false, false, false];
+	const menuArray = [false, false, false, false, true];
 	const [menu, setMenu] = useState(menuArray);
 	const [show, setShow] = useState(false); // Por defecto oculto en móviles
 
@@ -116,7 +116,7 @@ export function SideBar() {
 								{/* SVG Path */}
 								<path d="M234.735 35.532c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16zm0 24c-4.412 0-8-3.588-8-8s3.588-8 8-8 8 3.588 8 8-3.588 8-8 8zm-62.529-14c0-2.502 2.028-4.53 4.53-4.53s4.53 2.028 4.53 4.53c0 2.501-2.028 4.529-4.53 4.529s-4.53-2.027-4.53-4.529zm89.059 60c0 2.501-2.028 4.529-4.53 4.529s-4.53-2.028-4.53-4.529c0-2.502 2.028-4.53 4.53-4.53s4.53 2.029 4.53 4.53z" />
 							</svg>
-							<h1 className="text-lg font-bold text-blue-700">Travi</h1>
+							<h1 className="text-lg font-bold text-slate-900 dark:text-slate-200">TraviAI</h1>
 						</Link>
 					</div>
 

@@ -72,7 +72,7 @@ export function NavBar() {
                         <div className="h-full flex items-center">
                             <div className="mr-10 flex items-center">
                                 <img src={icono} alt="Icono" className="mr-2 w-6 h-6" />
-                                <h3 className="text-base text-slate-700 dark:text-white font-bold tracking-normal leading-tight ml-3 hidden lg:block"><Link to="/">Travi</Link></h3>
+                                <h3 className="text-base text-slate-700 dark:text-white font-bold tracking-normal leading-tight ml-3 hidden lg:block"><Link to="/">TraviAI</Link></h3>
                             </div>
                             <ul className="xl:flex items-center h-full hidden">
                                 {Object.entries(routes).map(([key, { path, name }]) => (
@@ -199,7 +199,7 @@ export function NavBar() {
                                             <div className="flex items-center justify-between w-full">
                                                 <div className="flex items-center">
                                                     <img src={icono} alt="Icono" className="mr-2 w-6 h-6" />
-                                                    <p className="text-base  text-white ml-3">Travi</p>
+                                                    <p className="text-base  text-white ml-3">TraviAI</p>
                                                 </div>
                                                 <div id="cross" className="text-white" onClick={() => setShow(!show)}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8">

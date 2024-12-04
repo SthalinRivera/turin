@@ -5,13 +5,15 @@ import { Footer } from "../../components/Footer";
 import { ListSearch } from "../../components/Skeleton/ListSearch";
 import ReactMarkdown from 'react-markdown';
 export function Tesis() {
-  const [inputValue, setInputValue] = useState('"Inteligencia Artificial y Turismo Alternativo en Cañete en el 2024');
+  const [inputValue, setInputValue] = useState('');
   const [apiResponse, setApiResponse] = useState(''); // Estado para la respuesta de la primera API
   const [apiResponseMetodologia, setApiResponseMetodologia] = useState(''); // Estado para la respuesta de la segunda API
+  const [apiResponseOperaVariables, setApiResponseOperaVariables] = useState(''); // Estado para la respuesta de la segunda API
   const [textCrossRef, setTextCrossRef] = useState("");
   const [textMetodologia, setTextMetodologia] = useState("");
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [loading3, setLoading3] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   // Acceso a la API de OpenAI usando la clave del entorno
@@ -203,11 +205,130 @@ export function Tesis() {
       setLoading2(false);
       const responseMetodologia = completion.choices[0].message.content; // Obtener el contenido de la respuesta
       setApiResponseMetodologia(responseMetodologia); // Guardar la respuesta en el estado
-      buscarEnCrossRef()
+      fetchResponseOperalizacionVaribles();
+
     } catch (error) {
       console.error("Error fetching response:", error);
     }
   }
+  async function fetchResponseOperalizacionVaribles() {
+    try {
+      setLoading3(true); // Establecer el estado de carga a true antes de la solicitud
+      console.log("sigo aka ", inputValue);
+
+      const completion = await openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content: "Eres un asistente útil que proporciona respuestas en formato JSON con una estructura específica. Tu tarea es generar datos en un formato JSON específico sin modificar las claves de los objetos que te proporciono."
+          },
+          {
+            role: "user",
+            content: "Por favor, genera una tabla en formato JSON para una Operacionalización de las variables utilizando los siguientes nombres clave: 'Variables', 'Definición operacional', 'Dimensiones', 'Indicadores', 'Ítems o fórmula', 'Instrumento y escala de medición'. A continuación, te proporciono un ejemplo de cómo debería ser el formato JSON, Solo cambia los valores, manteniendo intactas las claves de los objetos."
+          },
+          {
+            role: "assistant",
+            content: JSON.stringify({
+              "variables": [
+                {
+                  "nombre": "Satisfacción Laboral",
+                  "definicion_operacional": "Grado en que los empleados se sienten satisfechos con su trabajo.",
+                  "dimensiones": [
+                    {
+                      "nombre": "Satisfacción Intrínseca",
+                      "indicadores": [
+                        {
+                          "nombre": "Nivel de satisfacción con tareas del puesto",
+                          "items_formula": "Preguntas sobre disfrute de tareas y realización personal (1-5)",
+                          "instrumento_escala": "Cuestionario de satisfacción laboral. Escala Likert (1-5)"
+                        }
+                      ]
+                    },
+                    {
+                      "nombre": "Satisfacción Extrínseca",
+                      "indicadores": [
+                        {
+                          "nombre": "Satisfacción con el salario y condiciones",
+                          "items_formula": "Preguntas sobre satisfacción con salario, ambiente y beneficios (1-5)",
+                          "instrumento_escala": "Cuestionario de satisfacción laboral. Escala Likert (1-5)"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "nombre": "Productividad",
+                  "definicion_operacional": "Rendimiento del empleado en la realización de tareas laborales.",
+                  "dimensiones": [
+                    {
+                      "nombre": "Eficiencia",
+                      "indicadores": [
+                        {
+                          "nombre": "Tareas realizadas en tiempo y forma",
+                          "items_formula": "Medición de cantidad de tareas completadas por semana.",
+                          "instrumento_escala": "Registro de tareas completadas. Escala numérica"
+                        }
+                      ]
+                    },
+                    {
+                      "nombre": "Eficacia",
+                      "indicadores": [
+                        {
+                          "nombre": "Calidad del trabajo realizado",
+                          "items_formula": "Evaluación del supervisor sobre la calidad de trabajo (1-5)",
+                          "instrumento_escala": "Evaluación del desempeño del supervisor. Escala Likert (1-5)"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "nombre": "Motivación Laboral",
+                  "definicion_operacional": "Nivel de compromiso y energía con la que un empleado desempeña sus funciones.",
+                  "dimensiones": [
+                    {
+                      "nombre": "Motivación Intrínseca",
+                      "indicadores": [
+                        {
+                          "nombre": "Interés en el desarrollo profesional y personal",
+                          "items_formula": "Preguntas sobre el deseo de crecer en el trabajo (1-5)",
+                          "instrumento_escala": "Cuestionario de motivación laboral. Escala Likert (1-5)"
+                        }
+                      ]
+                    },
+                    {
+                      "nombre": "Motivación Extrínseca",
+                      "indicadores": [
+                        {
+                          "nombre": "Incentivos económicos y reconocimiento externo",
+                          "items_formula": "Preguntas sobre la importancia del salario y reconocimiento (1-5)",
+                          "instrumento_escala": "Cuestionario de motivación laboral. Escala Likert (1-5)"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }, null, 2), // Envía el objeto inicial en formato JSON
+          },
+          { role: "user", content: inputValue },
+        ],
+        model: "gpt-3.5-turbo",
+      });
+
+      const response = JSON.parse(completion.choices[0].message.content);
+
+      setApiResponseOperaVariables(response.variables);
+      console.log('llgeu hasta aqui asi que vas en  buen camino');
+
+      buscarEnCrossRef()
+    } catch (error) {
+      console.error('Error fetching response:', error);
+    } finally {
+      setLoading3(false); // Establecer el estado de carga a false después de la solicitud
+    }
+  }
+
   // Lista de sugerencias (puedes obtener esto de una API o de otro lugar)
   const allSuggestions = [
     "Implementación de inteligencia artificial para la optimización de procesos logísticos en empresas de Cañete, 2024",
@@ -272,15 +393,15 @@ export function Tesis() {
       <NavBar />
       <div className="mt-[80px] md:mt-2 flex-grow flex justify-center items-start m-2">
 
-     
+
         <div className="max-w-3xl min-h-screen w-full bg-white dark:bg-gray-800 p-8 shadow-lg rounded-lg border border-gray-300 dark:border-gray-700">
           {/* Formulario de entrada */}
-   <div className=''>
-          <h1 className=" text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 text-center">
-          Define tu planteamiento y metodología con un solo click
-          </h1>
-          <p className='text-sm  text-gray-900 dark:text-gray-100 mb-6 text-center'>Herramientas de IA todo en uno para estudiantes e investigadores.</p>
-        </div>
+          <div className=''>
+            <h1 className=" text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 text-center">
+              Define tu planteamiento y metodología con un solo click
+            </h1>
+            <p className='text-sm  text-gray-900 dark:text-gray-100 mb-6 text-center'>Herramientas de IA todo en uno para estudiantes e investigadores.</p>
+          </div>
           <form onSubmit={handleSubmit} className="mb-6">
             <label
               className="mx-auto relative min-w-sm max-w-2xl flex flex-col md:flex-row items-center justify-center border py-2 px-2 rounded-2xl gap-2 shadow-2xl focus-within:border-gray-300 bg-white border-gray-300 dark:bg-gray-900 dark:border-gray-700"
@@ -296,7 +417,7 @@ export function Tesis() {
                   }}
                   value={inputValue}
                   placeholder="Ej: Describe el problema o pregunta."
-                  className="px-6 py-2 w-full rounded-md outline-none bg-white text-black dark:bg-gray-900 dark:text-white border border-gray-300 dark:border-gray-700"
+                  className="px-6 py-2 w-full rounded-md outline-none bg-white text-black dark:bg-gray-900 dark:text-white  dark:border-gray-700"
                 />
 
                 {/* Lista de sugerencias */}
@@ -354,6 +475,10 @@ export function Tesis() {
 
 
           </form>
+
+
+
+
           {loading && (
             <div className='w-full'>
               <ListSearch />
@@ -362,6 +487,9 @@ export function Tesis() {
           {/* Contenedor de la respuesta */}
           {apiResponse && (
             <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md border border-gray-300 dark:border-gray-600 mb-2">
+              <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-1 text-center">
+                Planteamiento de una investigación.
+              </h1>
               <div className=" max-w-full ">
                 <pre className="font-serif text-lg text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
                   <ReactMarkdown>{apiResponse}</ReactMarkdown>
@@ -376,6 +504,9 @@ export function Tesis() {
           )}
           {apiResponseMetodologia && (
             <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md border border-gray-300 dark:border-gray-600 mb-2">
+              <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-1 text-center">
+                Metodología de la Investigación
+              </h1>
               <div className=" max-w-full ">
                 <pre className="font-serif text-lg text-gray-800 dark:text-gray-200 whitespace-pre-wrap">
                   <ReactMarkdown>{apiResponseMetodologia}</ReactMarkdown>
@@ -383,7 +514,97 @@ export function Tesis() {
               </div>
             </div>
           )}
+          <div class=" p-6 mb-2 overflow-y-auto h-auto">
+            {loading3 ? (
+              <div className=''>
+                <ListSearch />
+              </div>
+            ) : null}
+            {apiResponseOperaVariables && !loading3 && (
+              <div>
+                <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-1 text-center">
+                  Operacionalización de las variables
+                </h1>
+                <table className="min-w-full border-collapse border border-gray-300 text-center mt-4 rounded-lg shadow-lg bg-white dark:bg-gray-800">
+                  <thead>
+                    <tr className="bg-gray-100 dark:bg-gray-700">
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Variables
+                      </th>
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Definición Operacional
+                      </th>
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Dimensión
+                      </th>
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Indicador
+                      </th>
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Ítems o Fórmula
+                      </th>
+                      <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-800 dark:text-gray-200">
+                        Instrumento y Escala
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {apiResponseOperaVariables.map((variable, variableIndex) =>
+                      variable.dimensiones.map((dimension, dimensionIndex) =>
+                        dimension.indicadores.map((indicador, indicadorIndex) => (
+                          <tr
+                            key={`${variableIndex}-${dimensionIndex}-${indicadorIndex}`}
+                            className="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-800 dark:even:bg-gray-700"
+                          >
+                            {dimensionIndex === 0 && indicadorIndex === 0 ? (
+                              <td
+                                className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100"
+                                rowSpan={variable.dimensiones.reduce(
+                                  (total, dim) => total + dim.indicadores.length,
+                                  0
+                                )}
+                              >
+                                {variable.nombre}
+                              </td>
+                            ) : null}
+                            {dimensionIndex === 0 && indicadorIndex === 0 ? (
+                              <td
+                                className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100"
+                                rowSpan={variable.dimensiones.reduce(
+                                  (total, dim) => total + dim.indicadores.length,
+                                  0
+                                )}
+                              >
+                                {variable.definicion_operacional}
+                              </td>
+                            ) : null}
+                            {indicadorIndex === 0 ? (
+                              <td
+                                className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100"
+                                rowSpan={dimension.indicadores.length}
+                              >
+                                {dimension.nombre}
+                              </td>
+                            ) : null}
+                            <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100">
+                              {indicador.nombre}
+                            </td>
+                            <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100">
+                              {indicador.items_formula}
+                            </td>
+                            <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-gray-900 dark:text-gray-100">
+                              {indicador.instrumento_escala}
+                            </td>
+                          </tr>
+                        ))
+                      )
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
+          </div>
           {textCrossRef.length > 0 && (
             <div className='bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md border border-gray-300 dark:border-gray-600 mb-2'>
               <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-1 text-center"> 20 Articulos encontrados:</h2>

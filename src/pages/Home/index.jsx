@@ -283,7 +283,7 @@ export function Home() {
       <div className='wrapper mb-12'>
         <div class="md:flex mb-4">
           <div class="mt-10 md:mt-0 w-full md:w-1/4 p-2 h-auto  md:h-screen">
-          <h1 className='mt-10 md:mt-0 text-slate-700 dark:text-white  text-lg font-bold text-center'>Generador de Matriz de consistencia </h1>
+            <h1 className='mt-10 md:mt-0 text-slate-700 dark:text-white  text-lg font-bold text-center'>Generador de Matriz de consistencia </h1>
             <p className='mt-4 md:mt-0 text-slate-700 dark:text-white  text-center'>Describe your variables </p>
             <form onSubmit={handleSubmit} className='  rounded-xl p-1 mt-4 z-0'>
               <textarea required type="text" rows={4} className='p-2 resize-none block bg-zinc-300 dark:bg-zinc-800 w-full  text-sm font-semibold italic text-slate-700 dark:text-white border  dark:border-slate-400 rounded-xl placeholder-slate-700 dark:placeholder-slate-300' placeholder="Ej:Implemtacion de plan de marketing en proceso de ventas del Travi Sac ." value={inputValue}
@@ -292,7 +292,7 @@ export function Home() {
                 <nav className=" my-1 flex overflow-x-auto bg-slate-600 items-center p-1 space-x-1 rtl:space-x-reverse text-sm text-gray-600 bg-gray-500/5 rounded-xl dark:bg-slate-700">
                   <button
                     role="tab" type="button"
-                    className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none focus:ring-2 focus:ring-salte-900 focus:ring-inset ${visibility === 'private' ? 'bg-slate-900 text-white' : 'text-slate-100  hover:text-slate-200'}`}
+                    className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg  ${visibility === 'private' ? 'dark:bg-slate-900 dark:text-slate-100 bg-slate-800 text-slate-100 ' : 'text-slate-800  hover:text-slate-800 dark:text-slate-100  dark:hover:text-slate-200'}`}
                     aria-selected={visibility === 'private' ? 'true' : 'false'}
                     onClick={() => handleVisibilityChange('private')}
                   > Privado
@@ -300,7 +300,7 @@ export function Home() {
 
                   <button
                     role="tab" type="button"
-                    className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg outline-none focus:ring-2 focus:ring-salte-900 focus:ring-inset ${visibility === 'public' ? 'bg-slate-900 text-white' : 'text-slate-100  hover:text-slate-200'}`}
+                    className={`flex whitespace-nowrap items-center h-8 px-5 font-medium rounded-lg  ${visibility === 'public' ? 'bg-slate-800 text-slate-100 dark:bg-slate-900 dark:text-white' : 'text-slate-800  hover:text-slate-800 dark:text-slate-100  dark:hover:text-slate-200'}`}
                     aria-selected={visibility === 'public' ? 'true' : 'false'}
                     onClick={() => handleVisibilityChange('public')}
                   >Público

@@ -65,7 +65,7 @@ export function NavBar() {
     const isActive = (path) => currentPath === path;
     return (
         <>
-            <div className="  w-full z-50">
+            <div className=" w-full z-50">
                 {/* Code block starts */}
                 <nav className="  w-full mx-auto hidden xl:block bg-gray-200 dark:bg-slate-800 shadow">
                     <div className="container px-6 justify-between h-16 flex items-center lg:items-stretch mx-auto">
@@ -76,7 +76,7 @@ export function NavBar() {
                             </div>
                             <ul className="xl:flex items-center h-full hidden">
                                 {Object.entries(routes).map(([key, { path, name }]) => (
-                                    <li key={key} className={`cursor-pointer h-full flex items-center hover:text-indigo-700 text-sm mr-4 tracking-normal ${isActive(path) ? 'text-indigo-200 border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
+                                    <li key={key} className={`cursor-pointer h-full flex items-center hover:text-slate-600 hover:font-bold text-sm mr-4 tracking-normal ${isActive(path) ? 'dark:text-slate-100 font-bold border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
                                         <Link to={path}>{name}</Link>
                                     </li>
                                 ))}

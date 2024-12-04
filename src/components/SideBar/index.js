@@ -28,7 +28,7 @@ export function SideBar() {
 	return (
 		<>
 			{/* Botones de toggler para móviles */}
-			<div className="fixed top-4 left-4 z-50 md:hidden">
+			<div className="fixed top-0 left-0 z-50 md:hidden">
 				{!show ? (
 					<button
 						aria-label="Abrir menú"
@@ -99,10 +99,10 @@ export function SideBar() {
 
 			{/* Barra Lateral */}
 			<div
-				className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-slate-900 shadow-lg transform ${show ? "translate-x-0" : "-translate-x-full"
+				className={`fixed h-full w-64 bg-white dark:bg-slate-900 shadow-lg transform ${show ? "translate-x-0" : "-translate-x-full"
 					} transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none z-40`}
 			>
-				<div className="flex flex-col h-full">
+				<div className="flex flex-col h-full  ">
 					{/* Logo */}
 					<div className="p-4 flex items-center space-x-3 border-b">
 						<Link to="/" className="flex items-center space-x-3">

@@ -389,7 +389,7 @@ export function Tesis() {
   };
 
   return (
-    <div className="bg-zinc-200 dark:bg-slate-900 min-h-screen flex flex-col">
+    <div className="bg-white dark:bg-slate-900 min-h-screen flex flex-col">
       <NavBar />
       <div className="mt-[80px] md:mt-2 flex-grow flex justify-center items-start m-2">
 
@@ -398,9 +398,9 @@ export function Tesis() {
           {/* Formulario de entrada */}
           <div className=''>
             <h1 className=" text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 text-center">
-              Define tu planteamiento y metodología con un solo click
+              Define tu planteamiento y metodología de tu tesis con un solo click
             </h1>
-            <p className='text-sm  text-gray-900 dark:text-gray-100 mb-6 text-center'>Herramientas de IA todo en uno para estudiantes e investigadores.</p>
+            <p className='text-sm  text-gray-900 dark:text-gray-100 mb-6 text-center'>Define rápidamente el planteamiento y la metodología de tu tesis con un solo clic, optimizando tu tiempo y esfuerzo exclusivo para estudiantes e investigadores.</p>
           </div>
           <form onSubmit={handleSubmit} className="mb-6">
             <label

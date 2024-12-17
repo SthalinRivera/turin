@@ -103,16 +103,16 @@ export function Preguntas() {
 
   return (
 
-    <div className='bg-zinc-200 dark:bg-slate-900'>
+    <div className='bg-white dark:bg-slate-900'>
       <NavBar />
       <div className="min-h-screen text-white">
         <div className="container mx-auto p-4">
           <div className="flex justify-center items-center">
             <div className="relative text-center">
               <div className="mt-[80px] md:mt-4 ">
-                <h1 className='mt-10 md:mt-0 text-slate-700 dark:text-white  text-lg font-bold text-center'>Generar preguntas y respuestas con IA </h1>
-                <p className="mx-5 mt-2 text-slate-800 dark:text-slate-100">
-                  Nuestra aplicación utiliza inteligencia artificial para generar respuestas y preguntas comunes relacionadas con tesis académicas. ¿Quieres ensayar ahora?
+                <h1 className='mt-10 md:mt-0 text-slate-700 dark:text-white  text-2xl font-bold text-center'>Defiende tu Tesis: Generador de Respuestas para Preguntas del Jurado </h1>
+                <p className="mx-5 mt-2 text-slate-800 dark:text-slate-100 text-lg">
+                  Nuestra aplicación utiliza inteligencia artificial para generar respuestas comunes relacionadas con la defenta de  tesis en la sustentación. ¿Quieres ensayar ahora?
                 </p>
               </div>
             </div>
@@ -130,7 +130,7 @@ export function Preguntas() {
                       <input
                         type="text"
                         name="va01"
-                        className="w-full p-2 mt-1 text-slate-800 dark:text-slate-100  bg-gray-300 dark:bg-gray-600 rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-2 mt-1 text-slate-800 dark:text-slate-100  bg-gray-100 dark:bg-gray-600 rounded-lg focus:ring-purple-500 focus:border-purple-500"
                         placeholder=" "
                         value={va01Input}
                         onChange={(e) => setVa01Input(e.target.value)}
@@ -140,7 +140,7 @@ export function Preguntas() {
                       <label className="block text-sm font-medium text-slate-800 dark:text-slate-100">Variable Dependiente o Variable 02</label>
                       <input
                         type="text"
-                        className="w-full p-2 mt-1 text-slate-800 dark:text-slate-100  bg-gray-300 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-2 mt-1 text-slate-800 dark:text-slate-100  bg-gray-100 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
                         placeholder=" "
                         value={va02Input}
                         onChange={(e) => setVa02Input(e.target.value)}
@@ -149,7 +149,7 @@ export function Preguntas() {
                     <div>
                       <label className="block text-sm font-medium text-slate-800 dark:text-slate-100">Enfoque de investigación</label>
                       <select
-                        className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-300 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-100 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
                         value={enfoqueInvestigacion}
                         onChange={(e) => setEnfoqueInvestigacion(e.target.value)}
                       >
@@ -162,7 +162,7 @@ export function Preguntas() {
                     <div>
                       <label className="block text-sm font-medium text-slate-800 dark:text-slate-100">Tipo de investigación</label>
                       <select
-                        className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-300 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-100 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
                         value={tipoInvestigacion}
                         onChange={(e) => setTipoInvestigacion(e.target.value)}
                       >
@@ -174,7 +174,7 @@ export function Preguntas() {
                     <div>
                       <label className="block text-sm font-medium text-slate-800 dark:text-slate-100">Diseño de investigación</label>
                       <select
-                        className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-300 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-100 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
                         value={disenoInvestigacion}
                         onChange={(e) => {
                           setDisenoInvestigacion(e.target.value);
@@ -191,7 +191,7 @@ export function Preguntas() {
                       <div>
                         <label className="block text-sm font-medium text-slate-800 dark:text-slate-100">Tipos de diseño experimental</label>
                         <select
-                          className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-300 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                          className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-100 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
                           value={tiposDisenoExperimental}
                           onChange={(e) => setTiposDisenoExperimental(e.target.value)}
                         >
@@ -206,7 +206,7 @@ export function Preguntas() {
                       <div>
                         <label className="block text-sm font-medium text-slate-800 dark:text-slate-100">Tipos de diseño no experimental</label>
                         <select
-                          className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-300 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                          className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-100 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
                           value={tiposDisenoNoExperimental}
                           onChange={(e) => setTiposDisenoNoExperimental(e.target.value)}
                         >
@@ -219,7 +219,7 @@ export function Preguntas() {
                     <div>
                       <label className="block text-sm font-medium text-slate-800 dark:text-slate-100">Nivel de investigación</label>
                       <select
-                        className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-300 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                        className="w-full p-2 text-slate-800 dark:text-slate-100  bg-gray-100 dark:bg-gray-600  rounded-lg focus:ring-purple-500 focus:border-purple-500"
                         value={nivelInvestigacion}
                         onChange={(e) => setNivelInvestigacion(e.target.value)}
                       >
@@ -269,10 +269,10 @@ export function Preguntas() {
                     />
                     <button
                       type="button"
-                      className="w-full py-2 text-purple-400 hover:underline"
+                      className="w-full py-2 text-purple-800 dark:text-purple-400 hover:underline"
                       onClick={handleSurpriseClick}
                     >
-                      <FaIcons.FaStarHalfAlt size="20px" className="inline-block mr-2" /> Sorpréndeme
+                      <FaIcons.FaStarHalfAlt size="20px" className="inline-block mr-2 " />  Sorpréndeme
                     </button>
 
                     <div className="bg-slate-100 dark:bg-gray-600 p-4 rounded-lg mt-4">
@@ -296,13 +296,13 @@ export function Preguntas() {
           </div>
 
           <div className="max-w-4xl mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-6">Preguntas de Investigación</h1>
+            <h1 className="text-3xl font-bold mb-6 text-slate-800 dark:text-slate-100">Preguntas de Investigación</h1>
             {categorias.map((categoria, index) => (
               <div key={index} className="mb-1">
-                <h2 className="text-2xl font-semibold mb-4">{categoria.nombre}</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-slate-800 dark:text-slate-100">{categoria.nombre}</h2>
                 <ul className="list-disc list-inside space-y-0">
                   {categoria.preguntas.map((pregunta, idx) => (
-                    <li key={idx} className="ml-4">{pregunta}</li>
+                    <li key={idx} className="ml-4 text-slate-800 dark:text-slate-100">{pregunta}</li>
                   ))}
                 </ul>
               </div>

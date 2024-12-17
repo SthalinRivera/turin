@@ -23,7 +23,7 @@ export function Login() {
     setError("");
     try {
       await login(user.email, user.password);
-      navigate("/home");
+      navigate("/matriz");
     } catch (error) {
       setError(error.message);
     }
@@ -38,7 +38,7 @@ export function Login() {
       await loginWithGoogle();
 
 
-      navigate("/home");
+      navigate("/matriz");
     } catch (error) {
       setError(error.message);
     }

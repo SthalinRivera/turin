@@ -351,15 +351,15 @@ export function Home() {
               )}
             </div>
             <Tabs>
-              <Tab title="All Showcase">
+              <Tab title="Todos los ejemplos">
                 <>
                   <div className='flex  justify-between  md:m-1'>
                     <h1 className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300 md:text-xl font-bold pointer-events-auto'>
-                      Showcase</h1>
+                      Ejemplos</h1>
                     <button
                       onClick={loadMoreProducts}
                       className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300 md:text-xl font-bold justify-end'
-                    > Show more +  </button>
+                    > Mostrar más +  </button>
                   </div>
                   {allProducts ? "" : (
                     <div className='grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 sm:z-0 ' >
@@ -376,15 +376,15 @@ export function Home() {
                 </>
               </Tab>
 
-              <Tab title="My Showcase">
+              <Tab title="Mis ejemplos">
                 <>
                   <div className='flex  justify-between  md:m-1'>
                     <h1 className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300  md:text-2xl font-bold pointer-events-auto'>
-                      Showcase</h1>
+                      Ejemplos</h1>
                     <button
                       onClick={loadMoreProducts}
                       className='text-slate-700 hover:text-slate-900 dark:text-white dark:hover:text-slate-300 md:text-2xl font-bold justify-end'
-                    > Show more +  </button>
+                    > Mostrar más +  </button>
                   </div>
                   {myProduct ? "" : (
                     <div className='grid xl:grid-cols-2 md:grid-cols-1 grid-cols-1 sm:z-0 ' >

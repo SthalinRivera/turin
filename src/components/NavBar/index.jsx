@@ -16,7 +16,7 @@ export function NavBar() {
 
     // Define your routes in an object
     const routes = {
-        home: { path: '/home', name: 'Generate Matriz Consc.' },
+        home: { path: '/matriz', name: 'Generate Matriz Consc.' },
         opera: { path: '/opera', name: 'Oper. Variables' },
         gemini: { path: '/gemini', name: 'Gemini' },
         parafrasear: { path: '/parafrasear', name: 'Parafrasea' },

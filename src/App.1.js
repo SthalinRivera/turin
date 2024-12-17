@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Routes ,useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { Home } from "./pages/Home";
@@ -20,7 +20,9 @@ import { Parafrasear } from "./pages/Parafrasear";
 import { Turis } from "./pages/Turis";
 import { Resumir } from "./pages/Resumir";
 import { Opera } from "./pages/Opera";
+
 import { Teste } from "./pages/Teste";
+import { Claude } from "./pages/Claude";
 import { Preguntas } from "./pages/Preguntas";
 import { Encuesta } from "./pages/Encuesta";
 import { NewEncuesta } from "./pages/Encuesta/NewEncuesta";
@@ -34,6 +36,7 @@ import { Reports } from "./pages/Reports";
 import { TextToImage } from "./pages/TextToImage";
 import { SatisfactionReport } from "./pages/Reports/SatisfactionReport";
 import { Users } from "./pages/Users";
+import { Matriz } from "./pages/Matriz";
 export function App() {
   const [isBannerOpen, setIsBannerOpen] = useState(false);
   const location = useLocation(); // Obtenemos la ubicación actual
@@ -75,8 +78,8 @@ export function App() {
   const routesWithBanner = ["/home", "/opera", "/parafrasear", "/preguntas"];
   return (
     <div>
-     {/* Mostrar el banner solo si la ruta actual está en la lista de rutas permitidas */}
-     {isBannerOpen && routesWithBanner.includes(location.pathname) && (
+      {/* Mostrar el banner solo si la ruta actual está en la lista de rutas permitidas */}
+      {isBannerOpen && routesWithBanner.includes(location.pathname) && (
         <Banner showBanner={showBanner} />
       )}
       <AuthProvider>
@@ -85,6 +88,7 @@ export function App() {
           <Route path="/" element={<Portal />} />
           <Route path="/*" element={<NotFound />} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/matriz" element={<ProtectedRoute><Matriz /></ProtectedRoute>} />
           <Route path="/parafrasear" element={<ProtectedRoute><Parafrasear /></ProtectedRoute>} />
           <Route path="/resumir" element={<ProtectedRoute><Resumir /></ProtectedRoute>} />
           <Route path="/opera" element={<ProtectedRoute><Opera /></ProtectedRoute>} />
@@ -109,6 +113,7 @@ export function App() {
           <Route path="/teste" element={<Teste />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/turis" element={<Turis />} />
+          <Route path="/claude" element={<Claude />} />
           <Route path="/text-to-image" element={<TextToImage />} />
           <Route path="/reports/satisfaction-report" element={<SatisfactionReport />} />
         </Routes>

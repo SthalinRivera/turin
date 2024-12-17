@@ -23,7 +23,7 @@ export function Card({ product }) {
 
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(doc(db, "OperaVariables", product.id), (doc) => {
+        const unsubscribe = onSnapshot(doc(db, "Matrices", product.id), (doc) => {
             if (doc.exists()) {
                 setLike(doc.data().like);
                 setViews(doc.data().views); // Actualiza el estado de las vistas al valor de la base de datos

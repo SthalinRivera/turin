@@ -13,18 +13,21 @@ export function NavBar() {
         setIsOpen(!isOpen);
     };
     const { logout, user } = useAuth();
-
+    // Obtener el rol desde localStorage (puedes cambiarlo por Firebase si es necesario)
+    const userRole = localStorage.getItem("userRole") || "INVITADO";
     // Define your routes in an object
-    const routes = {
-        home: { path: '/matriz', name: 'Generate Matriz Consc.' },
-        opera: { path: '/opera', name: 'Oper. Variables' },
-        gemini: { path: '/gemini', name: 'Gemini' },
-        parafrasear: { path: '/parafrasear', name: 'Parafrasea' },
-        resumir: { path: '/resumir', name: 'Resumir' },
-        preguntas: { path: '/preguntas', name: 'Preguntas' },
-        search: { path: '/search', name: 'Search' },
-        tesis: { path: '/tesis', name: 'Tesis' },
-    };
+    // 🔹 Define los enlaces y sus permisos según el rol
+    const routes = [
+        { path: "/matriz", name: "Generate Matriz Consc.", roles: ["ADMINISTRADOR", "INVITADO"] },
+        { path: "/opera", name: "Oper. Variables", roles: ["ADMINISTRADOR", "INVITADO"] },
+        { path: "/gemini", name: "Gemini", roles: ["ADMINISTRADOR", "INVITADO"] },
+        { path: "/parafrasear", name: "Parafrasea", roles: ["ADMINISTRADOR", "INVITADO"] },
+        { path: "/resumir", name: "Resumir", roles: ["ADMINISTRADOR", "INVITADO"] },
+        { path: "/preguntas", name: "Preguntas", roles: ["ADMINISTRADOR", "INVITADO"] },
+        { path: "/search", name: "Search", roles: ["ADMINISTRADOR", "INVITADO"] },
+        { path: "/tesis", name: "Tesis", roles: ["ADMINISTRADOR", "INVITADO"] },
+        { path: "/dashboard", name: "Administrador", roles: ["ADMINISTRADOR"] },
+    ];
 
     const handleLogout = async () => {
         try {
@@ -60,7 +63,10 @@ export function NavBar() {
     // Get the current location
     const location = useLocation();
     const currentPath = location.pathname;
-
+    // Verifica si el enlace es accesible según el rol del usuario
+    const isRoleAllowed = (roles) => {
+        return roles.includes(userRole);
+    };
     // Helper function to determine if a link is active
     const isActive = (path) => currentPath === path;
     return (
@@ -75,10 +81,16 @@ export function NavBar() {
                                 <h3 className="text-base text-slate-700 dark:text-white font-bold tracking-normal leading-tight ml-3 hidden lg:block"><Link to="/">TraviAI</Link></h3>
                             </div>
                             <ul className="xl:flex items-center h-full hidden">
-                                {Object.entries(routes).map(([key, { path, name }]) => (
-                                    <li key={key} className={`cursor-pointer h-full flex items-center hover:text-slate-600 hover:font-bold text-sm mr-4 tracking-normal ${isActive(path) ? 'dark:text-slate-100 font-bold border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}>
-                                        <Link to={path}>{name}</Link>
-                                    </li>
+                                {Object.entries(routes).map(([key, { path, name, roles }]) => (
+                                    // Solo muestra el enlace si el rol tiene acceso
+                                    isRoleAllowed(roles) && (
+                                        <li
+                                            key={key}
+                                            className={`cursor-pointer h-full flex items-center hover:text-slate-600 hover:font-bold text-sm mr-4 tracking-normal ${isActive(path) ? 'dark:text-slate-100 font-bold border-b-2 border-indigo-700 dark:border-indigo-300' : 'text-slate-700 dark:text-white'}`}
+                                        >
+                                            <Link to={path}>{name}</Link>
+                                        </li>
+                                    )
                                 ))}
                             </ul>
                         </div>

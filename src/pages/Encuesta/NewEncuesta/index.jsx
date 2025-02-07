@@ -50,7 +50,7 @@ export function NewEncuesta() {
 
         <main className="flex-1 p-4 md:p-6">
           <div className="bg-white dark:bg-slate-800 shadow-lg  p-6 rounded-lg bg-white dark:bg-slate-800 rounded shadow-md w-full md:max-w-lg mx-auto mt-[80px] md:mt-4">
-         
+
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {submitted && <p className="text-green-500 mb-4">Gracias por su encuesta.</p>}
 
@@ -59,7 +59,7 @@ export function NewEncuesta() {
               <div className="w-full space-y-4">
                 {/* Pregunta 1 */}
                 <div>
-                  <label className="block text-gray-700 dark:text-gray-300">1. ¿Cómo calificaría la calidad de nuestro servicio?</label>
+                  <label className="block text-gray-700 dark:text-gray-300">1. ¿Qué tan intuitiva y fácil de usar encontró la interfaz de la aplicación y sus funcionalidades principales?</label>
                   <select name="question1" value={responses.question1} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
                     <option value="1">1 - Muy insatisfecho</option>
@@ -72,7 +72,7 @@ export function NewEncuesta() {
 
                 {/* Pregunta 2 */}
                 <div>
-                  <label className="block text-gray-700 dark:text-gray-300">2. ¿Cómo evalúa la atención al cliente?</label>
+                  <label className="block text-gray-700 dark:text-gray-300">2. ¿En qué medida considera que la aplicación ha facilitado su proceso de investigación científica, como la redacción o análisis de datos?</label>
                   <select name="question2" value={responses.question2} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
                     <option value="1">1 - Muy insatisfecho</option>
@@ -85,7 +85,7 @@ export function NewEncuesta() {
 
                 {/* Pregunta 3 */}
                 <div>
-                  <label className="block text-gray-700 dark:text-gray-300">3. ¿Qué tan satisfecho está con la rapidez del servicio?</label>
+                  <label className="block text-gray-700 dark:text-gray-300">3. ¿En qué medida considera que la aplicación ha mejorado su flujo de trabajo en áreas clave como la generación de texto, análisis de datos, gestión de referencias y organización de ideas?</label>
                   <select name="question3" value={responses.question3} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
                     <option value="1">1 - Muy insatisfecho</option>
@@ -98,7 +98,7 @@ export function NewEncuesta() {
 
                 {/* Pregunta 4 */}
                 <div>
-                  <label className="block text-gray-700 dark:text-gray-300">4. ¿Cómo evalúa la facilidad para contactar con nosotros?</label>
+                  <label className="block text-gray-700 dark:text-gray-300">4. ¿Qué tan satisfecho está con la rapidez y precisión de las respuestas generadas por las APIs de OpenAI y Gemini en la aplicación?</label>
                   <select name="question4" value={responses.question4} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
                     <option value="1">1 - Muy insatisfecho</option>
@@ -111,7 +111,7 @@ export function NewEncuesta() {
 
                 {/* Pregunta 5 */}
                 <div>
-                  <label className="block text-gray-700 dark:text-gray-300">5. ¿Qué tan probable es que recomiende nuestros servicios?</label>
+                  <label className="block text-gray-700 dark:text-gray-300">5. ¿Cómo calificaría el impacto de la aplicación en la calidad de su investigación o en la eficiencia de su trabajo?</label>
                   <select name="question5" value={responses.question5} onChange={handleChange} className="w-full p-2 border rounded bg-gray-100 dark:bg-slate-800 dark:text-white">
                     <option value="">Seleccionar</option>
                     <option value="1">1 - Muy insatisfecho</option>

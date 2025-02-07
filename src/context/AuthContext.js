@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
     return createUserWithEmailAndPassword(auth, email, password, displayName);
 
   };
-  
+
 
   const login = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
@@ -38,7 +38,10 @@ export function AuthProvider({ children }) {
     return signInWithPopup(auth, googleProvider);
   };
 
-  const logout = () => signOut(auth);
+  const logout = () => {
+    localStorage.removeItem("userRole"); // Eliminar el rol al cerrar sesión
+    return signOut(auth);
+  };
 
   const resetPassword = async (email) => sendPasswordResetEmail(auth, email);
 

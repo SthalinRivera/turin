@@ -32,10 +32,10 @@ import { Search } from "./pages/Search/";
 import { useState } from "react";
 import { Banner } from "./components/Banner";
 import { Tesis } from "./pages/Tesis";
-import { Reports } from "./pages/Reports";
+import { ReportsModels } from "./pages/Dashboard/ReportsModels";
 import { TextToImage } from "./pages/TextToImage";
-import { SatisfactionReport } from "./pages/Reports/SatisfactionReport";
-import { Users } from "./pages/Users";
+import { ReportsSatisfactionUsers } from "./pages/Dashboard/ReportsSatisfactionUsers";
+import { Users } from "./pages/Dashboard/Users";
 import { Matriz } from "./pages/Matriz";
 export function App() {
   const [isBannerOpen, setIsBannerOpen] = useState(false);
@@ -97,7 +97,7 @@ export function App() {
           <Route path="/product/new-posts" element={<ProtectedRoute><NewPosts /></ProtectedRoute>} />
           <Route path="/places" element={<ProtectedRoute><Places /></ProtectedRoute>} />
           <Route path="/places/new-place" element={<ProtectedRoute><NewPlace /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+
           <Route path="/encuesta" element={<ProtectedRoute><Encuesta /></ProtectedRoute>} />
           <Route path="/encuesta/new-encuesta" element={<ProtectedRoute><NewEncuesta /></ProtectedRoute>} />
           <Route path="/encuesta/end-encuesta" element={<ProtectedRoute><EndEncuesta /></ProtectedRoute>} />
@@ -105,7 +105,7 @@ export function App() {
           <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
           <Route path="/preguntas" element={<ProtectedRoute><Preguntas /></ProtectedRoute>} />
           <Route path="/tesis" element={<ProtectedRoute><Tesis /></ProtectedRoute>} />
-          <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+
           <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />
           <Route path="/speech-generator" element={<SpeechGenerator />} />
@@ -115,7 +115,11 @@ export function App() {
           <Route path="/turis" element={<Turis />} />
           <Route path="/claude" element={<Claude />} />
           <Route path="/text-to-image" element={<TextToImage />} />
-          <Route path="/reports/satisfaction-report" element={<SatisfactionReport />} />
+
+          <Route path="/dashboard" element={<ProtectedRoute requiredRoles={["ADMINISTRADOR"]}><Dashboard /></ProtectedRoute>} />
+          <Route path="/dashboard/users" element={<ProtectedRoute requiredRoles={['ADMINISTRADOR']}><Users /></ProtectedRoute>} />
+          <Route path="/dashboard/reportsModels" element={<ProtectedRoute requiredRoles={['ADMINISTRADOR']}><ReportsModels /></ProtectedRoute>} />
+          <Route path="/dashboard/reportsSatisfactionUsers" element={<ProtectedRoute requiredRoles={['ADMINISTRADOR']}><ReportsSatisfactionUsers /></ProtectedRoute>} />
         </Routes>
       </AuthProvider>
     </div>

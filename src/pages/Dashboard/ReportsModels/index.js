@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebase";
-import { NavBar } from "../../components/NavBar";
-import { Footer } from "../../components/Footer";
-import { SideBar } from "../../components/SideBar";
+import { db } from "../../../firebase";
+import { NavBar } from "../../../components/NavBar";
+import { Footer } from "../../../components/Footer";
+import { SideBar } from "../../../components/SideBar";
 import { FaPlusCircle, FaRedo } from "react-icons/fa";
 import { Scatter } from 'react-chartjs-2'; // Para gráfico de dispersión
 import { Line } from 'react-chartjs-2'; // Para gráfico de líneas
@@ -13,7 +13,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-export function Reports() {
+export function ReportsModels() {
   const [reports, setReports] = useState([]);
   const [reportsGPT, setReportsGPT] = useState([]);
   const [reportsGemini, setReportsGemini] = useState([]);

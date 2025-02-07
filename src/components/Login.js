@@ -1,10 +1,11 @@
-import { useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Alert } from "./Alert";
 import { NavBar } from "../components/NavBar";
 import { db } from "../firebase";
-import { collection, addDoc } from "firebase/firestore"; // Métodos de Firestore
+
+import { collection, getDocs, getDoc, deleteDoc, doc, addDoc } from 'firebase/firestore';
 import { Footer } from "../components/Footer";
 export function Login() {
   const [user, setUser] = useState({
@@ -15,34 +16,104 @@ export function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [users, setUsers] = useState('');
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    // Lista de emails con sus roles
+    const roles = {
+      "sthalin.11@gmail.com": "admin",
+      "user@example.com": "user",
+      "guest@example.com": "guest"
+    };
+
     try {
-      await login(user.email, user.password);
-      navigate("/matriz");
+      // Llama a la función de login de tu contexto de autenticación
+      const userCredential = await login(user.email, user.password);
+      const userEmail = userCredential.user.email;
+
+      // Verifica el rol según el email
+      const userRole = roles[userEmail] || "guest"; // Si no está en la lista, será 'guest'
+
+      // Guarda el rol en localStorage o en el contexto global
+      localStorage.setItem("userRole", userRole);
+
+      // Redirigir según el rol
+      if (userRole === "admin") {
+        navigate("/dashboard"); // Redirige a dashboard si es admin
+      } else {
+        navigate("/home"); // Redirige a home si no es admin
+      }
+
     } catch (error) {
+      // En caso de error en el login, mostrar un mensaje de error
       setError(error.message);
     }
   };
-
 
   const handleChange = ({ target: { value, name } }) =>
     setUser({ ...user, [name]: value });
 
-  const handleGoogleSignin = async () => {
+  const getUsers = async () => {
     try {
-      await loginWithGoogle();
+      const data = await getDocs(collection(db, "Users"));
+      const usersArray = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-
-      navigate("/matriz");
+      setUsers(usersArray);
+      console.log("Usuarios obtenidos:", usersArray); // ✅ Aquí se imprimen los datos correctos
     } catch (error) {
-      setError(error.message);
+      console.error("Error al obtener los usuarios:", error);
     }
   };
+  const handleGoogleSignin = async () => {
+    try {
+      const userCredential = await loginWithGoogle(); // Inicia sesión con Google
+      const userEmail = userCredential.user.email;
+      const userName = userCredential.user.displayName; // Nombre del usuario de Google
+
+      // 🔹 Obtener los usuarios desde Firebase
+      const data = await getDocs(collection(db, "Users"));
+      const usersArray = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+      // 🔹 Buscar el usuario por email en los datos obtenidos
+      let user = usersArray.find((u) => u.email === userEmail);
+
+      // 🔹 Si el usuario no existe, lo creamos en Firebase
+      if (!user) {
+        const newUser = {
+          email: userEmail,
+          name: userName || "Usuario sin nombre", // Si no tiene nombre, asignamos uno genérico
+          role: "INVITADO", // Rol predeterminado
+          state: true, // Usuario activo
+        };
+
+        // Guardar en Firebase
+        const userRef = await addDoc(collection(db, "Users"), newUser);
+        user = { ...newUser, id: userRef.id }; // Agregar el ID generado por Firebase
+
+        console.log("Nuevo usuario creado en Firebase:", user);
+      }
+
+      // 🔹 Guardamos el rol en localStorage (eliminando espacios extra)
+      const userRole = user.role.trim();
+      localStorage.setItem("userRole", userRole);
+
+      // 🔹 Redirigir según el rol
+      if (userRole.toUpperCase() === "ADMINISTRADOR") {
+        navigate("/dashboard"); // Redirige a dashboard si es admin
+      } else {
+        navigate("/home"); // Redirige a home si no es admin
+      }
+
+    } catch (error) {
+      setError(error.message); // Manejo de errores
+    }
+  };
+
 
   const handleResetPassword = async (e) => {
     e.preventDefault();

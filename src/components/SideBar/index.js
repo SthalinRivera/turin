@@ -99,7 +99,7 @@ export function SideBar() {
 
 			{/* Barra Lateral */}
 			<div
-				className={`fixed h-full w-64 bg-white dark:bg-slate-900 shadow-lg transform ${show ? "translate-x-0" : "-translate-x-full"
+				className={`fixed h-screen w-64 bg-white dark:bg-slate-900 shadow-lg transform ${show ? "translate-x-0" : "-translate-x-full"
 					} transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none z-40`}
 			>
 				<div className="flex flex-col h-full  ">
@@ -166,39 +166,17 @@ export function SideBar() {
 								</Link>
 							</li>
 
-							{/* Users */}
-							<li>
-								<Link
-									to="/users"
-									className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
-								>
-									<svg
-										className="w-6 h-6 mr-3"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={2}
-											d="M5.121 17.804A13.935 13.935 0 0112 15c2.673 0 5.194.53 7.379 1.471M5.121 17.804A13.935 13.935 0 0112 15c2.673 0 5.194.53 7.379 1.471M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-										/>
-									</svg>
-									Users
-								</Link>
-							</li>
 
-							{/* Pots */}
+
+							{/* Vendors */}
 							<li>
 								<button
-									onClick={() => toggleMenu(0)}
+									onClick={() => toggleMenu(3)}
 									className="flex justify-between items-center w-full p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none"
 								>
-									<span>Pots</span>
+									<span>Users</span>
 									<svg
-										className={`w-4 h-4 transform transition-transform ${menu[0] ? "rotate-180" : ""
+										className={`w-4 h-4 transform transition-transform ${menu[3] ? "rotate-180" : ""
 											}`}
 										fill="none"
 										stroke="currentColor"
@@ -213,109 +191,21 @@ export function SideBar() {
 										/>
 									</svg>
 								</button>
-								{menu[0] && (
+								{menu[3] && (
 									<ul className="pl-6 mt-2 space-y-1">
 										<li>
 											<Link
-												to="/product/new-posts"
+												to="/dashboard/users"
 												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
 											>
-												<span>New Posts</span>
+												<span>List Users</span>
 											</Link>
 										</li>
-										<li>
-											<Link
-												to="/product"
-												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
-											>
-												<span>List Posts</span>
-											</Link>
-										</li>
+
 									</ul>
 								)}
 							</li>
 
-							{/* Places */}
-							<li>
-								<button
-									onClick={() => toggleMenu(1)}
-									className="flex justify-between items-center w-full p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none"
-								>
-									<span>Places</span>
-									<svg
-										className={`w-4 h-4 transform transition-transform ${menu[1] ? "rotate-180" : ""
-											}`}
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={2}
-											d="M19 9l-7 7-7-7"
-										/>
-									</svg>
-								</button>
-								{menu[1] && (
-									<ul className="pl-6 mt-2 space-y-1">
-										<li>
-											<Link
-												to="/places/new-place"
-												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
-											>
-												<span>New Attractive Place</span>
-											</Link>
-										</li>
-										<li>
-											<Link
-												to="/places"
-												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
-											>
-												<span>List Attractive Place</span>
-											</Link>
-										</li>
-									</ul>
-								)}
-							</li>
-
-							{/* Gallery */}
-							<li>
-								<button
-									onClick={() => toggleMenu(2)}
-									className="flex justify-between items-center w-full p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none"
-								>
-									<span>Gallery</span>
-									<svg
-										className={`w-4 h-4 transform transition-transform ${menu[2] ? "rotate-180" : ""
-											}`}
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={2}
-											d="M19 9l-7 7-7-7"
-										/>
-									</svg>
-								</button>
-								{menu[2] && (
-									<ul className="pl-6 mt-2 space-y-1">
-										<li>
-											<Link
-												to="/gallery"
-												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
-											>
-												<span>List Gallery</span>
-											</Link>
-										</li>
-									</ul>
-								)}
-							</li>
 
 							{/* Vendors */}
 							<li>
@@ -344,7 +234,7 @@ export function SideBar() {
 									<ul className="pl-6 mt-2 space-y-1">
 										<li>
 											<Link
-												to="/reports"
+												to="/dashboard/reportsModels"
 												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
 											>
 												<span>Reporte models</span>
@@ -352,7 +242,7 @@ export function SideBar() {
 										</li>
 										<li>
 											<Link
-												to="/reports/satisfaction-report"
+												to="/dashboard/reportsSatisfactionUsers"
 												className="flex items-center p-2 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
 											>
 												<span>Reporte Satisfaciíon usuarios</span>

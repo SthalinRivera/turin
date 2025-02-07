@@ -4,18 +4,22 @@ import { NavBar } from "../../components/NavBar";
 import "../../index.css";
 import { Footer } from "../../components/Footer/";
 import { Link } from "react-router-dom";
+import { db } from "../../firebase";
 import PlanetImg from "../../asset/images/planet.png";
 import PlanetOverlayImg from "../../asset/images/planet-overlay.svg";
 import PlanetTagImg01 from "../../asset/images/planet-tag-01.png";
 import PlanetTagImg02 from "../../asset/images/planet-tag-02.png";
 import PlanetTagImg03 from "../../asset/images/planet-tag-03.png";
 import PlanetTagImg04 from "../../asset/images/planet-tag-04.png";
-
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 export function Portal() {
   const { logout, user } = useAuth();
   const [placeholderText, setPlaceholderText] = useState('');
 
-
+  const [totalUsers, setTotalUsers] = useState(0);  // Estado para el total de usuarios
+  const [totalVisits, setTotalVisits] = useState(0);  // Estado para el total de visitas
+  const usersCollection = collection(db, "Users");  // Suponiendo que tienes una colección llamada "Users"
+  const visitsCollection = collection(db, "visitas");  // Colección para registrar las visitas
 
   const phrases = [
     'Resumir',
@@ -24,9 +28,24 @@ export function Portal() {
     'Estudiar',
     // Agrega más frases aquí según sea necesario
   ];
+
+  // Función para registrar una visita
+  const registerVisit = async () => {
+    try {
+      await addDoc(visitsCollection, {
+        timestamp: serverTimestamp(), // Usamos el servidor para registrar la hora exacta
+      });
+      console.log("Visita registrada");
+    } catch (error) {
+      console.error("Error registrando la visita: ", error);
+    }
+  };
+
+
   const inputRef = useRef(null);
 
   useEffect(() => {
+    registerVisit();  // Llamamos a la función para registrar la visita
     const animateText = (text, index) => {
       if (index < text.length) {
         setTimeout(() => {

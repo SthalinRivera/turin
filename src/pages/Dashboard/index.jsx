@@ -7,32 +7,34 @@ import { Link } from "react-router-dom";
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 
 export function Dashboard(props) {
-  const [posts, setPosts] = useState([]);
-  const [totalPosts, setTotalPosts] = useState(0);
-  const postsCollection = collection(db, "dataset");
-
-  const getDataCharts = async () => {
+  const [totalUsers, setTotalUsers] = useState(0);  // Estado para el total de usuarios
+  const [totalVisits, setTotalVisits] = useState(0);  // Estado para el total de visitas
+  const usersCollection = collection(db, "Users");  // Suponiendo que tienes una colección llamada "Users"
+  const visitsCollection = collection(db, "visitas");  // Colección para registrar las visitas
+  // Función para obtener el total de usuarios
+  const getUsersTotal = async () => {
     try {
-      const data = await getDocs(query(postsCollection, orderBy("time", "asc")));
-      setPosts(data.docs.map(doc => doc.data()));
+      const data = await getDocs(usersCollection);  // Obtenemos todos los usuarios
+      setTotalUsers(data.docs.length);  // Contamos el número de usuarios
     } catch (error) {
-      console.error("Error fetching posts: ", error);
+      console.error("Error fetching users: ", error);
     }
   };
-
-  const getPostsTotal = async () => {
+  // Función para obtener el total de visitas
+  const getVisitsTotal = async () => {
     try {
-      const data = await getDocs(query(postsCollection, orderBy("time", "asc")));
-      setTotalPosts(data.docs.length);
+      const data = await getDocs(visitsCollection);  // Obtenemos todas las visitas
+      setTotalVisits(data.docs.length);  // Contamos el número de visitas
     } catch (error) {
-      console.error("Error fetching posts: ", error);
+      console.error("Error fetching visits: ", error);
     }
   };
-
   useEffect(() => {
-    getDataCharts();
-    getPostsTotal();
+    getUsersTotal();  // Llamamos a la función para obtener el total de usuarios
+    getVisitsTotal();  // Llamamos a la función para obtener el total de visitas
   }, []);
+
+
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white transition-all">
@@ -52,7 +54,7 @@ export function Dashboard(props) {
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-semibold text-sm text-gray-500 dark:text-gray-300">Usurios</p>
-                      <h5 className="font-bold text-3xl dark:text-gray-100">234</h5>
+                      <h5 className="font-bold text-3xl dark:text-gray-100">{totalUsers}</h5>
                     </div>
                     <div className="text-indigo-600 dark:text-indigo-400 text-3xl">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10">
@@ -70,7 +72,7 @@ export function Dashboard(props) {
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-semibold text-sm text-gray-500 dark:text-gray-300">Visitas</p>
-                      <h5 className="font-bold text-3xl dark:text-gray-100">545</h5>
+                      <h5 className="font-bold text-3xl dark:text-gray-100">{totalVisits}</h5>
                     </div>
                     <div className="text-green-600 dark:text-green-400 text-3xl">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10">
